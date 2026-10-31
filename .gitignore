@@ -1,0 +1,24 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Frontend
+node_modules/
+dist/
+
+# Local configuration / secrets
+.env
+.env.*
+!.env.example
+!.env.sample
+
+# Logs
+*.log
+
+# Python generated package metadata
+*.egg-info/
+
+# Runtime research notes
+**/backend/notes/
