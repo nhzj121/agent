@@ -22,3 +22,9 @@ dist/
 
 # Runtime research notes
 **/backend/notes/
+# Activated files_v2 runtime workspaces (prefer outside the checkout)
+**/backend/notes-v2/
+.files-v2-workspace.json
+.notes.lock
+.notes-control.json
+.note-tmp-*
