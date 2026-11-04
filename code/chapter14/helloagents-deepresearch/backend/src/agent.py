@@ -48,18 +48,13 @@ class DeepResearchAgent:
         self._note_repository = note_repository
         self._note_owner = None
         self.last_note_result = None
+        if self.config.enable_notes and note_repository is None:
+            raise ValueError("notes require the configured files_v2 service factory or an explicit Repository; "
+                             "set ENABLE_NOTES=false for no-note mode")
         self.llm = ProjectLLM(self._init_llm(), self.config)
 
-        self.note_tool = (
-            NoteTool(workspace=self.config.notes_workspace)
-            if self.config.enable_notes and note_repository is None
-            else None
-        )
+        self.note_tool = None
         self.tools_registry: ToolRegistry | None = None
-        if self.note_tool:
-            registry = ToolRegistry()
-            registry.register_tool(ControlledTool(self.note_tool))
-            self.tools_registry = registry
 
         self._tool_tracker = ToolCallTracker(
             (str(note_repository.workspace) if note_repository is not None else self.config.notes_workspace)
@@ -142,8 +137,8 @@ class DeepResearchAgent:
         self._tool_tracker.set_event_sink(sink)
 
     def _begin_notes_run(self) -> None:
-        # Explicit Repository injection is the only activation path. Never infer
-        # a migration target from the existing config.notes_workspace.
+        # The service factory injects an activated Repository. Programmatic
+        # callers may still explicitly inject a temporary/test Repository.
         if getattr(self, "_note_repository", None) is None:
             return
         self._note_owner = None
@@ -227,7 +222,25 @@ class DeepResearchAgent:
                                    "error_code":task.error_code})
         return events
 
+    def cancellation_snapshot(self, execution):
+        """Freeze transport terminal state under the existing commit/cancel lock."""
+        with execution.lock:
+            if getattr(self, "execution", None) is not execution:
+                return [{"type":"done", "run_id":execution.id, "run_status":"cancelled",
+                         "warnings":[f"{execution.code}: {execution.detail}"]}]
+            self._cancel_state(ExecutionStopped(execution.code, execution.detail))
+            # Include all known task terminal states, even when their queued
+            # events were not delivered before transport cancellation.
+            return [
+                self._enrich_event({"type":"task_status", "task_id":task.id,
+                                    "run_status":"cancelled", **self._serialize_task(task)})
+                for task in self._active_state.todo_items
+            ] + [self._enrich_event({"type":"done"})]
+
     def _fatal_state(self, exc):
+        if self.execution.cancel_event.is_set():
+            self._cancel_state(ExecutionStopped(self.execution.code, self.execution.detail))
+            return
         self.run_status = "failed"
         state = self._active_state
         if state is not None:
@@ -269,6 +282,7 @@ class DeepResearchAgent:
     def run_stream(self, topic: str, *, execution=None) -> Iterator[dict[str, Any]]:
         self._enter_run(streaming=True, execution=execution)
         inner = self._run_stream(topic)
+        terminal_yielded = False
         # Bind around next/close, never across yield: ASGI can resume a sync
         # iterator in a different thread/context on its next invocation.
         try:
@@ -283,11 +297,13 @@ class DeepResearchAgent:
                     ack = getattr(self._tool_tracker, "ack", None)
                     if ack:
                         ack(event["event_id"])
+                terminal_yielded = event.get("type") in ("done", "error")
                 yield event
         except GeneratorExit:
-            self.execution.cancel("research iterator closed")
-            self._cancel_state(ExecutionStopped(self.execution.code or "CANCELLED",
-                                              self.execution.detail or "execution cancelled"))
+            if not terminal_yielded:
+                self.execution.cancel("research iterator closed")
+                self._cancel_state(ExecutionStopped(self.execution.code or "CANCELLED",
+                                                  self.execution.detail or "execution cancelled"))
             raise
         except ExecutionStopped as exc:
             for event in self._cancel_state(exc):

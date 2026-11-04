@@ -2,14 +2,13 @@
 
 from __future__ import annotations
 
-import json
 from dataclasses import asdict, is_dataclass
 import sys
-from typing import Any, Dict, Iterator, Optional
+from typing import Any, Dict, Optional
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
+from fastapi.responses import Response, StreamingResponse
 from loguru import logger
 from pydantic import BaseModel, Field
 
@@ -21,6 +20,8 @@ _ExecutionAgent = DeepResearchAgent
 from services.execution_control import (
     ExecutionControl, ResearchAdmission, ResearchBusy, bind_execution)
 from threading import Lock
+from services.sse_bridge import ResearchBridge, ResearchJSONResponse, ResearchStreamingResponse
+from services.notes_runtime import create_service_agent, validate_service_configuration
 
 _process_admission = None
 _admission_lock = Lock()
@@ -82,6 +83,17 @@ class ResearchResponse(BaseModel):
     )
 
 
+def result_payload(result):
+    return ResearchResponse(
+        report_markdown=(result.report_markdown or result.running_summary or ""),
+        todo_items=[asdict(item) if is_dataclass(item) else vars(item) for item in result.todo_items],
+        **{key: getattr(result, key, default) for key, default in [
+            ("run_id", None), ("run_status", "completed"), ("warnings", []),
+            ("report_note_id", None), ("report_note_path", None),
+            ("report_note_status", "not_started"), ("report_note_error", None)]},
+    ).model_dump()
+
+
 def _mask_secret(value: Optional[str], visible: int = 4) -> str:
     """Mask sensitive tokens while keeping leading and trailing characters."""
     if not value:
@@ -116,6 +128,10 @@ def create_app(*, agent_factory=None, admission=None) -> FastAPI:
     @app.on_event("startup")
     def log_startup_configuration() -> None:
         config = Configuration.from_env()
+        default_factory = agent_factory is None and DeepResearchAgent is _ExecutionAgent
+        if default_factory or config.notes_storage is not None:
+            storage = validate_service_configuration(config)
+            app.state.notes_storage = storage or {"storage":"disabled"}
 
         if config.llm_provider == "ollama":
             base_url = config.sanitized_ollama_url()
@@ -142,8 +158,7 @@ def create_app(*, agent_factory=None, admission=None) -> FastAPI:
     def health_check() -> Dict[str, str]:
         return {"status": "ok"}
 
-    @app.post("/research", response_model=ResearchResponse)
-    def run_research(payload: ResearchRequest) -> ResearchResponse:
+    def prepare(payload, *, streaming):
         try:
             config = _build_config(payload)
             try:
@@ -153,86 +168,68 @@ def create_app(*, agent_factory=None, admission=None) -> FastAPI:
                     "code":"RESEARCH_CAPACITY_EXCEEDED", "detail":"active research limit reached"}) from exc
             control = ExecutionControl(config.research_deadline_seconds, on_idle=lease.release)
             try:
-                agent = (agent_factory or DeepResearchAgent)(config=config)
+                if agent_factory is None and DeepResearchAgent is _ExecutionAgent:
+                    agent = create_service_agent(config, control, agent_class=DeepResearchAgent)
+                else:
+                    # Trusted Python DI retains its explicit Repository contract;
+                    # no HTTP/env fallback to the legacy NoteTool exists.
+                    if config.notes_storage is not None:
+                        validate_service_configuration(config)
+                    agent = (agent_factory or DeepResearchAgent)(config=config)
             except BaseException:
                 control.finish()
                 raise
-        except HTTPException:
-            raise
-        except ValueError as exc:  # Likely due to unsupported configuration
-            raise HTTPException(status_code=400, detail=str(exc)) from exc
-        except Exception as exc:  # pragma: no cover - defensive guardrail
-            raise HTTPException(status_code=500, detail="Research failed") from exc
-
-        try:
-            with bind_execution(control):
-                result = (agent.run(payload.topic, execution=control)
-                          if isinstance(agent, _ExecutionAgent) else agent.run(payload.topic))
-        except Exception as exc:
-            raise HTTPException(status_code=500, detail="Research failed") from exc
-        finally:
-            control.finish()
-
-        return ResearchResponse(
-            report_markdown=(result.report_markdown or result.running_summary or ""),
-            todo_items=[asdict(item) if is_dataclass(item) else vars(item) for item in result.todo_items],
-            **{key: getattr(result, key, default) for key, default in [
-                ("run_id", None), ("run_status", "completed"), ("warnings", []),
-                ("report_note_id", None), ("report_note_path", None),
-                ("report_note_status", "not_started"), ("report_note_error", None)]},
-        )
-
-    @app.post("/research/stream")
-    def stream_research(payload: ResearchRequest) -> StreamingResponse:
-        try:
-            config = _build_config(payload)
-            try:
-                lease = (admission or _admission(config)).acquire()
-            except ResearchBusy as exc:
-                raise HTTPException(status_code=429, detail={
-                    "code":"RESEARCH_CAPACITY_EXCEEDED", "detail":"active research limit reached"}) from exc
-            control = ExecutionControl(config.research_deadline_seconds, on_idle=lease.release)
-            try:
-                agent = (agent_factory or DeepResearchAgent)(config=config)
-            except BaseException:
-                control.finish()
-                raise
+            return agent, control
         except HTTPException:
             raise
         except ValueError as exc:
             raise HTTPException(status_code=400, detail=str(exc)) from exc
-
         except Exception as exc:
-            raise HTTPException(status_code=500, detail="Research initialization failed") from exc
+            detail = "Research initialization failed" if streaming else "Research failed"
+            raise HTTPException(status_code=500, detail=detail) from exc
 
-        def event_iterator() -> Iterator[str]:
-            inner = None
-            try:
-                inner = (agent.run_stream(payload.topic, execution=control)
-                         if isinstance(agent, _ExecutionAgent) else agent.run_stream(payload.topic))
-                for event in inner:
-                    yield f"data: {json.dumps(event, ensure_ascii=False)}\n\n"
-            except Exception as exc:  # pragma: no cover - defensive guardrail
-                logger.exception("Streaming research failed")
-                error_payload = {"type": "error", "detail": str(exc),
-                                 "run_id": getattr(agent, "run_id", None), "run_status": "failed"}
-                yield f"data: {json.dumps(error_payload, ensure_ascii=False)}\n\n"
-            finally:
-                close = getattr(inner, "close", None)
-                try:
-                    if close is not None:
-                        close()
-                finally:
-                    control.finish()
+    def make_bridge(agent, control, payload, *, streaming):
+        def iterate():
+            with bind_execution(control):
+                if streaming:
+                    inner = (agent.run_stream(payload.topic, execution=control)
+                             if isinstance(agent, _ExecutionAgent) else agent.run_stream(payload.topic))
+                    try:
+                        yield from inner
+                    finally:
+                        close = getattr(inner, "close", None)
+                        if close is not None:
+                            close()
+                else:
+                    result = (agent.run(payload.topic, execution=control)
+                              if isinstance(agent, _ExecutionAgent) else agent.run(payload.topic))
+                    yield result_payload(result)
 
-        return StreamingResponse(
-            event_iterator(),
-            media_type="text/event-stream",
-            headers={
-                "Cache-Control": "no-cache",
-                "Connection": "keep-alive",
-            },
-        )
+        def cancelled(execution):
+            if isinstance(agent, _ExecutionAgent):
+                events = agent.cancellation_snapshot(execution)
+                if streaming:
+                    return events
+                if agent._active_state is not None:
+                    return [result_payload(agent._output(agent._active_state))]
+            if streaming:
+                return [{"type":"done", "run_id":execution.id, "run_status":"cancelled",
+                         "warnings":[f"{execution.code}: {execution.detail}"]}]
+            return [ResearchResponse(report_markdown="", run_id=execution.id,
+                                     run_status="cancelled",
+                                     warnings=[f"{execution.code}: {execution.detail}"]).model_dump()]
+
+        return ResearchBridge(control, iterate, cancelled)
+
+    @app.post("/research", response_model=ResearchResponse)
+    def run_research(payload: ResearchRequest) -> Response:
+        agent, control = prepare(payload, streaming=False)
+        return ResearchJSONResponse(make_bridge(agent, control, payload, streaming=False))
+
+    @app.post("/research/stream")
+    def stream_research(payload: ResearchRequest) -> StreamingResponse:
+        agent, control = prepare(payload, streaming=True)
+        return ResearchStreamingResponse(make_bridge(agent, control, payload, streaming=True))
 
     return app
 

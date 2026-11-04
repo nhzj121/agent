@@ -1,4 +1,5 @@
 import os
+import json
 from enum import Enum
 from typing import Any, Optional
 
@@ -49,10 +50,14 @@ class Configuration(BaseModel):
         title="Enable Notes",
         description="Whether to store task progress in NoteTool",
     )
+    notes_storage: Optional[str] = None
+    notes_v2_workspace: Optional[str] = None
+    notes_protected_workspaces: list[str] = Field(default_factory=list)
+
     notes_workspace: str = Field(
         default="./notes",
         title="Notes Workspace",
-        description="Directory for NoteTool to persist task notes",
+        description="Protected legacy source path; never a files_v2 write target",
     )
     fetch_full_page: bool = Field(
         default=True,
@@ -134,6 +139,9 @@ class Configuration(BaseModel):
                 if value is not None:
                     raw_values[key] = value
 
+        protected = raw_values.get("notes_protected_workspaces")
+        if isinstance(protected, str):
+            raw_values["notes_protected_workspaces"] = json.loads(protected)
         return cls(**raw_values)
 
     def sanitized_ollama_url(self) -> str:

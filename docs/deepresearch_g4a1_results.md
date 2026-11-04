@@ -148,7 +148,7 @@ G0 在 venv/g0-n_sj55n4 新建独立构建/安装环境，包含新增模块，�
 cd /home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source
 test "$(git rev-parse --show-toplevel)" = "$PWD" || exit 1
 G4_ROOT="$PWD"
-G4_PY="$G4_/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-20261102-bd5dab4b/acceptance-final/runtime/bin/python"
+G4_PY="${G4_ROOT}/venv/g0-20261102-bd5dab4b/acceptance-final/runtime/bin/python"
 
 "$G4_PY" -B -m unittest discover -s tests/acceptance -p 'test_phase_4a_1*.py' -v
 "$G4_PY" -B -m unittest discover -s tests/acceptance -p 'test_phase_1*.py' -v
@@ -160,7 +160,7 @@ G4_BASE=/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/bi
 env -u G0_WORK_ROOT -u PYTHONPATH -u VIRTUAL_ENV  G0_BASE_PYTHON="$G4_BASE" G0_UV=/home/nhzj121/.local/bin/uv  "$G4_BASE" -B -m unittest discover -s tests/acceptance -p 'test_phase_0*.py' -v
 
 G4_NODE=/home/nhzj121/.nvm/versions/node/v24.15.0/bin/node
-G4_FRONT="$G4_/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend"
+G4_FRONT="${G4_ROOT}/code/chapter14/helloagents-deepresearch/frontend"
 "$G4_NODE" "$G4_FRONT/tests/acceptance/phase3.mjs"
 (
  cd "$G4_FRONT" &&

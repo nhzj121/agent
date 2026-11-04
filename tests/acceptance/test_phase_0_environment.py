@@ -38,7 +38,7 @@ BACKEND = ROOT / "code/chapter14/helloagents-deepresearch/backend"
 EXPECTED_MODULES = ("agent", "config", "main", "models", "prompts", "utils")
 EXPECTED_SERVICES = ("__init__", "notes", "planner", "reporter", "search",
                      "summarizer", "text_processing", "tool_events", "agent_adapter",
-                     "note_versions", "note_ownership", "execution_control", "search_runtime")
+                     "note_versions", "note_ownership", "execution_control", "search_runtime", "sse_bridge", "notes_runtime")
 EXPECTED_STORAGE = ("__init__", "note_repository", "file_notes", "note_codec", "manual_edit")
 CONTEXT = None
 
@@ -512,7 +512,7 @@ import importlib,importlib.metadata as m,json,sys,pathlib
 names=["main","agent","config","models","prompts","utils","services.planner",
        "services.search","services.summarizer","services.reporter",
        "services.notes","services.text_processing","services.tool_events",
-       "llm.project_llm","tools.controlled_tool","services.execution_control","services.search_runtime",
+       "llm.project_llm","tools.controlled_tool","services.execution_control","services.search_runtime","services.sse_bridge","services.notes_runtime",
        "tools.project_note_tool","services.agent_adapter","services.note_versions","services.note_ownership",
        "storage.note_repository","storage.file_notes","storage.note_codec","storage.manual_edit",
        "hello_agents","huggingface_hub","yaml"]

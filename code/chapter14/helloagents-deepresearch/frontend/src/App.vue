@@ -1068,7 +1068,9 @@ const handleSubmit = async () => {
     );
 
     if (currentController !== controller || controller.signal.aborted) return;
-    if (!reportMarkdown.value) throw new Error("研究结束但未收到最终报告");
+    if (!reportMarkdown.value && runStatus.value !== "cancelled") {
+      throw new Error("研究结束但未收到最终报告");
+    }
     if (runStatus.value === "running") {
       const count = todoTasks.value.filter(t => t.status === "completed").length;
       runStatus.value = !todoTasks.value.length || count === todoTasks.value.length ?
@@ -1079,7 +1081,7 @@ const handleSubmit = async () => {
     if (err instanceof DOMException && err.name === "AbortError") {
       runStatus.value = "cancelled";
       for (const task of todoTasks.value) if (!TERMINAL_TASKS.has(task.status)) task.status = "cancelled";
-      progressLogs.value.push("已停止接收，后台研究可能仍在继续");
+      progressLogs.value.push("连接已取消，后台可能仍在收尾");
     } else {
       error.value = err instanceof Error ? err.message : "请求失败";
       runStatus.value = "failed";

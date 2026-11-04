@@ -91,9 +91,10 @@ class ExecutionControl:
             self.check()
             yield
 
-    def retain(self):
+    def retain(self, *, allow_cancelled=False):
         with self.lock:
-            self.check()
+            if not allow_cancelled:
+                self.check()
             if self._refs == 0:
                 raise RuntimeError("execution already idle")
             self._refs += 1
