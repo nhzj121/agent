@@ -1,0 +1,1 @@
+{"argv": ["/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/bin/python3.12", "-B", "-m", "unittest", "discover", "-s", "tests/acceptance", "-p", "test_phase_0*.py", "-v"], "exit_code": 0, "elapsed_seconds": 11.045717036000497}

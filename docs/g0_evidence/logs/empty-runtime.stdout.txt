@@ -1,0 +1,1 @@
+{"prefix": "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-20261102-bd5dab4b/acceptance-final/runtime", "base_prefix": "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu", "distributions": []}

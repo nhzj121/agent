@@ -1,0 +1,11 @@
+{
+  "command": [
+    "wsl.exe",
+    "--list",
+    "--verbose"
+  ],
+  "verified_target": "Ubuntu22.04.3",
+  "wsl_version": 2,
+  "observed_output": "  NAME              STATE           VERSION\n* Ubuntu22.04.3     Running         2\n  Ubuntu            Stopped         2\n  docker-desktop    Stopped         2\n",
+  "note": "Windows side read-only inventory; registration name, Linux os-release and capability tests recorded independently."
+}

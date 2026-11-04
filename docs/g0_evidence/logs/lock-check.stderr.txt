@@ -1,0 +1,2 @@
+Using CPython 3.12.14 interpreter at: /home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/bin/python3.12
+Resolved 72 packages in 7ms

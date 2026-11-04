@@ -1,0 +1,60 @@
+{
+  "tracked_files_changed_from_HEAD": [],
+  "git_diff_exit": 0,
+  "git_staged_diff_exit": 0,
+  "git_status": "## main...origin/main\n?? AGENTS.md\n?? docs/audit_build_probe.py\n?? docs/audit_evidence/backend-tests.txt\n?? docs/audit_evidence/build-probe.txt\n?? docs/audit_evidence/environment.json\n?? docs/audit_evidence/frontend-tests.txt\n?? docs/audit_evidence/integrity.json\n?? docs/audit_evidence/npm-audit-all.json\n?? docs/audit_evidence/npm-audit-production.json\n?? docs/audit_evidence/npm-remediation.json\n?? docs/audit_frontend.mjs\n?? docs/audit_repro.py\n?? docs/deepresearch_code_audit.md\n",
+  "notes_test_scope": "All NoteTool tests used TemporaryDirectory; existing notes not used.",
+  "frontend_versions": {
+    "vue": {
+      "installed": "3.5.22",
+      "locked": "3.5.22"
+    },
+    "axios": {
+      "installed": "1.12.2",
+      "locked": "1.12.2"
+    },
+    "vite": {
+      "installed": "6.4.1",
+      "locked": "6.4.1"
+    },
+    "rollup": {
+      "installed": "4.52.5",
+      "locked": "4.52.5"
+    },
+    "esbuild": {
+      "installed": "0.25.11",
+      "locked": "0.25.11"
+    },
+    "typescript": {
+      "installed": "5.9.3",
+      "locked": "5.9.3"
+    },
+    "vue-tsc": {
+      "installed": "2.2.12",
+      "locked": "2.2.12"
+    },
+    "@vitejs/plugin-vue": {
+      "installed": "5.2.4",
+      "locked": "5.2.4"
+    }
+  },
+  "tracked_file_count": 31,
+  "source_fingerprint_count": 111,
+  "existing_note_files_count": 7,
+  "source_fingerprint_mismatches": {},
+  "existing_note_fingerprint_mismatches": {},
+  "audit_date_asia_shanghai": "2026-11-02",
+  "audit_artifact_sha256": {
+    "docs/deepresearch_code_audit.md": "3c0cc107975642ed610e22a8bdde81230b6d714b4bb8d13a5b91417ef4295881",
+    "docs/audit_frontend.mjs": "c223acca311c76c5663a15841a73767ab3c52bb2a875a8e5c5e2d152d88e04f5",
+    "docs/audit_repro.py": "bf4d3dae4258189b8bb8f4e8f87c2ae732a62c17cddb932821564aa29b1cab6e",
+    "docs/audit_build_probe.py": "86240ce77d5e1f338e04d1ded4520775f68a8afe3a8eca858a51d7f035f635b0",
+    "docs/audit_evidence/npm-remediation.json": "823037eb952d503d92f1361f553a8eba066a1b135474926c33ef074b8c329056",
+    "docs/audit_evidence/build-probe.txt": "48949494cbbb589fdd6088511d3eaca7af6423202b344c300f7160e8a7c3d82e",
+    "docs/audit_evidence/frontend-tests.txt": "05467b2d6244ecd8d28edc08ac860aae8895532ffad669af41d08d34abdefa5e",
+    "docs/audit_evidence/npm-audit-production.json": "f85cade5d1336eecdfc0c69a26a51a99ef259cbdc141ee342493158141985d4b",
+    "docs/audit_evidence/environment.json": "0d84e1348086a94bad313616ee5ca324d7d384bbddb3a0a1cbdb5b44606d604d",
+    "docs/audit_evidence/npm-audit-all.json": "2a7216d8520c88a46856b52c36cfa92696778a4a0d1b12ddfa187d9ef19b6944",
+    "docs/audit_evidence/backend-tests.txt": "11405db3706335890a2c6fc877da9d1d3752aadfde81bed7480306855780a059"
+  }
+}

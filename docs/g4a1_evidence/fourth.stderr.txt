@@ -1,0 +1,230 @@
+test_cancel_keeps_run_lock_and_capacity_until_blocked_search_really_exits (test_phase_4a_1_execution.ExecutionTests.test_cancel_keeps_run_lock_and_capacity_until_blocked_search_really_exits) ... INFO:services.planner:Planner raw output (truncated): {"tasks": [{"title": "0", "query": "0"}]}
+INFO:services.planner:Planner produced 1 tasks: ['0']
+ok
+test_cancel_orders_note_commit_and_prevents_followup_write (test_phase_4a_1_execution.ExecutionTests.test_cancel_orders_note_commit_and_prevents_followup_write) ... ok
+test_close_with_blocked_worker_returns_without_releasing_its_slot (test_phase_4a_1_execution.ExecutionTests.test_close_with_blocked_worker_returns_without_releasing_its_slot) ... INFO:services.planner:Planner raw output (truncated): {"tasks": [{"title": "0", "query": "0"}]}
+INFO:services.planner:Planner produced 1 tasks: ['0']
+ok
+test_deadline_during_summary_never_starts_reporter_and_keeps_capacity (test_phase_4a_1_execution.ExecutionTests.test_deadline_during_summary_never_starts_reporter_and_keeps_capacity) ... INFO:services.planner:Planner raw output (truncated): {"tasks": [{"title": "0", "query": "0"}, {"title": "1", "query": "1"}, {"title": "2", "query": "2"}, {"title": "3", "query": "3"}]}
+INFO:services.planner:Planner produced 4 tasks: ['0', '1', '2', '3']
+ok
+test_defaults_and_environment (test_phase_4a_1_execution.ExecutionTests.test_defaults_and_environment) ... ok
+test_eight_tasks_real_active_workers_bounded (test_phase_4a_1_execution.ExecutionTests.test_eight_tasks_real_active_workers_bounded) ... INFO:services.planner:Planner raw output (truncated): {"tasks": [{"title": "0", "query": "0"}, {"title": "1", "query": "1"}, {"title": "2", "query": "2"}, {"title": "3", "query": "3"}, {"title": "4", "query": "4"}, {"title": "5", "query": "5"}, {"title": "6", "query": "6"}, {"title": "7", "query": "7"}]}
+INFO:services.planner:Planner produced 8 tasks: ['0', '1', '2', '3', '4', '5', '6', '7']
+ok
+test_excess_plan_is_rejected_not_truncated (test_phase_4a_1_execution.ExecutionTests.test_excess_plan_is_rejected_not_truncated) ... INFO:services.planner:Planner raw output (truncated): {"tasks": [{"title": "0", "query": "0"}, {"title": "1", "query": "1"}, {"title": "2", "query": "2"}, {"title": "3", "query": "3"}, {"title": "4", "query": "4"}, {"title": "5", "query": "5"}, {"title": "6", "query": "6"}, {"title": "7", "query": "7"}, {"title": "8", "query": "8"}]}
+INFO:services.planner:Planner produced 9 tasks: ['0', '1', '2', '3', '4', '5', '6', '7', '8']
+ok
+test_http_admission_429_before_factory_and_recovery (test_phase_4a_1_execution.ExecutionTests.test_http_admission_429_before_factory_and_recovery) ... /home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/main.py:113: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  @app.on_event("startup")
+/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-20261102-bd5dab4b/acceptance-final/runtime/lib/python3.12/site-packages/fastapi/applications.py:4574: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  return self.router.on_event(event_type)
+/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/main.py:113: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  @app.on_event("startup")
+/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-20261102-bd5dab4b/acceptance-final/runtime/lib/python3.12/site-packages/fastapi/applications.py:4574: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  return self.router.on_event(event_type)
+2026-11-04 08:52:55.767 | INFO     | main:log_startup_configuration:124 - DeepResearch configuration loaded: provider=%s model=%s base_url=%s search_api=%s max_loops=%s fetch_full_page=%s tool_calling=%s strip_thinking=%s api_key=%s
+[32m2026-11-04 08:52:55[0m | [1mINFO[0m | [36musing_function:log_startup_configuration[0m | [36mmain.py:124[0m | [1mDeepResearch configuration loaded: provider=%s model=%s base_url=%s search_api=%s max_loops=%s fetch_full_page=%s tool_calling=%s strip_thinking=%s api_key=%s[0m
+INFO:services.planner:Planner raw output (truncated): {"tasks": [{"title": "0", "query": "0"}]}
+INFO:services.planner:Planner produced 1 tasks: ['0']
+ok
+test_note_write_after_cancel_rejected_without_changing_etag (test_phase_4a_1_execution.ExecutionTests.test_note_write_after_cancel_rejected_without_changing_etag) ... ok
+test_planner_reporter_return_after_deadline_cannot_advance (test_phase_4a_1_execution.ExecutionTests.test_planner_reporter_return_after_deadline_cannot_advance) ... INFO:services.planner:Planner raw output (truncated): {"tasks": [{"title": "0", "query": "0"}]}
+INFO:services.planner:Planner produced 1 tasks: ['0']
+ok
+test_real_two_active_researches_third_rejected_before_initialization (test_phase_4a_1_execution.ExecutionTests.test_real_two_active_researches_third_rejected_before_initialization) ... /home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/main.py:113: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  @app.on_event("startup")
+/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-20261102-bd5dab4b/acceptance-final/runtime/lib/python3.12/site-packages/fastapi/applications.py:4574: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  return self.router.on_event(event_type)
+2026-11-04 08:52:55.795 | INFO     | main:log_startup_configuration:124 - DeepResearch configuration loaded: provider=%s model=%s base_url=%s search_api=%s max_loops=%s fetch_full_page=%s tool_calling=%s strip_thinking=%s api_key=%s
+[32m2026-11-04 08:52:55[0m | [1mINFO[0m | [36musing_function:log_startup_configuration[0m | [36mmain.py:124[0m | [1mDeepResearch configuration loaded: provider=%s model=%s base_url=%s search_api=%s max_loops=%s fetch_full_page=%s tool_calling=%s strip_thinking=%s api_key=%s[0m
+2026-11-04 08:52:55.795 | INFO     | main:log_startup_configuration:124 - DeepResearch configuration loaded: provider=%s model=%s base_url=%s search_api=%s max_loops=%s fetch_full_page=%s tool_calling=%s strip_thinking=%s api_key=%s
+[32m2026-11-04 08:52:55[0m | [1mINFO[0m | [36musing_function:log_startup_configuration[0m | [36mmain.py:124[0m | [1mDeepResearch configuration loaded: provider=%s model=%s base_url=%s search_api=%s max_loops=%s fetch_full_page=%s tool_calling=%s strip_thinking=%s api_key=%s[0m
+INFO:services.planner:Planner raw output (truncated): {"tasks": [{"title": "0", "query": "0"}]}
+INFO:services.planner:Planner produced 1 tasks: ['0']
+INFO:services.planner:Planner raw output (truncated): {"tasks": [{"title": "0", "query": "0"}]}
+INFO:services.planner:Planner produced 1 tasks: ['0']
+/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/main.py:113: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  @app.on_event("startup")
+/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-20261102-bd5dab4b/acceptance-final/runtime/lib/python3.12/site-packages/fastapi/applications.py:4574: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  return self.router.on_event(event_type)
+2026-11-04 08:52:55.801 | INFO     | main:log_startup_configuration:124 - DeepResearch configuration loaded: provider=%s model=%s base_url=%s search_api=%s max_loops=%s fetch_full_page=%s tool_calling=%s strip_thinking=%s api_key=%s
+[32m2026-11-04 08:52:55[0m | [1mINFO[0m | [36musing_function:log_startup_configuration[0m | [36mmain.py:124[0m | [1mDeepResearch configuration loaded: provider=%s model=%s base_url=%s search_api=%s max_loops=%s fetch_full_page=%s tool_calling=%s strip_thinking=%s api_key=%s[0m
+ok
+test_search_deadline_blocks_summary_report_and_late_completion (test_phase_4a_1_execution.ExecutionTests.test_search_deadline_blocks_summary_report_and_late_completion) ... INFO:services.planner:Planner raw output (truncated): {"tasks": [{"title": "0", "query": "0"}, {"title": "1", "query": "1"}, {"title": "2", "query": "2"}, {"title": "3", "query": "3"}]}
+INFO:services.planner:Planner produced 4 tasks: ['0', '1', '2', '3']
+ok
+test_sync_and_stream_deadline_agree_no_fabricated_report (test_phase_4a_1_execution.ExecutionTests.test_sync_and_stream_deadline_agree_no_fabricated_report) ... INFO:services.planner:Planner raw output (truncated): {"tasks": [{"title": "0", "query": "0"}, {"title": "1", "query": "1"}]}
+INFO:services.planner:Planner produced 2 tasks: ['0', '1']
+INFO:services.planner:Planner raw output (truncated): {"tasks": [{"title": "0", "query": "0"}, {"title": "1", "query": "1"}]}
+INFO:services.planner:Planner produced 2 tasks: ['0', '1']
+ok
+test_worker_start_failure_and_stage_exceptions (test_phase_4a_1_execution.ExecutionTests.test_worker_start_failure_and_stage_exceptions) ... INFO:services.planner:Planner raw output (truncated): {"tasks": [{"title": "0", "query": "0"}, {"title": "1", "query": "1"}]}
+INFO:services.planner:Planner produced 2 tasks: ['0', '1']
+ERROR:agent:Task execution failed
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 486, in worker
+    for event in self._execute_task(state, task, emit_stream=True, step=step):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 602, in _execute_task
+    search_result, notices, answer_text, backend = run_search(dispatch_search,
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/services/search_runtime.py", line 7, in run_search
+    result = dispatch(*args)
+             ^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1198, in _execute_mock_call
+    raise effect
+RuntimeError: search error
+ERROR:agent:Task execution failed
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 486, in worker
+    for event in self._execute_task(state, task, emit_stream=True, step=step):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 602, in _execute_task
+    search_result, notices, answer_text, backend = run_search(dispatch_search,
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/services/search_runtime.py", line 7, in run_search
+    result = dispatch(*args)
+             ^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1198, in _execute_mock_call
+    raise effect
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 486, in worker
+    for event in self._execute_task(state, task, emit_stream=True, step=step):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 602, in _execute_task
+    search_result, notices, answer_text, backend = run_search(dispatch_search,
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/services/search_runtime.py", line 7, in run_search
+    result = dispatch(*args)
+             ^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1198, in _execute_mock_call
+    raise effect
+RuntimeError: search error
+INFO:services.planner:Planner raw output (truncated): {"tasks": [{"title": "0", "query": "0"}, {"title": "1", "query": "1"}]}
+INFO:services.planner:Planner produced 2 tasks: ['0', '1']
+ERROR:agent:Task execution failed
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 486, in worker
+    for event in self._execute_task(state, task, emit_stream=True, step=step):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 679, in _execute_task
+    summary_stream, summary_getter = self.summarizer.stream_task_summary(state, task, context)
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1198, in _execute_mock_call
+    raise effect
+RuntimeError: summary
+ERROR:agent:Task execution failed
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 486, in worker
+    for event in self._execute_task(state, task, emit_stream=True, step=step):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 679, in _execute_task
+    summary_stream, summary_getter = self.summarizer.stream_task_summary(state, task, context)
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1198, in _execute_mock_call
+    raise effect
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 486, in worker
+    for event in self._execute_task(state, task, emit_stream=True, step=step):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 679, in _execute_task
+    summary_stream, summary_getter = self.summarizer.stream_task_summary(state, task, context)
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1198, in _execute_mock_call
+    raise effect
+RuntimeError: summary
+INFO:services.planner:Planner raw output (truncated): {"tasks": [{"title": "0", "query": "0"}, {"title": "1", "query": "1"}]}
+INFO:services.planner:Planner produced 2 tasks: ['0', '1']
+INFO:services.planner:Planner raw output (truncated): {"tasks": [{"title": "0", "query": "0"}, {"title": "1", "query": "1"}]}
+INFO:services.planner:Planner produced 2 tasks: ['0', '1']
+ok
+test_bounded_retry_and_explicit_connect_read_timeout (test_phase_4a_1_resources.ResourceTests.test_bounded_retry_and_explicit_connect_read_timeout) ... ok
+test_existing_search_backend_override_and_fallback_unchanged (test_phase_4a_1_resources.ResourceTests.test_existing_search_backend_override_and_fallback_unchanged) ... INFO:services.search:Search notice (fallback): fallback notice
+INFO:services.search:Search backend=tavily resolved_backend=fallback answer=False results=0
+ok
+test_one_stream_close_does_not_close_other_shared_request (test_phase_4a_1_resources.ResourceTests.test_one_stream_close_does_not_close_other_shared_request) ... ok
+test_partial_stream_is_not_retried (test_phase_4a_1_resources.ResourceTests.test_partial_stream_is_not_retried) ... ok
+test_real_framework_retaining_llm_iterator_closes_owned_sdk_response (test_phase_4a_1_resources.ResourceTests.test_real_framework_retaining_llm_iterator_closes_owned_sdk_response) ... ok
+test_sdk_stream_normal_error_and_early_close (test_phase_4a_1_resources.ResourceTests.test_sdk_stream_normal_error_and_early_close) ... ok
+test_shared_sdk_concurrent_outputs_and_contexts_do_not_mix (test_phase_4a_1_resources.ResourceTests.test_shared_sdk_concurrent_outputs_and_contexts_do_not_mix) ... ok
+test_timeout_retries_clamped_to_remaining_budget (test_phase_4a_1_resources.ResourceTests.test_timeout_retries_clamped_to_remaining_budget) ... ok
+
+----------------------------------------------------------------------
+Ran 22 tests in 0.993s
+
+OK

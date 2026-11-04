@@ -1,0 +1,47 @@
+{
+  "initial_node_probe": "node --version unavailable on noninteractive WSL PATH (FileNotFoundError); no installation attempted. Explicit existing NVM binary verified below.",
+  "commands": [
+    {
+      "argv": [
+        "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/bin/python3.12",
+        "-I",
+        "-c",
+        "import sys,sqlite3; print(sys.version); print(\"SQLite \"+sqlite3.sqlite_version)"
+      ],
+      "cwd": "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source",
+      "exit_code": 0,
+      "stdout": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]\nSQLite 3.53.1\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/home/nhzj121/.nvm/versions/node/v24.15.0/bin/node",
+        "--version"
+      ],
+      "cwd": "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source",
+      "exit_code": 0,
+      "stdout": "v24.15.0\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/home/nhzj121/.nvm/versions/node/v24.15.0/bin/npm",
+        "--version"
+      ],
+      "cwd": "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source",
+      "exit_code": 0,
+      "stdout": "11.12.1\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/home/nhzj121/.local/bin/uv",
+        "--version"
+      ],
+      "cwd": "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source",
+      "exit_code": 0,
+      "stdout": "uv 0.12.7 (x86_64-unknown-linux-gnu)\n",
+      "stderr": ""
+    }
+  ]
+}

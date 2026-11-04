@@ -1,0 +1,19 @@
+⚠️ TAVILY_API_KEY 未设置
+⚠️ SERPAPI_API_KEY 未设置
+⚠️ 没有可用的 Tavily/SerpApi 搜索源，将回退到通用模式
+✅ 工具 'note' 已注册。
+✅ 工具 'note' 已注册。
+✅ 工具 'note' 已注册。
+✅ 工具 'note' 已注册。
+✅ 工具 'note' 已注册。
+✅ 工具 'note' 已注册。
+✅ 工具 'note' 已注册。
+✅ 工具 'note' 已注册。
+✅ 工具 'note' 已注册。
+✅ 工具 'note' 已注册。
+✅ 工具 'note' 已注册。
+✅ 工具 'note' 已注册。
+✅ 工具 'note' 已注册。
+✅ 工具 'note' 已注册。
+✅ 工具 'note' 已注册。
+✅ 工具 'note' 已注册。

@@ -1,0 +1,79 @@
+test_close_mid_single_chunk_has_no_finally_yield (test_phase_1_core.G1Tests.test_close_mid_single_chunk_has_no_finally_yield) ... ok
+test_close_with_unclosed_think_and_exception_release (test_phase_1_core.G1Tests.test_close_with_unclosed_think_and_exception_release) ... ok
+test_execute_task_close_releases_summary_stream (test_phase_1_core.G1Tests.test_execute_task_close_releases_summary_stream) ... ok
+test_filter_disabled_keeps_thinking (test_phase_1_core.G1Tests.test_filter_disabled_keeps_thinking) ... ok
+test_inner_exception_not_masked_by_cleanup (test_phase_1_core.G1Tests.test_inner_exception_not_masked_by_cleanup) ... WARNING:services.summarizer:Summary cleanup failed
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/services/summarizer.py", line 76, in generator
+    for chunk in inner:
+                 ^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 46, in stream_run
+    raise self.error
+ValueError: original
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/services/summarizer.py", line 89, in generator
+    cleanup()
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1198, in _execute_mock_call
+    raise effect
+RuntimeError: cleanup
+ok
+test_malformed_input_has_process_deadline (test_phase_1_core.G1Tests.test_malformed_input_has_process_deadline) ... ok
+test_partial_close_does_not_yield_and_closes_owned_stream (test_phase_1_core.G1Tests.test_partial_close_does_not_yield_and_closes_owned_stream) ... ok
+test_planner_reporter_history_normal_and_exception (test_phase_1_core.G1Tests.test_planner_reporter_history_normal_and_exception) ... INFO:services.planner:Planner raw output (truncated): {"tasks":[{"title":"t","query":"q"}]}
+INFO:services.planner:Planner produced 1 tasks: ['t']
+ok
+test_stream_event_order_and_fields (test_phase_1_core.G1Tests.test_stream_event_order_and_fields) ... ok
+test_sync_single_multiple_and_fallback (test_phase_1_core.G1Tests.test_sync_single_multiple_and_fallback) ... INFO:agent:No TODO items generated; falling back to single task
+ok
+test_synchronous_summary_cleanup_and_filter (test_phase_1_core.G1Tests.test_synchronous_summary_cleanup_and_filter) ... ok
+test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) ... ok
+test_tool_json_arrays_quotes_escapes_multiple_and_plain_brackets (test_phase_1_core.G1Tests.test_tool_json_arrays_quotes_escapes_multiple_and_plain_brackets) ... ok
+test_worker_failures_object_event_and_reporter_agree (test_phase_1_core.G1Tests.test_worker_failures_object_event_and_reporter_agree) ... ERROR:agent:Task execution failed
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 486, in worker
+    for event in self._execute_task(state, task, emit_stream=True, step=step):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 602, in _execute_task
+    search_result, notices, answer_text, backend = run_search(dispatch_search,
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/services/search_runtime.py", line 7, in run_search
+    result = dispatch(*args)
+             ^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1198, in _execute_mock_call
+    raise effect
+ValueError: fake failure
+ERROR:agent:Task execution failed
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 486, in worker
+    for event in self._execute_task(state, task, emit_stream=True, step=step):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 683, in _execute_task
+    for chunk in summary_stream:
+                 ^^^^^^^^^^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/services/summarizer.py", line 76, in generator
+    for chunk in inner:
+                 ^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 46, in stream_run
+    raise self.error
+ValueError: fake failure
+ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 0.041s
+
+OK

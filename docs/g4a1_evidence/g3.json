@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-20261102-bd5dab4b/acceptance-final/runtime/bin/python",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests/acceptance",
+    "-p",
+    "test_phase_3*.py",
+    "-v"
+  ],
+  "cwd": "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source",
+  "exit": 0,
+  "elapsed": 2.1427179529999876
+}

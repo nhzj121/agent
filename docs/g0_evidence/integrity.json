@@ -1,0 +1,32 @@
+{
+  "checked_original_files": 101,
+  "expected_changed_files": [
+    {
+      "path": "code/chapter14/helloagents-deepresearch/backend/pyproject.toml",
+      "before": "345cec3fd3a56ca4a1947da96402e259621562bb8964f2c3d045096d14070a50",
+      "after": "dfeeb3b916a8df70e71fc3f5d036f8ece2a13a02c98a04f705f53d4cdf6e62e5"
+    },
+    {
+      "path": "code/chapter14/helloagents-deepresearch/backend/uv.lock",
+      "before": "14cc6a3c658679c8e12be45dcfbff6c32b6f83f7bcf42e60647dcb4470e25199",
+      "after": "785d863ae16068b8bfb813ab437346da4e4a9f979201a6058f806e9869ffffa1"
+    }
+  ],
+  "other_original_fingerprints_unchanged": true,
+  "original_venv_python_target_unchanged": true,
+  "staged_diff_empty": true,
+  "git_status": " M code/chapter14/helloagents-deepresearch/backend/pyproject.toml\n M code/chapter14/helloagents-deepresearch/backend/uv.lock\n?? AGENTS.md\n?? code/chapter14/helloagents-deepresearch/backend/README.md\n?? docs/audit_build_probe.py\n?? docs/audit_evidence/backend-tests.txt\n?? docs/audit_evidence/build-probe.txt\n?? docs/audit_evidence/environment.json\n?? docs/audit_evidence/frontend-tests.txt\n?? docs/audit_evidence/integrity.json\n?? docs/audit_evidence/npm-audit-all.json\n?? docs/audit_evidence/npm-audit-production.json\n?? docs/audit_evidence/npm-remediation.json\n?? docs/audit_frontend.mjs\n?? docs/audit_repro.py\n?? docs/deepresearch_code_audit.md\n?? docs/deepresearch_g0_results.md\n?? docs/deepresearch_refactor_plan.md\n?? docs/g0_evidence/acceptance-final.stderr.txt\n?? docs/g0_evidence/acceptance-final.stdout.txt\n?? docs/g0_evidence/acceptance.stderr.txt\n?? docs/g0_evidence/acceptance.stdout.txt\n?? docs/g0_evidence/baseline.json\n?? docs/g0_evidence/capabilities.json\n?? docs/g0_evidence/commands.json\n?? docs/g0_evidence/dependency-reasons.json\n?? docs/g0_evidence/http-smoke.json\n?? docs/g0_evidence/identity.json\n?? docs/g0_evidence/installed-environment.json\n?? docs/g0_evidence/integrity.json\n?? docs/g0_evidence/lock-command.json\n?? docs/g0_evidence/lock-diff.json\n?? docs/g0_evidence/lock-resolution.txt\n?? docs/g0_evidence/logs/build.stderr.txt\n?? docs/g0_evidence/logs/build.stdout.txt\n?? docs/g0_evidence/logs/create-runtime.stderr.txt\n?? docs/g0_evidence/logs/create-runtime.stdout.txt\n?? docs/g0_evidence/logs/dependency-check.stderr.txt\n?? docs/g0_evidence/logs/dependency-check.stdout.txt\n?? docs/g0_evidence/logs/empty-runtime.stderr.txt\n?? docs/g0_evidence/logs/empty-runtime.stdout.txt\n?? docs/g0_evidence/logs/export-lock.stderr.txt\n?? docs/g0_evidence/logs/export-lock.stdout.txt\n?? docs/g0_evidence/logs/fake-http-smoke.stderr.txt\n?? docs/g0_evidence/logs/fake-http-smoke.stdout.txt\n?? docs/g0_evidence/logs/flock-blocked.stderr.txt\n?? docs/g0_evidence/logs/flock-blocked.stdout.txt\n?? docs/g0_evidence/logs/flock-released.stderr.txt\n?? docs/g0_evidence/logs/flock-released.stdout.txt\n?? docs/g0_evidence/logs/install-runtime-dependencies.stderr.txt\n?? docs/g0_evidence/logs/install-runtime-dependencies.stdout.txt\n?? docs/g0_evidence/logs/install-wheel.stderr.txt\n?? docs/g0_evidence/logs/install-wheel.stdout.txt\n?? docs/g0_evidence/logs/installed-imports.stderr.txt\n?? docs/g0_evidence/logs/installed-imports.stdout.txt\n?? docs/g0_evidence/logs/installed-metadata.stderr.txt\n?? docs/g0_evidence/logs/installed-metadata.stdout.txt\n?? docs/g0_evidence/logs/lock-check.stderr.txt\n?? docs/g0_evidence/logs/lock-check.stdout.txt\n?? docs/g0_evidence/logs/startup-app-dir.txt\n?? docs/g0_evidence/logs/startup-installed.txt\n?? docs/g0_evidence/logs/startup-src-cwd.txt\n?? docs/g0_evidence/runtime-requirements.txt\n?? docs/g0_evidence/setup.json\n?? docs/g0_evidence/test-command-final.json\n?? docs/g0_evidence/test-command.json\n?? docs/g0_evidence/test-process-final.json\n?? docs/g0_evidence/test-process.json\n?? docs/g0_evidence/toolchain.json\n?? docs/g0_evidence/work_directory.txt\n?? docs/g0_evidence/wsl.json\n?? tests/acceptance/test_phase_0_environment.py\n",
+  "test_process": {
+    "exit_code": 0,
+    "duration_seconds": 15.094474205000097,
+    "work_root": "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-20261102-bd5dab4b/acceptance-final"
+  },
+  "note": "Only original manifest paths read. Existing notes and .env not inspected. Final status includes this artifact and report.",
+  "added_files_sha256": {
+    "docs/deepresearch_g0_results.md": "47cb9140ad76f76c1dfa646ecbf0977853eff8a91a7af6cd977467ed8c27e43e",
+    "code/chapter14/helloagents-deepresearch/backend/README.md": "dc8b2eeee28bee718956ec00af333c9b925c9945b1e4d98f9f882f0170e3dfe6",
+    "tests/acceptance/test_phase_0_environment.py": "73fec3b388b20ce7321895450beacfb252330be8d592d8927e7cc7ac47e4bb8a"
+  },
+  "documentation_shell_syntax_check": "Passed bash -n for README and results report; examples not executed by this check.",
+  "git_diff_check_exit_code": 0
+}

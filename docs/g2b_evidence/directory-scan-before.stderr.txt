@@ -1,0 +1,20 @@
+test_parallel_directory_scans_have_independent_cursors (test_phase_2b_ownership.OwnershipTests.test_parallel_directory_scans_have_independent_cursors) ... FAIL
+
+======================================================================
+FAIL: test_parallel_directory_scans_have_independent_cursors (test_phase_2b_ownership.OwnershipTests.test_parallel_directory_scans_have_independent_cursors)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_2b_ownership.py", line 112, in test_parallel_directory_scans_have_independent_cursors
+    self.assertEqual(bad, [])
+AssertionError: Lists differ: [[], [], ['note_073be3a409c34b6fad9599b531[2443 chars], []] != []
+
+First list contains 8 additional elements.
+First extra element 0:
+[]
+
+Diff is 2731 characters long. Set self.maxDiff to None to see it.
+
+----------------------------------------------------------------------
+Ran 1 test in 0.147s
+
+FAILED (failures=1)

@@ -1,0 +1,223 @@
+test_concurrent_event_ids_are_allocated_atomically (test_phase_3_events.EventTests.test_concurrent_event_ids_are_allocated_atomically) ... INFO:services.tool_events:Tool call recorded: agent=fake tool=note task_id=1 note_id=None parsed_parameters={'action': 'create', 'task_id': 1, 'note_id': None}
+INFO:services.tool_events:Tool call recorded: agent=fake tool=note task_id=1 note_id=None parsed_parameters={'action': 'create', 'task_id': 1, 'note_id': None}
+INFO:services.tool_events:Tool call recorded: agent=fake tool=note task_id=1 note_id=None parsed_parameters={'action': 'create', 'task_id': 1, 'note_id': None}
+INFO:services.tool_events:Tool call recorded: agent=fake tool=note task_id=1 note_id=None parsed_parameters={'action': 'create', 'task_id': 1, 'note_id': None}
+INFO:services.tool_events:Tool call recorded: agent=fake tool=note task_id=1 note_id=None parsed_parameters={'action': 'create', 'task_id': 1, 'note_id': None}
+INFO:services.tool_events:Tool call recorded: agent=fake tool=note task_id=1 note_id=None parsed_parameters={'action': 'create', 'task_id': 1, 'note_id': None}
+INFO:services.tool_events:Tool call recorded: agent=fake tool=note task_id=1 note_id=None parsed_parameters={'action': 'create', 'task_id': 1, 'note_id': None}
+INFO:services.tool_events:Tool call recorded: agent=fake tool=note task_id=1 note_id=None parsed_parameters={'action': 'create', 'task_id': 1, 'note_id': None}
+INFO:services.tool_events:Tool call recorded: agent=fake tool=note task_id=1 note_id=None parsed_parameters={'action': 'create', 'task_id': 1, 'note_id': None}
+INFO:services.tool_events:Tool call recorded: agent=fake tool=note task_id=1 note_id=None parsed_parameters={'action': 'create', 'task_id': 1, 'note_id': None}
+INFO:services.tool_events:Tool call recorded: agent=fake tool=note task_id=1 note_id=None parsed_parameters={'action': 'create', 'task_id': 1, 'note_id': None}
+INFO:services.tool_events:Tool call recorded: agent=fake tool=note task_id=1 note_id=None parsed_parameters={'action': 'create', 'task_id': 1, 'note_id': None}
+INFO:services.tool_events:Tool call recorded: agent=fake tool=note task_id=1 note_id=None parsed_parameters={'action': 'create', 'task_id': 1, 'note_id': None}
+INFO:services.tool_events:Tool call recorded: agent=fake tool=note task_id=1 note_id=None parsed_parameters={'action': 'create', 'task_id': 1, 'note_id': None}
+INFO:services.tool_events:Tool call recorded: agent=fake tool=note task_id=1 note_id=None parsed_parameters={'action': 'create', 'task_id': 1, 'note_id': None}
+INFO:services.tool_events:Tool call recorded: agent=fake tool=note task_id=1 note_id=None parsed_parameters={'action': 'create', 'task_id': 1, 'note_id': None}
+INFO:services.tool_events:Tool call recorded: agent=fake tool=note task_id=1 note_id=None parsed_parameters={'action': 'create', 'task_id': 1, 'note_id': None}
+INFO:services.tool_events:Tool call recorded: agent=fake tool=note task_id=1 note_id=None parsed_parameters={'action': 'create', 'task_id': 1, 'note_id': None}
+INFO:services.tool_events:Tool call recorded: agent=fake tool=note task_id=1 note_id=None parsed_parameters={'action': 'create', 'task_id': 1, 'note_id': None}
+INFO:services.tool_events:Tool call recorded: agent=fake tool=note task_id=1 note_id=None parsed_parameters={'action': 'create', 'task_id': 1, 'note_id': None}
+FAIL
+test_failed_sink_is_available_for_one_replay (test_phase_3_events.EventTests.test_failed_sink_is_available_for_one_replay) ... INFO:services.tool_events:Tool call recorded: agent=fake tool=note task_id=1 note_id=note_11111111111111111111111111111111 parsed_parameters={'action': 'create', 'task_id': 1, 'note_id': 'note_11111111111111111111111111111111'}
+ERROR
+test_inflight_close_failure_keeps_replay_without_duplicate (test_phase_3_events.EventTests.test_inflight_close_failure_keeps_replay_without_duplicate) ... INFO:services.tool_events:Tool call recorded: agent=fake tool=note task_id=1 note_id=None parsed_parameters={'action': 'create', 'task_id': 1, 'note_id': None}
+Exception in thread Thread-1 (<lambda>):
+Traceback (most recent call last):
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/threading.py", line 1075, in _bootstrap_inner
+    self.run()
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/threading.py", line 1012, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_3_events.py", line 81, in <lambda>
+    thread = threading.Thread(target=lambda: self.tracker.record(payload()))
+                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/services/tool_events.py", line 86, in record
+    sink(self._build_payload(event, step=None))
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_3_events.py", line 79, in sink
+    raise OSError("closing sink")
+OSError: closing sink
+FAIL
+test_normal_sink_once_and_drain_still_updates_state (test_phase_3_events.EventTests.test_normal_sink_once_and_drain_still_updates_state) ... INFO:services.tool_events:Tool call recorded: agent=fake tool=note task_id=1 note_id=note_11111111111111111111111111111111 parsed_parameters={'action': 'create', 'task_id': 1, 'note_id': 'note_11111111111111111111111111111111'}
+FAIL
+test_read_does_not_hide_failed_write_but_write_can_recover (test_phase_3_events.EventTests.test_read_does_not_hide_failed_write_but_write_can_recover) ... INFO:services.tool_events:Tool call recorded: agent=fake tool=note task_id=1 note_id=fake-id parsed_parameters={'action': 'create', 'task_id': 1, 'note_id': None}
+INFO:services.tool_events:Tool call recorded: agent=fake tool=note task_id=1 note_id=note_33333333333333333333333333333333 parsed_parameters={'action': 'read', 'task_id': 1, 'note_id': 'note_33333333333333333333333333333333'}
+ERROR
+test_read_only_note_id_uses_trusted_result_mapping (test_phase_3_events.EventTests.test_read_only_note_id_uses_trusted_result_mapping) ... INFO:services.tool_events:Tool call recorded: agent=fake tool=note task_id=None note_id=note_22222222222222222222222222222222 parsed_parameters={'action': 'read', 'note_id': 'note_22222222222222222222222222222222'}
+FAIL
+test_run_identity_blocks_foreign_projection (test_phase_3_events.EventTests.test_run_identity_blocks_foreign_projection) ... ERROR
+test_structured_failure_does_not_bind_model_supplied_id (test_phase_3_events.EventTests.test_structured_failure_does_not_bind_model_supplied_id) ... INFO:services.tool_events:Tool call recorded: agent=fake tool=note task_id=1 note_id=fake parsed_parameters={'action': 'create', 'task_id': 1, 'note_id': 'fake'}
+FAIL
+test_complete_explicit_repository_workflow_and_frontend_fixture (test_phase_3_http.HttpTests.test_complete_explicit_repository_workflow_and_frontend_fixture) ... ERROR
+test_fatal_stream_exception_after_headers_emits_error_and_releases_iterator (test_phase_3_http.HttpTests.test_fatal_stream_exception_after_headers_emits_error_and_releases_iterator) ... ERROR
+test_summary_completed_with_note_paused_is_visible (test_phase_3_http.HttpTests.test_summary_completed_with_note_paused_is_visible) ... ERROR
+test_sync_and_sse_failures_share_task_and_reporter_status (test_phase_3_http.HttpTests.test_sync_and_sse_failures_share_task_and_reporter_status) ... ERROR
+test_worker_start_failure_is_terminal_without_hang (test_phase_3_http.HttpTests.test_worker_start_failure_is_terminal_without_hang) ... INFO:services.planner:Planner raw output (truncated): {"tasks":[{"title":"t","query":"q"}]}
+INFO:services.planner:Planner produced 1 tasks: ['t']
+ERROR
+
+======================================================================
+ERROR: test_failed_sink_is_available_for_one_replay (test_phase_3_events.EventTests.test_failed_sink_is_available_for_one_replay)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_3_events.py", line 68, in test_failed_sink_is_available_for_one_replay
+    self.tracker.record(payload(note_id="note_"+"1"*32))
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/services/tool_events.py", line 86, in record
+    sink(self._build_payload(event, step=None))
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_3_events.py", line 66, in fail
+    raise OSError("enqueue failed before put")
+OSError: enqueue failed before put
+
+======================================================================
+ERROR: test_read_does_not_hide_failed_write_but_write_can_recover (test_phase_3_events.EventTests.test_read_does_not_hide_failed_write_but_write_can_recover)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_3_events.py", line 119, in test_read_does_not_hide_failed_write_but_write_can_recover
+    self.assertEqual(self.task.note_status, "conflict")
+                     ^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'TodoItem' object has no attribute 'note_status'
+
+======================================================================
+ERROR: test_run_identity_blocks_foreign_projection (test_phase_3_events.EventTests.test_run_identity_blocks_foreign_projection)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_3_events.py", line 125, in test_run_identity_blocks_foreign_projection
+    self.tracker.reset(run_id="current")
+TypeError: ToolCallTracker.reset() got an unexpected keyword argument 'run_id'
+
+======================================================================
+ERROR: test_complete_explicit_repository_workflow_and_frontend_fixture (test_phase_3_http.HttpTests.test_complete_explicit_repository_workflow_and_frontend_fixture)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_3_http.py", line 49, in test_complete_explicit_repository_workflow_and_frontend_fixture
+    with TestClient(main.create_app(agent_factory=self.factory)) as client:
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: create_app() got an unexpected keyword argument 'agent_factory'
+
+======================================================================
+ERROR: test_fatal_stream_exception_after_headers_emits_error_and_releases_iterator (test_phase_3_http.HttpTests.test_fatal_stream_exception_after_headers_emits_error_and_releases_iterator)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_3_http.py", line 143, in test_fatal_stream_exception_after_headers_emits_error_and_releases_iterator
+    with TestClient(main.create_app(agent_factory=lambda **kw: instance)) as client:
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: create_app() got an unexpected keyword argument 'agent_factory'
+
+======================================================================
+ERROR: test_summary_completed_with_note_paused_is_visible (test_phase_3_http.HttpTests.test_summary_completed_with_note_paused_is_visible)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_3_http.py", line 76, in test_summary_completed_with_note_paused_is_visible
+    TestClient(main.create_app(agent_factory=self.factory)) as client:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: create_app() got an unexpected keyword argument 'agent_factory'
+
+======================================================================
+ERROR: test_sync_and_sse_failures_share_task_and_reporter_status (test_phase_3_http.HttpTests.test_sync_and_sse_failures_share_task_and_reporter_status)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_3_http.py", line 105, in test_sync_and_sse_failures_share_task_and_reporter_status
+    TestClient(main.create_app(agent_factory=factory)) as client:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: create_app() got an unexpected keyword argument 'agent_factory'
+
+======================================================================
+ERROR: test_worker_start_failure_is_terminal_without_hang (test_phase_3_http.HttpTests.test_worker_start_failure_is_terminal_without_hang)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_3_http.py", line 125, in test_worker_start_failure_is_terminal_without_hang
+    events = list(agent.run_stream("fake"))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 292, in run_stream
+    thread.start()
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1198, in _execute_mock_call
+    raise effect
+RuntimeError: cannot start
+
+======================================================================
+FAIL: test_concurrent_event_ids_are_allocated_atomically (test_phase_3_events.EventTests.test_concurrent_event_ids_are_allocated_atomically)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_3_events.py", line 53, in test_concurrent_event_ids_are_allocated_atomically
+    self.assertEqual(sorted(ids), list(range(1,21)))
+AssertionError: Lists differ: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1] != [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+
+First differing element 1:
+1
+2
+
+- [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
++ [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+
+======================================================================
+FAIL: test_inflight_close_failure_keeps_replay_without_duplicate (test_phase_3_events.EventTests.test_inflight_close_failure_keeps_replay_without_duplicate)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_3_events.py", line 85, in test_inflight_close_failure_keeps_replay_without_duplicate
+    self.assertEqual(self.tracker.drain(self.state), [])
+AssertionError: Lists differ: [{'type': 'tool_call', 'event_id': 1, 'age[138 chars]one}] != []
+
+First list contains 1 additional elements.
+First extra element 0:
+{'type': 'tool_call', 'event_id': 1, 'agent': 'fake', 'tool': 'note', 'parameters': {'action': 'create', 'task_id': 1, 'note_id': None}, 'result': 'ok', 'task_id': 1, 'note_id': None}
+
++ []
+- [{'agent': 'fake',
+-   'event_id': 1,
+-   'note_id': None,
+-   'parameters': {'action': 'create', 'note_id': None, 'task_id': 1},
+-   'result': 'ok',
+-   'task_id': 1,
+-   'tool': 'note',
+-   'type': 'tool_call'}]
+
+======================================================================
+FAIL: test_normal_sink_once_and_drain_still_updates_state (test_phase_3_events.EventTests.test_normal_sink_once_and_drain_still_updates_state)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_3_events.py", line 59, in test_normal_sink_once_and_drain_still_updates_state
+    self.assertEqual(self.tracker.drain(self.state), [])
+AssertionError: Lists differ: [{'type': 'tool_call', 'event_id': 1, 'age[282 chars]md'}] != []
+
+First list contains 1 additional elements.
+First extra element 0:
+{'type': 'tool_call', 'event_id': 1, 'agent': 'fake', 'tool': 'note', 'parameters': {'action': 'create', 'task_id': 1, 'note_id': 'note_11111111111111111111111111111111'}, 'result': 'ok', 'task_id': 1, 'note_id': 'note_11111111111111111111111111111111', 'note_path': '/tmp/tmpo0r5drza/note_11111111111111111111111111111111.md'}
+
++ []
+- [{'agent': 'fake',
+-   'event_id': 1,
+-   'note_id': 'note_11111111111111111111111111111111',
+-   'note_path': '/tmp/tmpo0r5drza/note_11111111111111111111111111111111.md',
+-   'parameters': {'action': 'create',
+-                  'note_id': 'note_11111111111111111111111111111111',
+-                  'task_id': 1},
+-   'result': 'ok',
+-   'task_id': 1,
+-   'tool': 'note',
+-   'type': 'tool_call'}]
+
+======================================================================
+FAIL: test_read_only_note_id_uses_trusted_result_mapping (test_phase_3_events.EventTests.test_read_only_note_id_uses_trusted_result_mapping)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_3_events.py", line 108, in test_read_only_note_id_uses_trusted_result_mapping
+    self.assertEqual(sent[0]["task_id"], 1)
+AssertionError: None != 1
+
+======================================================================
+FAIL: test_structured_failure_does_not_bind_model_supplied_id (test_phase_3_events.EventTests.test_structured_failure_does_not_bind_model_supplied_id)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_3_events.py", line 97, in test_structured_failure_does_not_bind_model_supplied_id
+    self.assertIsNone(self.task.note_id)
+AssertionError: 'fake' is not None
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.037s
+
+FAILED (failures=5, errors=8)

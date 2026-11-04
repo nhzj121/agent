@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/bin/python3.12",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests/acceptance",
+    "-p",
+    "test_phase_0*.py",
+    "-v"
+  ],
+  "cwd": "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source",
+  "exit": 1,
+  "elapsed": 16.4275061269999
+}

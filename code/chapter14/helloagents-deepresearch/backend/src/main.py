@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from dataclasses import asdict, is_dataclass
 import sys
 from typing import Any, Dict, Iterator, Optional
 
@@ -14,6 +15,24 @@ from pydantic import BaseModel, Field
 
 from config import Configuration, SearchAPI
 from agent import DeepResearchAgent
+
+# Keep legacy factory replacements compatible with the original run(topic) protocol.
+_ExecutionAgent = DeepResearchAgent
+from services.execution_control import (
+    ExecutionControl, ResearchAdmission, ResearchBusy, bind_execution)
+from threading import Lock
+
+_process_admission = None
+_admission_lock = Lock()
+
+
+def _admission(config):
+    global _process_admission
+    with _admission_lock:
+        if _process_admission is None:
+            _process_admission = ResearchAdmission(config.max_active_research)
+        return _process_admission
+
 
 # 添加控制台日志处理程序
 logger.add(
@@ -46,6 +65,14 @@ class ResearchRequest(BaseModel):
 class ResearchResponse(BaseModel):
     """HTTP response containing the generated report and structured tasks."""
 
+    run_id: str | None = None
+    run_status: str = "completed"
+    warnings: list[str] = Field(default_factory=list)
+    report_note_id: str | None = None
+    report_note_path: str | None = None
+    report_note_status: str = "not_started"
+    report_note_error: dict | None = None
+
     report_markdown: str = Field(
         ..., description="Markdown-formatted research report including sections"
     )
@@ -75,7 +102,7 @@ def _build_config(payload: ResearchRequest) -> Configuration:
     return Configuration.from_env(overrides=overrides)
 
 
-def create_app() -> FastAPI:
+def create_app(*, agent_factory=None, admission=None) -> FastAPI:
     app = FastAPI(title="HelloAgents Deep Researcher")
 
     app.add_middleware(
@@ -119,49 +146,84 @@ def create_app() -> FastAPI:
     def run_research(payload: ResearchRequest) -> ResearchResponse:
         try:
             config = _build_config(payload)
-            agent = DeepResearchAgent(config=config)
-            result = agent.run(payload.topic)
+            try:
+                lease = (admission or _admission(config)).acquire()
+            except ResearchBusy as exc:
+                raise HTTPException(status_code=429, detail={
+                    "code":"RESEARCH_CAPACITY_EXCEEDED", "detail":"active research limit reached"}) from exc
+            control = ExecutionControl(config.research_deadline_seconds, on_idle=lease.release)
+            try:
+                agent = (agent_factory or DeepResearchAgent)(config=config)
+            except BaseException:
+                control.finish()
+                raise
+        except HTTPException:
+            raise
         except ValueError as exc:  # Likely due to unsupported configuration
             raise HTTPException(status_code=400, detail=str(exc)) from exc
         except Exception as exc:  # pragma: no cover - defensive guardrail
             raise HTTPException(status_code=500, detail="Research failed") from exc
 
-        todo_payload = [
-            {
-                "id": item.id,
-                "title": item.title,
-                "intent": item.intent,
-                "query": item.query,
-                "status": item.status,
-                "summary": item.summary,
-                "sources_summary": item.sources_summary,
-                "note_id": item.note_id,
-                "note_path": item.note_path,
-            }
-            for item in result.todo_items
-        ]
+        try:
+            with bind_execution(control):
+                result = (agent.run(payload.topic, execution=control)
+                          if isinstance(agent, _ExecutionAgent) else agent.run(payload.topic))
+        except Exception as exc:
+            raise HTTPException(status_code=500, detail="Research failed") from exc
+        finally:
+            control.finish()
 
         return ResearchResponse(
             report_markdown=(result.report_markdown or result.running_summary or ""),
-            todo_items=todo_payload,
+            todo_items=[asdict(item) if is_dataclass(item) else vars(item) for item in result.todo_items],
+            **{key: getattr(result, key, default) for key, default in [
+                ("run_id", None), ("run_status", "completed"), ("warnings", []),
+                ("report_note_id", None), ("report_note_path", None),
+                ("report_note_status", "not_started"), ("report_note_error", None)]},
         )
 
     @app.post("/research/stream")
     def stream_research(payload: ResearchRequest) -> StreamingResponse:
         try:
             config = _build_config(payload)
-            agent = DeepResearchAgent(config=config)
+            try:
+                lease = (admission or _admission(config)).acquire()
+            except ResearchBusy as exc:
+                raise HTTPException(status_code=429, detail={
+                    "code":"RESEARCH_CAPACITY_EXCEEDED", "detail":"active research limit reached"}) from exc
+            control = ExecutionControl(config.research_deadline_seconds, on_idle=lease.release)
+            try:
+                agent = (agent_factory or DeepResearchAgent)(config=config)
+            except BaseException:
+                control.finish()
+                raise
+        except HTTPException:
+            raise
         except ValueError as exc:
             raise HTTPException(status_code=400, detail=str(exc)) from exc
 
+        except Exception as exc:
+            raise HTTPException(status_code=500, detail="Research initialization failed") from exc
+
         def event_iterator() -> Iterator[str]:
+            inner = None
             try:
-                for event in agent.run_stream(payload.topic):
+                inner = (agent.run_stream(payload.topic, execution=control)
+                         if isinstance(agent, _ExecutionAgent) else agent.run_stream(payload.topic))
+                for event in inner:
                     yield f"data: {json.dumps(event, ensure_ascii=False)}\n\n"
             except Exception as exc:  # pragma: no cover - defensive guardrail
                 logger.exception("Streaming research failed")
-                error_payload = {"type": "error", "detail": str(exc)}
+                error_payload = {"type": "error", "detail": str(exc),
+                                 "run_id": getattr(agent, "run_id", None), "run_status": "failed"}
                 yield f"data: {json.dumps(error_payload, ensure_ascii=False)}\n\n"
+            finally:
+                close = getattr(inner, "close", None)
+                try:
+                    if close is not None:
+                        close()
+                finally:
+                    control.finish()
 
         return StreamingResponse(
             event_iterator(),

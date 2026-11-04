@@ -16,14 +16,40 @@ def get_config_value(value: Any) -> str:
     return value if isinstance(value, str) else value.value
 
 
-def strip_thinking_tokens(text: str) -> str:
-    """Remove ``<think>`` sections from model responses."""
+class ThinkingFilter:
+    """Incremental exact-tag filter; unfinished thinking/prefixes fail closed."""
 
-    while "<think>" in text and "</think>" in text:
-        start = text.find("<think>")
-        end = text.find("</think>") + len("</think>")
-        text = text[:start] + text[end:]
-    return text
+    def __init__(self) -> None:
+        self._pending = ""
+        self._depth = 0
+
+    def feed(self, chunk: str) -> str:
+        self._pending += chunk
+        output: list[str] = []
+        tags = ("<think>", "</think>")
+        pos = 0
+        while pos < len(self._pending):
+            if self._pending.startswith(tags[0], pos):
+                self._depth += 1
+                pos += len(tags[0])
+            elif self._pending.startswith(tags[1], pos):
+                self._depth = max(0, self._depth - 1)
+                pos += len(tags[1])
+            elif len(self._pending) - pos < len(tags[1]) and any(
+                tag.startswith(self._pending[pos:]) for tag in tags
+            ):
+                break
+            else:
+                if not self._depth:
+                    output.append(self._pending[pos])
+                pos += 1
+        self._pending = self._pending[pos:]
+        return "".join(output)
+
+
+def strip_thinking_tokens(text: str) -> str:
+    """Apply the same conservative thinking-tag policy as the stream."""
+    return ThinkingFilter().feed(text)
 
 
 def deduplicate_and_format_sources(

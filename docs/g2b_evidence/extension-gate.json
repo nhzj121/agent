@@ -1,0 +1,1 @@
+{"argv": ["/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-20261102-bd5dab4b/acceptance-final/runtime/bin/python", "-B", "-m", "unittest", "discover", "-s", "tests/acceptance", "-p", "test_phase_2b_tool_adapter.py", "-v"], "exit_code": 0}

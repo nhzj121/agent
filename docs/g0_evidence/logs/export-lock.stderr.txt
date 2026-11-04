@@ -1,0 +1,2 @@
+Using CPython 3.12.14
+Resolved 72 packages in 0.99ms

@@ -1,0 +1,8 @@
+{
+  "system": "Linux",
+  "kernel": "6.18.54.1-microsoft-standard-WSL2",
+  "wsl_registered_name": "Ubuntu22.04.3",
+  "os_id": "ubuntu",
+  "os_version_id": "22.04",
+  "python": "3.12.14"
+}

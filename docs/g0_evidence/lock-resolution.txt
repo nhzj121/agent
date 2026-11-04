@@ -1,0 +1,14 @@
+
+Using CPython 3.12.14 interpreter at: /home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/bin/python3.12
+Resolved 72 packages in 10.58s
+Updated click v8.3.0 -> v8.5.0
+Added filelock v4.1.0, v4.2.6
+Added fsspec v2026.9.0
+Added hf-xet v1.8.0
+Added httpcore2 v2.14.0, v2.16.0
+Added httpx2 v2.14.0, v2.16.0
+Added httpx2-jsfetch v1.0
+Added huggingface-hub v2.3.0
+Updated idna v3.11 -> v3.20
+Added packaging v26.3
+Added truststore v0.10.5

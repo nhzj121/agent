@@ -1,0 +1,16 @@
+{
+  "base_python": "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/bin/python3.12",
+  "uv": "/home/nhzj121/.local/bin/uv",
+  "runtime": "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-n_sj55n4/runtime",
+  "source_copy": "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-n_sj55n4/source",
+  "wheel": "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-n_sj55n4/artifacts/helloagents_deep_researcher-0.0.1-py3-none-any.whl",
+  "sdist": "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-n_sj55n4/artifacts/helloagents_deep_researcher-0.0.1.tar.gz",
+  "empty_environment": {
+    "prefix": "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-n_sj55n4/runtime",
+    "base_prefix": "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu",
+    "distributions": []
+  },
+  "wheel_sha256": "f941f5e8f3fc54b4ae4887632826e5712020a4a04b2c78352c192c67993c1e17",
+  "lock_sha256": "785d863ae16068b8bfb813ab437346da4e4a9f979201a6058f806e9869ffffa1",
+  "pyproject_sha256": "dfeeb3b916a8df70e71fc3f5d036f8ece2a13a02c98a04f705f53d4cdf6e62e5"
+}

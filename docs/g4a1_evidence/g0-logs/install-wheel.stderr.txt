@@ -1,0 +1,5 @@
+Using Python 3.12.14 environment at: runtime
+Resolved 1 package in 1ms
+Prepared 1 package in 7ms
+Installed 1 package in 0.74ms
+ + helloagents-deep-researcher==0.0.1 (from file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-n_sj55n4/artifacts/helloagents_deep_researcher-0.0.1-py3-none-any.whl)

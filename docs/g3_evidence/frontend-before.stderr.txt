@@ -1,0 +1,32 @@
+解析流式事件失败： Error: UI failure
+    at file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:64:68
+    at Object.runResearchStream (eval at compile (file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:16:2), <anonymous>:40:25)
+    at async waitForActual (node:assert:646:5)
+    at async strict.rejects (node:assert:769:25)
+    at async file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:64:2
+    at async check (file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:23:35)
+    at async file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:62:1 {"type":"status"}
+解析流式事件失败： Error: UI failure
+    at file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:64:68
+    at Object.runResearchStream (eval at compile (file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:16:2), <anonymous>:40:25)
+    at async waitForActual (node:assert:646:5)
+    at async strict.rejects (node:assert:769:25)
+    at async file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:64:2
+    at async check (file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:23:35)
+    at async file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:62:1 {"type":"done"}
+解析流式事件失败： SyntaxError: Expected property name or '}' in JSON at position 1 (line 1 column 2)
+    at JSON.parse (<anonymous>)
+    at Object.runResearchStream (eval at compile (file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:16:2), <anonymous>:39:44)
+    at async waitForActual (node:assert:646:5)
+    at async strict.rejects (node:assert:769:25)
+    at async file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:69:2
+    at async check (file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:23:35)
+    at async file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:67:1 {bad}
+解析流式事件失败： SyntaxError: Unexpected non-whitespace character after JSON at position 21 (line 3 column 1)
+    at JSON.parse (<anonymous>)
+    at Object.runResearchStream (eval at compile (file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:16:2), <anonymous>:60:48)
+    at async file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:82:18
+    at async check (file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:23:35)
+    at async file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:80:1 {"type":"status"}
+
+data: {"type":"done"}

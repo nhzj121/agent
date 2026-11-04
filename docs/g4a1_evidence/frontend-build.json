@@ -1,0 +1,12 @@
+{
+  "argv": [
+    "/home/nhzj121/.nvm/versions/node/v24.15.0/bin/node",
+    "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/node_modules/vite/bin/vite.js",
+    "build",
+    "--outDir",
+    "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g4a1-front-5b3k3zqf/dist"
+  ],
+  "cwd": "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend",
+  "exit": 0,
+  "elapsed": 0.869563243000016
+}

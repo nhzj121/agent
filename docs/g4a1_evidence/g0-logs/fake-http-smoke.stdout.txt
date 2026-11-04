@@ -1,0 +1,4 @@
+⚠️ TAVILY_API_KEY 未设置
+⚠️ SERPAPI_API_KEY 未设置
+⚠️ 没有可用的 Tavily/SerpApi 搜索源，将回退到通用模式
+G0_JSON={"health": 200, "research": 200, "stream_types": ["status", "todo_list", "final_report", "done"], "error_type": "error", "calls": [["init", false], ["run", "fake"], ["init", false], ["stream", "fake"], ["init", false], ["stream", "fake-error"]]}

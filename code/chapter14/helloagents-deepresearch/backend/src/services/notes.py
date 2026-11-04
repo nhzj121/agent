@@ -33,6 +33,7 @@ def build_note_guidance(task: TodoItem) -> str:
             f"- 当前任务笔记 ID：{task.note_id}。\n"
             f"- 在书写总结前必须调用：[TOOL_CALL:note:{read_payload}] 获取最新内容。\n"
             f"- 完成分析后调用：[TOOL_CALL:note:{update_payload}] 同步增量信息。\n"
+            "- 更新必须在读取结果进入下一轮生成之后执行；冲突后重新读取并重新生成，不复用旧正文。\n"
             "- 更新时保持原有段落结构，新增内容请在对应段落中补充。\n"
             f"- 建议 tags 保持为 {tags_literal}，保证其他 Agent 可快速定位。\n"
             "- 成功同步到笔记后，再输出面向用户的总结。\n"

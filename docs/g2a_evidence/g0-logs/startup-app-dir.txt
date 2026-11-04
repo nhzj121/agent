@@ -1,0 +1,2 @@
+2026-11-03 14:13:52.775 | INFO     | main:log_startup_configuration:100 - DeepResearch configuration loaded: provider=%s model=%s base_url=%s search_api=%s max_loops=%s fetch_full_page=%s tool_calling=%s strip_thinking=%s api_key=%s
+[32m2026-11-03 14:13:52[0m | [1mINFO[0m | [36musing_function:log_startup_configuration[0m | [36mmain.py:100[0m | [1mDeepResearch configuration loaded: provider=%s model=%s base_url=%s search_api=%s max_loops=%s fetch_full_page=%s tool_calling=%s strip_thinking=%s api_key=%s[0m

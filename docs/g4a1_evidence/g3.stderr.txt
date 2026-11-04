@@ -1,0 +1,280 @@
+test_concurrent_event_ids_are_allocated_atomically (test_phase_3_events.EventTests.test_concurrent_event_ids_are_allocated_atomically) ... ok
+test_failed_sink_is_available_for_one_replay (test_phase_3_events.EventTests.test_failed_sink_is_available_for_one_replay) ... WARNING:services.tool_events:Tool sink failed; event retained for drain
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/services/tool_events.py", line 94, in record
+    sink(self._build_payload(event))
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_3_events.py", line 66, in fail
+    raise OSError("enqueue failed before put")
+OSError: enqueue failed before put
+ok
+test_inflight_close_failure_keeps_replay_without_duplicate (test_phase_3_events.EventTests.test_inflight_close_failure_keeps_replay_without_duplicate) ... WARNING:services.tool_events:Tool sink failed; event retained for drain
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/services/tool_events.py", line 94, in record
+    sink(self._build_payload(event))
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_3_events.py", line 79, in sink
+    raise OSError("closing sink")
+OSError: closing sink
+ok
+test_normal_sink_once_and_drain_still_updates_state (test_phase_3_events.EventTests.test_normal_sink_once_and_drain_still_updates_state) ... ok
+test_read_does_not_hide_failed_write_but_write_can_recover (test_phase_3_events.EventTests.test_read_does_not_hide_failed_write_but_write_can_recover) ... ok
+test_read_only_note_id_uses_trusted_result_mapping (test_phase_3_events.EventTests.test_read_only_note_id_uses_trusted_result_mapping) ... ok
+test_run_identity_blocks_foreign_projection (test_phase_3_events.EventTests.test_run_identity_blocks_foreign_projection) ... ok
+test_structured_failure_does_not_bind_model_supplied_id (test_phase_3_events.EventTests.test_structured_failure_does_not_bind_model_supplied_id) ... ok
+test_all_skipped_is_failed_and_research_fatal_valueerror_is_500 (test_phase_3_http.HttpTests.test_all_skipped_is_failed_and_research_fatal_valueerror_is_500) ... /home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/main.py:116: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  @app.on_event("startup")
+/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-20261102-bd5dab4b/acceptance-final/runtime/lib/python3.12/site-packages/fastapi/applications.py:4574: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  return self.router.on_event(event_type)
+2026-11-04 08:57:12.537 | INFO     | main:log_startup_configuration:127 - DeepResearch configuration loaded: provider=%s model=%s base_url=%s search_api=%s max_loops=%s fetch_full_page=%s tool_calling=%s strip_thinking=%s api_key=%s
+[32m2026-11-04 08:57:12[0m | [1mINFO[0m | [36musing_function:log_startup_configuration[0m | [36mmain.py:127[0m | [1mDeepResearch configuration loaded: provider=%s model=%s base_url=%s search_api=%s max_loops=%s fetch_full_page=%s tool_calling=%s strip_thinking=%s api_key=%s[0m
+INFO:services.planner:Planner raw output (truncated): {"tasks":[{"title":"t","query":"q"}]}
+INFO:services.planner:Planner produced 1 tasks: ['t']
+/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/main.py:116: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  @app.on_event("startup")
+/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-20261102-bd5dab4b/acceptance-final/runtime/lib/python3.12/site-packages/fastapi/applications.py:4574: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  return self.router.on_event(event_type)
+2026-11-04 08:57:12.543 | INFO     | main:log_startup_configuration:127 - DeepResearch configuration loaded: provider=%s model=%s base_url=%s search_api=%s max_loops=%s fetch_full_page=%s tool_calling=%s strip_thinking=%s api_key=%s
+[32m2026-11-04 08:57:12[0m | [1mINFO[0m | [36musing_function:log_startup_configuration[0m | [36mmain.py:127[0m | [1mDeepResearch configuration loaded: provider=%s model=%s base_url=%s search_api=%s max_loops=%s fetch_full_page=%s tool_calling=%s strip_thinking=%s api_key=%s[0m
+ok
+test_complete_explicit_repository_workflow_and_frontend_fixture (test_phase_3_http.HttpTests.test_complete_explicit_repository_workflow_and_frontend_fixture) ... /home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/main.py:116: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  @app.on_event("startup")
+/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-20261102-bd5dab4b/acceptance-final/runtime/lib/python3.12/site-packages/fastapi/applications.py:4574: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  return self.router.on_event(event_type)
+2026-11-04 08:57:12.548 | INFO     | main:log_startup_configuration:127 - DeepResearch configuration loaded: provider=%s model=%s base_url=%s search_api=%s max_loops=%s fetch_full_page=%s tool_calling=%s strip_thinking=%s api_key=%s
+[32m2026-11-04 08:57:12[0m | [1mINFO[0m | [36musing_function:log_startup_configuration[0m | [36mmain.py:127[0m | [1mDeepResearch configuration loaded: provider=%s model=%s base_url=%s search_api=%s max_loops=%s fetch_full_page=%s tool_calling=%s strip_thinking=%s api_key=%s[0m
+INFO:services.planner:Planner raw output (truncated): {"tasks":[{"title":"t","intent":"i","query":"q"}]}
+INFO:services.planner:Planner produced 1 tasks: ['t']
+INFO:services.planner:Planner raw output (truncated): {"tasks":[{"title":"t","intent":"i","query":"q"}]}
+INFO:services.planner:Planner produced 1 tasks: ['t']
+ok
+test_fatal_stream_exception_after_headers_emits_error_and_releases_iterator (test_phase_3_http.HttpTests.test_fatal_stream_exception_after_headers_emits_error_and_releases_iterator) ... /home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/main.py:116: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  @app.on_event("startup")
+/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-20261102-bd5dab4b/acceptance-final/runtime/lib/python3.12/site-packages/fastapi/applications.py:4574: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  return self.router.on_event(event_type)
+2026-11-04 08:57:12.732 | INFO     | main:log_startup_configuration:127 - DeepResearch configuration loaded: provider=%s model=%s base_url=%s search_api=%s max_loops=%s fetch_full_page=%s tool_calling=%s strip_thinking=%s api_key=%s
+[32m2026-11-04 08:57:12[0m | [1mINFO[0m | [36musing_function:log_startup_configuration[0m | [36mmain.py:127[0m | [1mDeepResearch configuration loaded: provider=%s model=%s base_url=%s search_api=%s max_loops=%s fetch_full_page=%s tool_calling=%s strip_thinking=%s api_key=%s[0m
+2026-11-04 08:57:12.737 | ERROR    | main:event_iterator:216 - Streaming research failed
+Traceback (most recent call last):
+
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/threading.py", line 1032, in _bootstrap
+    self._bootstrap_inner()
+    │    └ <function Thread._bootstrap_inner at 0x7a41cf0f3240>
+    └ <WorkerThread(AnyIO worker thread, started daemon 134421151716928)>
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/threading.py", line 1075, in _bootstrap_inner
+    self.run()
+    │    └ <function WorkerThread.run at 0x7a41970cd300>
+    └ <WorkerThread(AnyIO worker thread, started daemon 134421151716928)>
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-20261102-bd5dab4b/acceptance-final/runtime/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 976, in run
+    result = context.run(func, *args)
+             │       │   │      └ (<generator object create_app.<locals>.stream_research.<locals>.event_iterator at 0x7a41970d4820>,)
+             │       │   └ <function _next at 0x7a41972d2660>
+             │       └ <method 'run' of '_contextvars.Context' objects>
+             └ <_contextvars.Context object at 0x7a4197080300>
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-20261102-bd5dab4b/acceptance-final/runtime/lib/python3.12/site-packages/starlette/concurrency.py", line 50, in _next
+    return next(iterator)
+                └ <generator object create_app.<locals>.stream_research.<locals>.event_iterator at 0x7a41970d4820>
+
+> File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/main.py", line 213, in event_iterator
+    for event in inner:
+        │        └ <generator object HttpTests.test_fatal_stream_exception_after_headers_emits_error_and_releases_iterator.<locals>.Bad.run_stre...
+        └ {'type': 'status', 'run_id': 'bad-run'}
+
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_3_http.py", line 266, in run_stream
+    raise RuntimeError("fatal")
+
+RuntimeError: fatal
+[32m2026-11-04 08:57:12[0m | [31m[1mERROR[0m | [36musing_function:event_iterator[0m | [36mmain.py:216[0m | [31m[1mStreaming research failed[0m
+[33m[1mTraceback (most recent call last):[0m
+
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/threading.py", line 1032, in _bootstrap
+    self._bootstrap_inner()
+    │    └ <function Thread._bootstrap_inner at 0x7a41cf0f3240>
+    └ <WorkerThread(AnyIO worker thread, started daemon 134421151716928)>
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/threading.py", line 1075, in _bootstrap_inner
+    self.run()
+    │    └ <function WorkerThread.run at 0x7a41970cd300>
+    └ <WorkerThread(AnyIO worker thread, started daemon 134421151716928)>
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-20261102-bd5dab4b/acceptance-final/runtime/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 976, in run
+    result = context.run(func, *args)
+             │       │   │      └ (<generator object create_app.<locals>.stream_research.<locals>.event_iterator at 0x7a41970d4820>,)
+             │       │   └ <function _next at 0x7a41972d2660>
+             │       └ <method 'run' of '_contextvars.Context' objects>
+             └ <_contextvars.Context object at 0x7a4197080300>
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-20261102-bd5dab4b/acceptance-final/runtime/lib/python3.12/site-packages/starlette/concurrency.py", line 50, in _next
+    return next(iterator)
+                └ <generator object create_app.<locals>.stream_research.<locals>.event_iterator at 0x7a41970d4820>
+
+> File "[32m/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/[0m[32m[1mmain.py[0m", line [33m213[0m, in [35mevent_iterator[0m
+    [35m[1mfor[0m [1mevent[0m [35m[1min[0m [1minner[0m[1m:[0m
+    [36m    │        └ [0m[36m[1m<generator object HttpTests.test_fatal_stream_exception_after_headers_emits_error_and_releases_iterator.<locals>.Bad.run_stre...[0m
+    [36m    └ [0m[36m[1m{'type': 'status', 'run_id': 'bad-run'}[0m
+
+  File "[32m/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/[0m[32m[1mtest_phase_3_http.py[0m", line [33m266[0m, in [35mrun_stream[0m
+    [35m[1mraise[0m [1mRuntimeError[0m[1m([0m[36m"fatal"[0m[1m)[0m
+
+[31m[1mRuntimeError[0m:[1m fatal[0m
+[32m2026-11-04 08:57:12[0m | [31m[1mERROR[0m | [36musing_function:event_iterator[0m | [36mmain.py:216[0m | [31m[1mStreaming research failed[0m
+[33m[1mTraceback (most recent call last):[0m
+
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/threading.py", line 1032, in _bootstrap
+    self._bootstrap_inner()
+    │    └ <function Thread._bootstrap_inner at 0x7a41cf0f3240>
+    └ <WorkerThread(AnyIO worker thread, started daemon 134421151716928)>
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/threading.py", line 1075, in _bootstrap_inner
+    self.run()
+    │    └ <function WorkerThread.run at 0x7a41970cd300>
+    └ <WorkerThread(AnyIO worker thread, started daemon 134421151716928)>
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-20261102-bd5dab4b/acceptance-final/runtime/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 976, in run
+    result = context.run(func, *args)
+             │       │   │      └ (<generator object create_app.<locals>.stream_research.<locals>.event_iterator at 0x7a41970d4820>,)
+             │       │   └ <function _next at 0x7a41972d2660>
+             │       └ <method 'run' of '_contextvars.Context' objects>
+             └ <_contextvars.Context object at 0x7a4197080300>
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-20261102-bd5dab4b/acceptance-final/runtime/lib/python3.12/site-packages/starlette/concurrency.py", line 50, in _next
+    return next(iterator)
+                └ <generator object create_app.<locals>.stream_research.<locals>.event_iterator at 0x7a41970d4820>
+
+> File "[32m/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/[0m[32m[1mmain.py[0m", line [33m213[0m, in [35mevent_iterator[0m
+    [35m[1mfor[0m [1mevent[0m [35m[1min[0m [1minner[0m[1m:[0m
+    [36m    │        └ [0m[36m[1m<generator object HttpTests.test_fatal_stream_exception_after_headers_emits_error_and_releases_iterator.<locals>.Bad.run_stre...[0m
+    [36m    └ [0m[36m[1m{'type': 'status', 'run_id': 'bad-run'}[0m
+
+  File "[32m/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/[0m[32m[1mtest_phase_3_http.py[0m", line [33m266[0m, in [35mrun_stream[0m
+    [35m[1mraise[0m [1mRuntimeError[0m[1m([0m[36m"fatal"[0m[1m)[0m
+
+[31m[1mRuntimeError[0m:[1m fatal[0m
+ok
+test_reused_agent_disabling_notes_does_not_borrow_old_run (test_phase_3_http.HttpTests.test_reused_agent_disabling_notes_does_not_borrow_old_run) ... INFO:services.planner:Planner raw output (truncated): {"tasks":[{"title":"t","query":"q"}]}
+INFO:services.planner:Planner produced 1 tasks: ['t']
+INFO:services.planner:Planner raw output (truncated): {"tasks":[{"title":"t","query":"q"}]}
+INFO:services.planner:Planner produced 1 tasks: ['t']
+ok
+test_same_agent_reentry_is_rejected_until_original_work_finishes (test_phase_3_http.HttpTests.test_same_agent_reentry_is_rejected_until_original_work_finishes) ... INFO:services.planner:Planner raw output (truncated): {"tasks":[{"title":"t","query":"q"}]}
+INFO:services.planner:Planner produced 1 tasks: ['t']
+ok
+test_summary_completed_with_note_paused_is_visible (test_phase_3_http.HttpTests.test_summary_completed_with_note_paused_is_visible) ... /home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/main.py:116: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  @app.on_event("startup")
+/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-20261102-bd5dab4b/acceptance-final/runtime/lib/python3.12/site-packages/fastapi/applications.py:4574: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  return self.router.on_event(event_type)
+2026-11-04 08:57:12.820 | INFO     | main:log_startup_configuration:127 - DeepResearch configuration loaded: provider=%s model=%s base_url=%s search_api=%s max_loops=%s fetch_full_page=%s tool_calling=%s strip_thinking=%s api_key=%s
+[32m2026-11-04 08:57:12[0m | [1mINFO[0m | [36musing_function:log_startup_configuration[0m | [36mmain.py:127[0m | [1mDeepResearch configuration loaded: provider=%s model=%s base_url=%s search_api=%s max_loops=%s fetch_full_page=%s tool_calling=%s strip_thinking=%s api_key=%s[0m
+INFO:services.planner:Planner raw output (truncated): {"tasks":[{"title":"t","intent":"i","query":"q"}]}
+INFO:services.planner:Planner produced 1 tasks: ['t']
+WARNING:agent:Final note persistence failed: WRITES_PAUSED
+ok
+test_sync_and_sse_failures_share_task_and_reporter_status (test_phase_3_http.HttpTests.test_sync_and_sse_failures_share_task_and_reporter_status) ... /home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/main.py:116: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  @app.on_event("startup")
+/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-20261102-bd5dab4b/acceptance-final/runtime/lib/python3.12/site-packages/fastapi/applications.py:4574: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  return self.router.on_event(event_type)
+2026-11-04 08:57:12.840 | INFO     | main:log_startup_configuration:127 - DeepResearch configuration loaded: provider=%s model=%s base_url=%s search_api=%s max_loops=%s fetch_full_page=%s tool_calling=%s strip_thinking=%s api_key=%s
+[32m2026-11-04 08:57:12[0m | [1mINFO[0m | [36musing_function:log_startup_configuration[0m | [36mmain.py:127[0m | [1mDeepResearch configuration loaded: provider=%s model=%s base_url=%s search_api=%s max_loops=%s fetch_full_page=%s tool_calling=%s strip_thinking=%s api_key=%s[0m
+INFO:services.planner:Planner raw output (truncated): {"tasks":[{"title":"ok","query":"ok"},{"title":"bad","query":"bad"}]}
+INFO:services.planner:Planner produced 2 tasks: ['ok', 'bad']
+INFO:services.planner:Planner raw output (truncated): {"tasks":[{"title":"ok","query":"ok"},{"title":"bad","query":"bad"}]}
+INFO:services.planner:Planner produced 2 tasks: ['ok', 'bad']
+ERROR:agent:Task execution failed
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 486, in worker
+    for event in self._execute_task(state, task, emit_stream=True, step=step):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 602, in _execute_task
+    search_result, notices, answer_text, backend = run_search(dispatch_search,
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/services/search_runtime.py", line 7, in run_search
+    result = dispatch(*args)
+             ^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1204, in _execute_mock_call
+    result = effect(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_3_http.py", line 117, in search
+    if query == "bad": raise ValueError("fake search failure")
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: fake search failure
+ok
+test_two_workers_sink_put_failure_replays_once_with_correct_task (test_phase_3_http.HttpTests.test_two_workers_sink_put_failure_replays_once_with_correct_task) ... INFO:services.planner:Planner raw output (truncated): {"tasks":[{"title":"one","query":"q1"},{"title":"two","query":"q2"}]}
+INFO:services.planner:Planner produced 2 tasks: ['one', 'two']
+WARNING:services.tool_events:Tool sink failed; event retained for drain
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/services/tool_events.py", line 94, in record
+    sink(self._build_payload(event))
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 470, in tool_event_sink
+    enqueue(event)
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 459, in enqueue
+    event_queue.put(payload)
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_3_http.py", line 149, in put
+    raise OSError("one enqueue failure")
+OSError: one enqueue failure
+ok
+test_worker_start_failure_is_terminal_without_hang (test_phase_3_http.HttpTests.test_worker_start_failure_is_terminal_without_hang) ... INFO:services.planner:Planner raw output (truncated): {"tasks":[{"title":"t","query":"q"}]}
+INFO:services.planner:Planner produced 1 tasks: ['t']
+ok
+
+----------------------------------------------------------------------
+Ran 17 tests in 0.526s
+
+OK

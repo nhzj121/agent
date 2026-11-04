@@ -1,0 +1,38 @@
+{
+  "checks": [
+    "F01 UTF-8 and arbitrary byte boundaries: supported",
+    "F02 CRLF two-frame stream: zero events (compatibility limitation; current backend uses LF)",
+    "F03 EOF before done/error resolves successfully",
+    "F04 onEvent errors are caught as parse errors",
+    "F05 done returns with reader lock held and no reader.cancel()",
+    "F06 AbortController is passed to fetch and AbortError propagates",
+    "F10 planner tool event before todo_list loses structured task log in UI",
+    "F07 failed is stored but detail/log/localized label absent; skipped is handled",
+    "F08 old aborted request finally resets loading while new request is active",
+    "F09 local abort leaves task status in_progress"
+  ],
+  "total": 10
+}
+
+解析流式事件失败： SyntaxError: Unexpected non-whitespace character after JSON at position 21 (line 3 column 1)
+    at JSON.parse (<anonymous>)
+    at Object.runResearchStream (eval at compile (file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/docs/audit_frontend.mjs:22:2), <anonymous>:60:48)
+    at async response (file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/docs/audit_frontend.mjs:37:2)
+    at async crlf_multiple_frames_fail (file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/docs/audit_frontend.mjs:47:15)
+    at async file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/docs/audit_frontend.mjs:46:1 {"type":"status"}
+
+data: {"type":"done"}
+解析流式事件失败： Error: fake UI failure
+    at file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/docs/audit_frontend.mjs:55:98
+    at file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/docs/audit_frontend.mjs:37:64
+    at Object.runResearchStream (eval at compile (file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/docs/audit_frontend.mjs:22:2), <anonymous>:40:25)
+    at async response (file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/docs/audit_frontend.mjs:37:2)
+    at async callback_errors_are_swallowed (file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/docs/audit_frontend.mjs:55:15)
+    at async file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/docs/audit_frontend.mjs:54:1 {"type":"status"}
+解析流式事件失败： Error: fake UI failure
+    at file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/docs/audit_frontend.mjs:55:98
+    at file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/docs/audit_frontend.mjs:37:64
+    at Object.runResearchStream (eval at compile (file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/docs/audit_frontend.mjs:22:2), <anonymous>:40:25)
+    at async response (file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/docs/audit_frontend.mjs:37:2)
+    at async callback_errors_are_swallowed (file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/docs/audit_frontend.mjs:55:15)
+    at async file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/docs/audit_frontend.mjs:54:1 {"type":"done"}

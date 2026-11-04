@@ -1,0 +1,75 @@
+{
+  "checks": [
+    {
+      "name": "UTF8 byte boundaries + reader release",
+      "ok": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\ntrue !== false\n\n    at file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:53:46\n    at async check (file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:23:35)\n    at async file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:48:1"
+    },
+    {
+      "name": "EOF rejects even after final_report",
+      "ok": false,
+      "error": "AssertionError [ERR_ASSERTION]: Missing expected rejection.\n    at async file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:58:3\n    at async check (file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:23:35)\n    at async file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:55:1"
+    },
+    {
+      "name": "callback errors propagate",
+      "ok": false,
+      "error": "AssertionError [ERR_ASSERTION]: Missing expected rejection.\n    at async file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:64:2\n    at async check (file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:23:35)\n    at async file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:62:1"
+    },
+    {
+      "name": "malformed JSON rejects",
+      "ok": false,
+      "error": "AssertionError [ERR_ASSERTION]: Missing expected rejection.\n    at async file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:69:2\n    at async check (file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:23:35)\n    at async file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:67:1"
+    },
+    {
+      "name": "error frame reaches UI and rejects",
+      "ok": false,
+      "error": "AssertionError [ERR_ASSERTION]: Missing expected rejection.\n    at async file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:73:2\n    at async check (file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:23:35)\n    at async file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:71:1"
+    },
+    {
+      "name": "done releases unfinished response",
+      "ok": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\ntrue !== false\n\n    at file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:78:57\n    at async check (file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:23:35)\n    at async file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:76:1"
+    },
+    {
+      "name": "CRLF framing",
+      "ok": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ []\n- [\n-   'status',\n-   'done'\n- ]\n\n    at file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:83:9\n    at async check (file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:23:35)\n    at async file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:80:1"
+    },
+    {
+      "name": "AbortSignal propagation",
+      "ok": true
+    },
+    {
+      "name": "Planner buffers + run/event deduplication",
+      "ok": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n0 !== 1\n\n    at file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:98:9\n    at check (file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:23:41)\n    at file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:92:7"
+    },
+    {
+      "name": "late event/catch/finally isolation",
+      "ok": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\nfalse !== true\n\n    at file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:109:9\n    at async check (file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:23:35)\n    at async file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:103:1"
+    },
+    {
+      "name": "task terminal status/error cannot regress",
+      "ok": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ 'in_progress'\n- 'failed'\n\n    at file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:119:9\n    at check (file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:23:41)\n    at file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:114:7"
+    },
+    {
+      "name": "cancel marks only unfinished local tasks",
+      "ok": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ 'in_progress'\n- 'cancelled'\n\n    at file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:130:65\n    at async check (file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:23:35)\n    at async file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:126:1"
+    },
+    {
+      "name": "actual API + Vue + backend fixture fake-workflow.json",
+      "ok": false,
+      "error": "Error: ENOENT: no such file or directory, open '/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/docs/g3_evidence/fake-workflow.json'\n    at Object.readFileSync (node:fs:441:20)\n    at file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:135:31\n    at check (file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:23:41)\n    at file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:134:8"
+    },
+    {
+      "name": "actual API + Vue + backend fixture fake-paused.json",
+      "ok": false,
+      "error": "Error: ENOENT: no such file or directory, open '/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/docs/g3_evidence/fake-paused.json'\n    at Object.readFileSync (node:fs:441:20)\n    at file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:135:31\n    at check (file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:23:41)\n    at file:///home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs:134:8"
+    }
+  ],
+  "passed": 1,
+  "failed": 13
+}

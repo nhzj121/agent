@@ -1,0 +1,20 @@
+test_01_registration_name_is_not_os_version (test_phase_0_environment.G0FilesystemTests.test_01_registration_name_is_not_os_version) ... ok
+test_02_cross_process_flock (test_phase_0_environment.G0FilesystemTests.test_02_cross_process_flock) ... ok
+test_03_dir_fd_and_nofollow (test_phase_0_environment.G0FilesystemTests.test_03_dir_fd_and_nofollow) ... ok
+test_04_atomic_replace_reader_sees_complete_versions (test_phase_0_environment.G0FilesystemTests.test_04_atomic_replace_reader_sees_complete_versions) ... ok
+test_05_directory_fsync (test_phase_0_environment.G0FilesystemTests.test_05_directory_fsync) ... ok
+test_00_source_copy_excludes_private_artifacts_and_preserves_code (test_phase_0_environment.G0PackagingTests.test_00_source_copy_excludes_private_artifacts_and_preserves_code) ... ok
+test_01_wheel_payload_and_declared_dependencies (test_phase_0_environment.G0PackagingTests.test_01_wheel_payload_and_declared_dependencies) ... ok
+test_02_sdist_contains_readme_and_all_sources (test_phase_0_environment.G0PackagingTests.test_02_sdist_contains_readme_and_all_sources) ... ok
+test_03_installed_imports_are_source_independent (test_phase_0_environment.G0PackagingTests.test_03_installed_imports_are_source_independent) ... ok
+test_04_installed_dependencies_match_lock (test_phase_0_environment.G0PackagingTests.test_04_installed_dependencies_match_lock) ... ok
+test_05_fake_http_routes_and_no_real_notes_or_llm (test_phase_0_environment.G0PackagingTests.test_05_fake_http_routes_and_no_real_notes_or_llm) ... ok
+test_06_installed_uvicorn_starts_without_source_pythonpath (test_phase_0_environment.G0PackagingTests.test_06_installed_uvicorn_starts_without_source_pythonpath) ... ok
+test_07_existing_app_dir_startup_is_compatible (test_phase_0_environment.G0PackagingTests.test_07_existing_app_dir_startup_is_compatible) ... ok
+test_08_existing_src_working_directory_is_compatible (test_phase_0_environment.G0PackagingTests.test_08_existing_src_working_directory_is_compatible) ... ok
+test_09_no_original_files_or_environment_are_rewritten (test_phase_0_environment.G0PackagingTests.test_09_no_original_files_or_environment_are_rewritten) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 15.399s
+
+OK

@@ -1,0 +1,37 @@
+AUDIT_OBSERVATIONS={"asgi_disconnect": {"spec_version": "2.3", "worker_active_after_disconnect": true}, "close": {"blocked_until_release": true, "worker_status_after_close": "completed"}, "context_chars_one_source": 32096, "loop_count": {"final": 2, "received": [0, 0]}, "missing_huggingface_import": "ModuleNotFoundError: blocked undeclared dependency: huggingface_hub", "note_create": {"duplicate_id": true, "files": 1, "index_records": 2}, "reversed_think_tags": "nonterminating; isolated child killed at 0.6 seconds", "strip_nested": "A,\"content\":\"C\"}]Z", "sync_run": {"search_calls": 0, "status": "pending"}, "think_split": {"final": "visible", "stream": "<think>SECRET</think>visible"}, "tracker_ids": [1, 1], "worker_failure": {"final_report": true, "sse": "failed", "state": "in_progress"}}
+
+test_01_run_does_not_consume_task_generator (__main__.AuditTests.test_01_run_does_not_consume_task_generator) ... ok
+test_02_worker_failure_state_disagrees_with_event (__main__.AuditTests.test_02_worker_failure_state_disagrees_with_event) ... ok
+test_03_answer_without_sources_is_skipped (__main__.AuditTests.test_03_answer_without_sources_is_skipped) ... ok
+test_04_normal_producer_events_are_delivered_once (__main__.AuditTests.test_04_normal_producer_events_are_delivered_once) ... ok
+test_05_close_waits_and_worker_continues (__main__.AuditTests.test_05_close_waits_and_worker_continues) ... ok
+test_06_counter_is_success_count_not_unique_search_sequence (__main__.AuditTests.test_06_counter_is_success_count_not_unique_search_sequence) ... ok
+test_07_tracker_duplicate_ids_under_forced_valid_interleaving (__main__.AuditTests.test_07_tracker_duplicate_ids_under_forced_valid_interleaving) ... ok
+test_08_note_id_alone_does_not_infer_task (__main__.AuditTests.test_08_note_id_alone_does_not_infer_task) ... ok
+test_09_failed_note_operation_can_attach_nonexistent_note (__main__.AuditTests.test_09_failed_note_operation_can_attach_nonexistent_note) ... ok
+test_10_think_marker_split_leaks (__main__.AuditTests.test_10_think_marker_split_leaks) ... ok
+test_11_finally_yield_can_break_close_and_skip_clear (__main__.AuditTests.test_11_finally_yield_can_break_close_and_skip_clear) ... ok
+test_12_exception_cleanup_differs_by_service (__main__.AuditTests.test_12_exception_cleanup_differs_by_service) ... ok
+test_13_strip_regex_fails_where_framework_parser_succeeds (__main__.AuditTests.test_13_strip_regex_fails_where_framework_parser_succeeds) ... ok
+test_14_concurrent_note_create_collides (__main__.AuditTests.test_14_concurrent_note_create_collides) ... ok
+test_15_note_read_modify_write_loses_independent_update (__main__.AuditTests.test_15_note_read_modify_write_loses_independent_update) ... ok
+test_16_two_note_instances_overwrite_index_snapshot (__main__.AuditTests.test_16_two_note_instances_overwrite_index_snapshot) ... ok
+test_17_report_matching_can_select_task_conclusion (__main__.AuditTests.test_17_report_matching_can_select_task_conclusion) ... ok
+test_18_persistence_reuses_one_report_but_leaves_earlier_duplicates (__main__.AuditTests.test_18_persistence_reuses_one_report_but_leaves_earlier_duplicates) ... ok
+test_19_note_failure_does_not_fail_task (__main__.AuditTests.test_19_note_failure_does_not_fail_task) ... ok
+test_20_report_input_contains_failure_and_missing_sources (__main__.AuditTests.test_20_report_input_contains_failure_and_missing_sources) ... ok
+test_21_context_budget_does_not_limit_snippet_or_answer (__main__.AuditTests.test_21_context_budget_does_not_limit_snippet_or_answer) ... ok
+test_22_shared_llm_client_concurrent_mock_transport (__main__.AuditTests.test_22_shared_llm_client_concurrent_mock_transport) ... ok
+test_23_partial_llm_stream_not_explicitly_closed (__main__.AuditTests.test_23_partial_llm_stream_not_explicitly_closed) ... ok
+test_24_tools_execute_after_llm_round_not_mid_chunk (__main__.AuditTests.test_24_tools_execute_after_llm_round_not_mid_chunk) ... ok
+test_25_missing_undeclared_huggingface_dependency_reproduces_import_error (__main__.AuditTests.test_25_missing_undeclared_huggingface_dependency_reproduces_import_error) ... ok
+test_26_explicit_backend_overrides_global_and_advanced_falls_back (__main__.AuditTests.test_26_explicit_backend_overrides_global_and_advanced_falls_back) ... ok
+test_27_fastapi_error_is_sse_after_http_200 (__main__.AuditTests.test_27_fastapi_error_is_sse_after_http_200) ... ok
+test_28_asgi_disconnect_does_not_cancel_active_worker (__main__.AuditTests.test_28_asgi_disconnect_does_not_cancel_active_worker) ... ok
+test_29_note_id_can_escape_workspace_in_contained_temp_fixture (__main__.AuditTests.test_29_note_id_can_escape_workspace_in_contained_temp_fixture) ... ok
+test_30_reversed_think_tags_do_not_terminate (__main__.AuditTests.test_30_reversed_think_tags_do_not_terminate) ... ok
+
+----------------------------------------------------------------------
+Ran 30 tests in 1.657s
+
+OK

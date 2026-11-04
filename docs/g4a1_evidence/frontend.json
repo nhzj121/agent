@@ -1,0 +1,9 @@
+{
+  "argv": [
+    "/home/nhzj121/.nvm/versions/node/v24.15.0/bin/node",
+    "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/frontend/tests/acceptance/phase3.mjs"
+  ],
+  "cwd": "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source",
+  "exit": 0,
+  "elapsed": 0.599637596999969
+}

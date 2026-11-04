@@ -1,0 +1,273 @@
+{
+  "events": [
+    {
+      "type": "status",
+      "message": "初始化研究流程",
+      "run_id": "2df6d17dc2ce41c19d032e29d0624e41",
+      "run_status": "running"
+    },
+    {
+      "type": "todo_list",
+      "tasks": [
+        {
+          "id": 1,
+          "title": "t",
+          "intent": "i",
+          "query": "q",
+          "status": "pending",
+          "summary": null,
+          "sources_summary": null,
+          "note_id": null,
+          "note_path": null,
+          "stream_token": "task_1",
+          "error_code": null,
+          "detail": null,
+          "note_status": "not_started",
+          "note_error": null,
+          "note_etag": null,
+          "notices": []
+        }
+      ],
+      "step": 0,
+      "run_id": "2df6d17dc2ce41c19d032e29d0624e41",
+      "run_status": "running"
+    },
+    {
+      "id": 1,
+      "title": "t",
+      "intent": "i",
+      "query": "q",
+      "status": "in_progress",
+      "summary": null,
+      "sources_summary": "sources",
+      "note_id": null,
+      "note_path": null,
+      "stream_token": "task_1",
+      "error_code": null,
+      "detail": null,
+      "note_status": "not_started",
+      "note_error": null,
+      "note_etag": null,
+      "notices": [],
+      "type": "task_status",
+      "task_id": 1,
+      "step": 1,
+      "run_id": "2df6d17dc2ce41c19d032e29d0624e41",
+      "run_status": "running"
+    },
+    {
+      "type": "sources",
+      "task_id": 1,
+      "latest_sources": "sources",
+      "raw_context": "context",
+      "step": 1,
+      "backend": "fake",
+      "note_id": null,
+      "note_path": null,
+      "stream_token": "task_1",
+      "run_id": "2df6d17dc2ce41c19d032e29d0624e41",
+      "run_status": "running"
+    },
+    {
+      "type": "tool_call",
+      "event_id": 1,
+      "agent": "任务总结专家",
+      "tool": "note",
+      "parameters": {
+        "action": "create",
+        "task_id": 1
+      },
+      "result": "❌ WRITES_PAUSED",
+      "task_id": 1,
+      "note_id": null,
+      "run_id": "2df6d17dc2ce41c19d032e29d0624e41",
+      "stage": "summarizer",
+      "success": false,
+      "error_code": "WRITES_PAUSED",
+      "detail": "manual edit window active",
+      "note_etag": null,
+      "note_status": "paused",
+      "persisted": false,
+      "step": 1,
+      "stream_token": "task_1",
+      "run_status": "running"
+    },
+    {
+      "type": "task_summary_chunk",
+      "task_id": 1,
+      "content": "ta",
+      "note_id": null,
+      "step": 1,
+      "stream_token": "task_1",
+      "run_id": "2df6d17dc2ce41c19d032e29d0624e41",
+      "run_status": "running"
+    },
+    {
+      "type": "task_summary_chunk",
+      "task_id": 1,
+      "content": "sk-summary",
+      "note_id": null,
+      "step": 1,
+      "stream_token": "task_1",
+      "run_id": "2df6d17dc2ce41c19d032e29d0624e41",
+      "run_status": "running"
+    },
+    {
+      "id": 1,
+      "title": "t",
+      "intent": "i",
+      "query": "q",
+      "status": "completed",
+      "summary": "task-summary",
+      "sources_summary": "sources",
+      "note_id": null,
+      "note_path": null,
+      "stream_token": "task_1",
+      "error_code": null,
+      "detail": null,
+      "note_status": "paused",
+      "note_error": {
+        "code": "WRITES_PAUSED",
+        "detail": "manual edit window active",
+        "persisted": false
+      },
+      "note_etag": null,
+      "notices": [
+        "笔记 WRITES_PAUSED: manual edit window active"
+      ],
+      "type": "task_status",
+      "task_id": 1,
+      "step": 1,
+      "run_id": "2df6d17dc2ce41c19d032e29d0624e41",
+      "run_status": "running"
+    },
+    {
+      "type": "tool_call",
+      "event_id": 2,
+      "agent": "报告撰写专家",
+      "tool": "note",
+      "parameters": {
+        "action": "create"
+      },
+      "result": "❌ WRITES_PAUSED",
+      "task_id": null,
+      "note_id": null,
+      "run_id": "2df6d17dc2ce41c19d032e29d0624e41",
+      "stage": "reporter",
+      "success": false,
+      "error_code": "WRITES_PAUSED",
+      "detail": "manual edit window active",
+      "note_etag": null,
+      "note_status": "paused",
+      "persisted": false,
+      "step": 2,
+      "run_status": "running"
+    },
+    {
+      "type": "final_report",
+      "report": "final-report",
+      "note_id": null,
+      "note_path": null,
+      "run_id": "2df6d17dc2ce41c19d032e29d0624e41",
+      "run_status": "completed",
+      "warnings": [
+        "summarizer: WRITES_PAUSED: manual edit window active",
+        "reporter: WRITES_PAUSED: manual edit window active",
+        "最终报告笔记 WRITES_PAUSED: manual edit window active"
+      ],
+      "report_note_status": "paused",
+      "report_note_error": {
+        "code": "WRITES_PAUSED",
+        "detail": "manual edit window active",
+        "persisted": false
+      },
+      "tasks": [
+        {
+          "id": 1,
+          "title": "t",
+          "intent": "i",
+          "query": "q",
+          "status": "completed",
+          "summary": "task-summary",
+          "sources_summary": "sources",
+          "note_id": null,
+          "note_path": null,
+          "stream_token": "task_1",
+          "error_code": null,
+          "detail": null,
+          "note_status": "paused",
+          "note_error": {
+            "code": "WRITES_PAUSED",
+            "detail": "manual edit window active",
+            "persisted": false
+          },
+          "note_etag": null,
+          "notices": [
+            "笔记 WRITES_PAUSED: manual edit window active"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "done",
+      "run_id": "2df6d17dc2ce41c19d032e29d0624e41",
+      "run_status": "completed",
+      "warnings": [
+        "summarizer: WRITES_PAUSED: manual edit window active",
+        "reporter: WRITES_PAUSED: manual edit window active",
+        "最终报告笔记 WRITES_PAUSED: manual edit window active"
+      ],
+      "report_note_status": "paused",
+      "report_note_error": {
+        "code": "WRITES_PAUSED",
+        "detail": "manual edit window active",
+        "persisted": false
+      }
+    }
+  ],
+  "expected": {
+    "type": "final_report",
+    "report": "final-report",
+    "note_id": null,
+    "note_path": null,
+    "run_id": "2df6d17dc2ce41c19d032e29d0624e41",
+    "run_status": "completed",
+    "warnings": [
+      "summarizer: WRITES_PAUSED: manual edit window active",
+      "reporter: WRITES_PAUSED: manual edit window active",
+      "最终报告笔记 WRITES_PAUSED: manual edit window active"
+    ],
+    "report_note_status": "paused",
+    "report_note_error": {
+      "code": "WRITES_PAUSED",
+      "detail": "manual edit window active",
+      "persisted": false
+    },
+    "tasks": [
+      {
+        "id": 1,
+        "title": "t",
+        "intent": "i",
+        "query": "q",
+        "status": "completed",
+        "summary": "task-summary",
+        "sources_summary": "sources",
+        "note_id": null,
+        "note_path": null,
+        "stream_token": "task_1",
+        "error_code": null,
+        "detail": null,
+        "note_status": "paused",
+        "note_error": {
+          "code": "WRITES_PAUSED",
+          "detail": "manual edit window active",
+          "persisted": false
+        },
+        "note_etag": null,
+        "notices": [
+          "笔记 WRITES_PAUSED: manual edit window active"
+        ]
+      }
+    ]
+  }
+}

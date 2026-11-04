@@ -1,0 +1,1 @@
+G0_WORK_ROOT=/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-n_sj55n4

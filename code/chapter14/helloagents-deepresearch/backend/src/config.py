@@ -16,6 +16,14 @@ class SearchAPI(Enum):
 class Configuration(BaseModel):
     """Configuration options for the deep research assistant."""
 
+    max_task_workers: int = Field(default=3, ge=1)
+    max_active_research: int = Field(default=2, ge=1)
+    max_planned_tasks: int = Field(default=8, ge=1)
+    research_deadline_seconds: float = Field(default=180, gt=0, allow_inf_nan=False)
+    model_connect_timeout: float = Field(default=5, gt=0, allow_inf_nan=False)
+    model_read_timeout: float = Field(default=20, gt=0, allow_inf_nan=False)
+    model_max_retries: int = Field(default=1, ge=0, le=4)
+
     max_web_research_loops: int = Field(
         default=3,
         title="Research Depth",

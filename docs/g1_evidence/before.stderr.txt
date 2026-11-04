@@ -1,0 +1,1461 @@
+test_close_with_unclosed_think_and_exception_release (test_phase_1_core.G1Tests.test_close_with_unclosed_think_and_exception_release) ... ok
+test_filter_disabled_keeps_thinking (test_phase_1_core.G1Tests.test_filter_disabled_keeps_thinking) ... ok
+test_inner_exception_not_masked_by_cleanup (test_phase_1_core.G1Tests.test_inner_exception_not_masked_by_cleanup) ... ERROR
+test_malformed_input_has_process_deadline (test_phase_1_core.G1Tests.test_malformed_input_has_process_deadline) ... ERROR
+test_partial_close_does_not_yield_and_closes_owned_stream (test_phase_1_core.G1Tests.test_partial_close_does_not_yield_and_closes_owned_stream) ... ok
+test_planner_reporter_history_normal_and_exception (test_phase_1_core.G1Tests.test_planner_reporter_history_normal_and_exception) ... INFO:services.planner:Planner raw output (truncated): {"tasks":[{"title":"t","query":"q"}]}
+INFO:services.planner:Planner produced 1 tasks: ['t']
+
+  test_planner_reporter_history_normal_and_exception (test_phase_1_core.G1Tests.test_planner_reporter_history_normal_and_exception) (role='planner', error=ValueError('fake')) ... FAIL
+  test_planner_reporter_history_normal_and_exception (test_phase_1_core.G1Tests.test_planner_reporter_history_normal_and_exception) (role='reporter', error=ValueError('fake')) ... FAIL
+test_stream_event_order_and_fields (test_phase_1_core.G1Tests.test_stream_event_order_and_fields) ... ok
+test_sync_single_multiple_and_fallback (test_phase_1_core.G1Tests.test_sync_single_multiple_and_fallback) ... 
+  test_sync_single_multiple_and_fallback (test_phase_1_core.G1Tests.test_sync_single_multiple_and_fallback) (count=1) ... FAIL
+  test_sync_single_multiple_and_fallback (test_phase_1_core.G1Tests.test_sync_single_multiple_and_fallback) (count=3) ... FAIL
+INFO:agent:No TODO items generated; falling back to single task
+  test_sync_single_multiple_and_fallback (test_phase_1_core.G1Tests.test_sync_single_multiple_and_fallback) (count=0) ... FAIL
+test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) ... 
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET</think>后', chunks=['前<', 'think>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET</think>后', chunks=['前<t', 'hink>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET</think>后', chunks=['前<th', 'ink>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET</think>后', chunks=['前<thi', 'nk>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET</think>后', chunks=['前<thin', 'k>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET</think>后', chunks=['前<think', '>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET</think>后', chunks=['前', '<', 't', 'h', 'i', 'n', 'k', '>', 'S', 'E', 'C', 'R', 'E', 'T', '<', '/', 't', 'h', 'i', 'n', 'k', '>', '后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['', '前<think>SECRET<think>NESTED</think>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前', '<think>SECRET<think>NESTED</think>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<', 'think>SECRET<think>NESTED</think>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<t', 'hink>SECRET<think>NESTED</think>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<th', 'ink>SECRET<think>NESTED</think>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<thi', 'nk>SECRET<think>NESTED</think>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<thin', 'k>SECRET<think>NESTED</think>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think', '>SECRET<think>NESTED</think>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>', 'SECRET<think>NESTED</think>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>S', 'ECRET<think>NESTED</think>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SE', 'CRET<think>NESTED</think>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SEC', 'RET<think>NESTED</think>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECR', 'ET<think>NESTED</think>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRE', 'T<think>NESTED</think>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET', '<think>NESTED</think>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<', 'think>NESTED</think>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<t', 'hink>NESTED</think>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<th', 'ink>NESTED</think>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<thi', 'nk>NESTED</think>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<thin', 'k>NESTED</think>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think', '>NESTED</think>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>', 'NESTED</think>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>N', 'ESTED</think>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NE', 'STED</think>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NES', 'TED</think>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NEST', 'ED</think>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTE', 'D</think>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED', '</think>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED<', '/think>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</', 'think>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</t', 'hink>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</th', 'ink>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</thi', 'nk>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</thin', 'k>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</think', '>SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</think>', 'SECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</think>S', 'ECRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</think>SE', 'CRET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</think>SEC', 'RET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</think>SECR', 'ET</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</think>SECRE', 'T</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</think>SECRET', '</think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</think>SECRET<', '/think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</think>SECRET</', 'think>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</think>SECRET</t', 'hink>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</think>SECRET</th', 'ink>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</think>SECRET</thi', 'nk>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</think>SECRET</thin', 'k>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</think>SECRET</think', '>后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</think>SECRET</think>', '后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</think>SECRET</think>后', '']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前', '<', 't', 'h', 'i', 'n', 'k', '>', 'S', 'E', 'C', 'R', 'E', 'T', '<', 't', 'h', 'i', 'n', 'k', '>', 'N', 'E', 'S', 'T', 'E', 'D', '<', '/', 't', 'h', 'i', 'n', 'k', '>', 'S', 'E', 'C', 'R', 'E', 'T', '<', '/', 't', 'h', 'i', 'n', 'k', '>', '后']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['', '前</think>后<think>SECRET']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前', '</think>后<think>SECRET']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前<', '/think>后<think>SECRET']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</', 'think>后<think>SECRET']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</t', 'hink>后<think>SECRET']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</th', 'ink>后<think>SECRET']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</thi', 'nk>后<think>SECRET']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</thin', 'k>后<think>SECRET']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</think', '>后<think>SECRET']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</think>', '后<think>SECRET']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</think>后', '<think>SECRET']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</think>后<', 'think>SECRET']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</think>后<t', 'hink>SECRET']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</think>后<th', 'ink>SECRET']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</think>后<thi', 'nk>SECRET']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</think>后<thin', 'k>SECRET']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</think>后<think', '>SECRET']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</think>后<think>', 'SECRET']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</think>后<think>S', 'ECRET']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</think>后<think>SE', 'CRET']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</think>后<think>SEC', 'RET']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</think>后<think>SECR', 'ET']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</think>后<think>SECRE', 'T']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</think>后<think>SECRET', '']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前', '<', '/', 't', 'h', 'i', 'n', 'k', '>', '后', '<', 't', 'h', 'i', 'n', 'k', '>', 'S', 'E', 'C', 'R', 'E', 'T']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET', chunks=['', '前<think>SECRET']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET', chunks=['前', '<think>SECRET']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET', chunks=['前<', 'think>SECRET']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET', chunks=['前<t', 'hink>SECRET']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET', chunks=['前<th', 'ink>SECRET']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET', chunks=['前<thi', 'nk>SECRET']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET', chunks=['前<thin', 'k>SECRET']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET', chunks=['前<think', '>SECRET']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET', chunks=['前<think>', 'SECRET']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET', chunks=['前<think>S', 'ECRET']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET', chunks=['前<think>SE', 'CRET']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET', chunks=['前<think>SEC', 'RET']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET', chunks=['前<think>SECR', 'ET']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET', chunks=['前<think>SECRE', 'T']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET', chunks=['前<think>SECRET', '']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET', chunks=['前', '<', 't', 'h', 'i', 'n', 'k', '>', 'S', 'E', 'C', 'R', 'E', 'T']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<thi', chunks=['', '前<thi']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<thi', chunks=['前', '<thi']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<thi', chunks=['前<', 'thi']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<thi', chunks=['前<t', 'hi']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<thi', chunks=['前<th', 'i']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<thi', chunks=['前<thi', '']) ... FAIL
+  test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<thi', chunks=['前', '<', 't', 'h', 'i']) ... FAIL
+test_tool_json_arrays_quotes_escapes_multiple_and_plain_brackets (test_phase_1_core.G1Tests.test_tool_json_arrays_quotes_escapes_multiple_and_plain_brackets) ... FAIL
+test_worker_failures_object_event_and_reporter_agree (test_phase_1_core.G1Tests.test_worker_failures_object_event_and_reporter_agree) ... ERROR:agent:Task execution failed
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 218, in worker
+    for event in self._execute_task(state, task, emit_stream=True, step=step):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 300, in _execute_task
+    search_result, notices, answer_text, backend = dispatch_search(
+                                                   ^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1198, in _execute_mock_call
+    raise effect
+ValueError: fake failure
+
+  test_worker_failures_object_event_and_reporter_agree (test_phase_1_core.G1Tests.test_worker_failures_object_event_and_reporter_agree) (stage='search') ... FAIL
+ERROR:agent:Task execution failed
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 218, in worker
+    for event in self._execute_task(state, task, emit_stream=True, step=step):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 379, in _execute_task
+    for chunk in summary_stream:
+                 ^^^^^^^^^^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/services/summarizer.py", line 85, in generator
+    for chunk in agent.stream_run(prompt):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 46, in stream_run
+    raise self.error
+ValueError: fake failure
+  test_worker_failures_object_event_and_reporter_agree (test_phase_1_core.G1Tests.test_worker_failures_object_event_and_reporter_agree) (stage='summary') ... FAIL
+
+======================================================================
+ERROR: test_inner_exception_not_masked_by_cleanup (test_phase_1_core.G1Tests.test_inner_exception_not_masked_by_cleanup)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/services/summarizer.py", line 85, in generator
+    for chunk in agent.stream_run(prompt):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 46, in stream_run
+    raise self.error
+ValueError: original
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 167, in test_inner_exception_not_masked_by_cleanup
+    list(stream)
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/services/summarizer.py", line 102, in generator
+    agent.clear_history()
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1198, in _execute_mock_call
+    raise effect
+RuntimeError: cleanup
+
+======================================================================
+ERROR: test_malformed_input_has_process_deadline (test_phase_1_core.G1Tests.test_malformed_input_has_process_deadline)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 184, in test_malformed_input_has_process_deadline
+    result = subprocess.run([sys.executable, "-B", "-c", code], env=env,
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/subprocess.py", line 550, in run
+    stdout, stderr = process.communicate(input, timeout=timeout)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/subprocess.py", line 1209, in communicate
+    stdout, stderr = self._communicate(input, endtime, timeout)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/subprocess.py", line 2116, in _communicate
+    self._check_timeout(endtime, orig_timeout, stdout, stderr)
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/subprocess.py", line 1253, in _check_timeout
+    raise TimeoutExpired(
+subprocess.TimeoutExpired: Command '['/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-20261102-bd5dab4b/acceptance-final/runtime/bin/python', '-B', '-c', "from utils import strip_thinking_tokens; assert strip_thinking_tokens('</think>x<think>SECRET') == 'x'; assert strip_thinking_tokens('a<think>x<think>y</think>z</think>b') == 'ab'"]' timed out after 3 seconds
+
+======================================================================
+FAIL: test_planner_reporter_history_normal_and_exception (test_phase_1_core.G1Tests.test_planner_reporter_history_normal_and_exception) (role='planner', error=ValueError('fake'))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 210, in test_planner_reporter_history_normal_and_exception
+    self.assertEqual(fake.clears, 1)
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_planner_reporter_history_normal_and_exception (test_phase_1_core.G1Tests.test_planner_reporter_history_normal_and_exception) (role='reporter', error=ValueError('fake'))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 210, in test_planner_reporter_history_normal_and_exception
+    self.assertEqual(fake.clears, 1)
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_sync_single_multiple_and_fallback (test_phase_1_core.G1Tests.test_sync_single_multiple_and_fallback) (count=1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 89, in test_sync_single_multiple_and_fallback
+    self.assertEqual(search.call_count, max(1, count))
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_sync_single_multiple_and_fallback (test_phase_1_core.G1Tests.test_sync_single_multiple_and_fallback) (count=3)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 89, in test_sync_single_multiple_and_fallback
+    self.assertEqual(search.call_count, max(1, count))
+AssertionError: 0 != 3
+
+======================================================================
+FAIL: test_sync_single_multiple_and_fallback (test_phase_1_core.G1Tests.test_sync_single_multiple_and_fallback) (count=0)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 89, in test_sync_single_multiple_and_fallback
+    self.assertEqual(search.call_count, max(1, count))
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET</think>后', chunks=['前<', 'think>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前<think>SECRET</think>后' != '前后'
+- 前<think>SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET</think>后', chunks=['前<t', 'hink>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前<think>SECRET</think>后' != '前后'
+- 前<think>SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET</think>后', chunks=['前<th', 'ink>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前<think>SECRET</think>后' != '前后'
+- 前<think>SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET</think>后', chunks=['前<thi', 'nk>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前<think>SECRET</think>后' != '前后'
+- 前<think>SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET</think>后', chunks=['前<thin', 'k>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前<think>SECRET</think>后' != '前后'
+- 前<think>SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET</think>后', chunks=['前<think', '>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前<think>SECRET</think>后' != '前后'
+- 前<think>SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET</think>后', chunks=['前', '<', 't', 'h', 'i', 'n', 'k', '>', 'S', 'E', 'C', 'R', 'E', 'T', '<', '/', 't', 'h', 'i', 'n', 'k', '>', '后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前<think>SECRET</think>后' != '前后'
+- 前<think>SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['', '前<think>SECRET<think>NESTED</think>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前', '<think>SECRET<think>NESTED</think>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<', 'think>SECRET<think>NESTED</think>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前<think>SECRETSECRET</think>后' != '前后'
+- 前<think>SECRETSECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<t', 'hink>SECRET<think>NESTED</think>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前<think>SECRETSECRET</think>后' != '前后'
+- 前<think>SECRETSECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<th', 'ink>SECRET<think>NESTED</think>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前<think>SECRETSECRET</think>后' != '前后'
+- 前<think>SECRETSECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<thi', 'nk>SECRET<think>NESTED</think>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前<think>SECRETSECRET</think>后' != '前后'
+- 前<think>SECRETSECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<thin', 'k>SECRET<think>NESTED</think>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前<think>SECRETSECRET</think>后' != '前后'
+- 前<think>SECRETSECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think', '>SECRET<think>NESTED</think>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前<think>SECRETSECRET</think>后' != '前后'
+- 前<think>SECRETSECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>', 'SECRET<think>NESTED</think>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>S', 'ECRET<think>NESTED</think>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SE', 'CRET<think>NESTED</think>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SEC', 'RET<think>NESTED</think>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECR', 'ET<think>NESTED</think>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRE', 'T<think>NESTED</think>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET', '<think>NESTED</think>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<', 'think>NESTED</think>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<t', 'hink>NESTED</think>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<th', 'ink>NESTED</think>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<thi', 'nk>NESTED</think>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<thin', 'k>NESTED</think>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think', '>NESTED</think>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>', 'NESTED</think>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>N', 'ESTED</think>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NE', 'STED</think>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NES', 'TED</think>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NEST', 'ED</think>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTE', 'D</think>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED', '</think>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED<', '/think>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</', 'think>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</t', 'hink>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</th', 'ink>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</thi', 'nk>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</thin', 'k>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</think', '>SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</think>', 'SECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</think>S', 'ECRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</think>SE', 'CRET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</think>SEC', 'RET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</think>SECR', 'ET</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</think>SECRE', 'T</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</think>SECRET', '</think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</think>SECRET<', '/think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</think>SECRET</', 'think>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</think>SECRET</t', 'hink>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</think>SECRET</th', 'ink>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</think>SECRET</thi', 'nk>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</think>SECRET</thin', 'k>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</think>SECRET</think', '>后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</think>SECRET</think>', '后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前<think>SECRET<think>NESTED</think>SECRET</think>后', ''])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前SECRET</think>后' != '前后'
+- 前SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET<think>NESTED</think>SECRET</think>后', chunks=['前', '<', 't', 'h', 'i', 'n', 'k', '>', 'S', 'E', 'C', 'R', 'E', 'T', '<', 't', 'h', 'i', 'n', 'k', '>', 'N', 'E', 'S', 'T', 'E', 'D', '<', '/', 't', 'h', 'i', 'n', 'k', '>', 'S', 'E', 'C', 'R', 'E', 'T', '<', '/', 't', 'h', 'i', 'n', 'k', '>', '后'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前<think>SECRET<think>NESTED</think>SECRET</think>后' != '前后'
+- 前<think>SECRET<think>NESTED</think>SECRET</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['', '前</think>后<think>SECRET'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前</think>后' != '前后'
+- 前</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前', '</think>后<think>SECRET'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前</think>后' != '前后'
+- 前</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前<', '/think>后<think>SECRET'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前</think>后' != '前后'
+- 前</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</', 'think>后<think>SECRET'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前</think>后' != '前后'
+- 前</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</t', 'hink>后<think>SECRET'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前</think>后' != '前后'
+- 前</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</th', 'ink>后<think>SECRET'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前</think>后' != '前后'
+- 前</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</thi', 'nk>后<think>SECRET'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前</think>后' != '前后'
+- 前</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</thin', 'k>后<think>SECRET'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前</think>后' != '前后'
+- 前</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</think', '>后<think>SECRET'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前</think>后' != '前后'
+- 前</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</think>', '后<think>SECRET'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前</think>后' != '前后'
+- 前</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</think>后', '<think>SECRET'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前</think>后' != '前后'
+- 前</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</think>后<', 'think>SECRET'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前</think>后<think>SECRET' != '前后'
+- 前</think>后<think>SECRET
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</think>后<t', 'hink>SECRET'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前</think>后<think>SECRET' != '前后'
+- 前</think>后<think>SECRET
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</think>后<th', 'ink>SECRET'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前</think>后<think>SECRET' != '前后'
+- 前</think>后<think>SECRET
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</think>后<thi', 'nk>SECRET'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前</think>后<think>SECRET' != '前后'
+- 前</think>后<think>SECRET
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</think>后<thin', 'k>SECRET'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前</think>后<think>SECRET' != '前后'
+- 前</think>后<think>SECRET
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</think>后<think', '>SECRET'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前</think>后<think>SECRET' != '前后'
+- 前</think>后<think>SECRET
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</think>后<think>', 'SECRET'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前</think>后' != '前后'
+- 前</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</think>后<think>S', 'ECRET'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前</think>后' != '前后'
+- 前</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</think>后<think>SE', 'CRET'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前</think>后' != '前后'
+- 前</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</think>后<think>SEC', 'RET'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前</think>后' != '前后'
+- 前</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</think>后<think>SECR', 'ET'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前</think>后' != '前后'
+- 前</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</think>后<think>SECRE', 'T'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前</think>后' != '前后'
+- 前</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前</think>后<think>SECRET', ''])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前</think>后' != '前后'
+- 前</think>后
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前</think>后<think>SECRET', chunks=['前', '<', '/', 't', 'h', 'i', 'n', 'k', '>', '后', '<', 't', 'h', 'i', 'n', 'k', '>', 'S', 'E', 'C', 'R', 'E', 'T'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前</think>后<think>SECRET' != '前后'
+- 前</think>后<think>SECRET
++ 前后
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET', chunks=['', '前<think>SECRET'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 138, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual(strip_thinking_tokens(text), expected)
+AssertionError: '前<think>SECRET' != '前'
+- 前<think>SECRET
++ 前
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET', chunks=['前', '<think>SECRET'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 138, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual(strip_thinking_tokens(text), expected)
+AssertionError: '前<think>SECRET' != '前'
+- 前<think>SECRET
++ 前
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET', chunks=['前<', 'think>SECRET'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前<think>SECRET' != '前'
+- 前<think>SECRET
++ 前
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET', chunks=['前<t', 'hink>SECRET'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前<think>SECRET' != '前'
+- 前<think>SECRET
++ 前
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET', chunks=['前<th', 'ink>SECRET'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前<think>SECRET' != '前'
+- 前<think>SECRET
++ 前
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET', chunks=['前<thi', 'nk>SECRET'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前<think>SECRET' != '前'
+- 前<think>SECRET
++ 前
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET', chunks=['前<thin', 'k>SECRET'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前<think>SECRET' != '前'
+- 前<think>SECRET
++ 前
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET', chunks=['前<think', '>SECRET'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前<think>SECRET' != '前'
+- 前<think>SECRET
++ 前
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET', chunks=['前<think>', 'SECRET'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 138, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual(strip_thinking_tokens(text), expected)
+AssertionError: '前<think>SECRET' != '前'
+- 前<think>SECRET
++ 前
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET', chunks=['前<think>S', 'ECRET'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 138, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual(strip_thinking_tokens(text), expected)
+AssertionError: '前<think>SECRET' != '前'
+- 前<think>SECRET
++ 前
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET', chunks=['前<think>SE', 'CRET'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 138, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual(strip_thinking_tokens(text), expected)
+AssertionError: '前<think>SECRET' != '前'
+- 前<think>SECRET
++ 前
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET', chunks=['前<think>SEC', 'RET'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 138, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual(strip_thinking_tokens(text), expected)
+AssertionError: '前<think>SECRET' != '前'
+- 前<think>SECRET
++ 前
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET', chunks=['前<think>SECR', 'ET'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 138, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual(strip_thinking_tokens(text), expected)
+AssertionError: '前<think>SECRET' != '前'
+- 前<think>SECRET
++ 前
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET', chunks=['前<think>SECRE', 'T'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 138, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual(strip_thinking_tokens(text), expected)
+AssertionError: '前<think>SECRET' != '前'
+- 前<think>SECRET
++ 前
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET', chunks=['前<think>SECRET', ''])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 138, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual(strip_thinking_tokens(text), expected)
+AssertionError: '前<think>SECRET' != '前'
+- 前<think>SECRET
++ 前
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<think>SECRET', chunks=['前', '<', 't', 'h', 'i', 'n', 'k', '>', 'S', 'E', 'C', 'R', 'E', 'T'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前<think>SECRET' != '前'
+- 前<think>SECRET
++ 前
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<thi', chunks=['', '前<thi'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前<thi' != '前'
+- 前<thi
++ 前
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<thi', chunks=['前', '<thi'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前<thi' != '前'
+- 前<thi
++ 前
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<thi', chunks=['前<', 'thi'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前<thi' != '前'
+- 前<thi
++ 前
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<thi', chunks=['前<t', 'hi'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前<thi' != '前'
+- 前<thi
++ 前
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<thi', chunks=['前<th', 'i'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前<thi' != '前'
+- 前<thi
++ 前
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<thi', chunks=['前<thi', ''])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前<thi' != '前'
+- 前<thi
++ 前
+
+
+======================================================================
+FAIL: test_think_all_boundaries_and_character_chunks (test_phase_1_core.G1Tests.test_think_all_boundaries_and_character_chunks) (text='前<thi', chunks=['前', '<', 't', 'h', 'i'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 136, in test_think_all_boundaries_and_character_chunks
+    self.assertEqual("".join(stream), expected)
+AssertionError: '前<thi' != '前'
+- 前<thi
++ 前
+
+
+======================================================================
+FAIL: test_tool_json_arrays_quotes_escapes_multiple_and_plain_brackets (test_phase_1_core.G1Tests.test_tool_json_arrays_quotes_escapes_multiple_and_plain_brackets)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 192, in test_tool_json_arrays_quotes_escapes_multiple_and_plain_brackets
+    self.assertEqual(strip_tool_calls("前"+marker+"中"+marker+"后 [正文]"), "前中后 [正文]")
+AssertionError: '前 \\\\"}]], "content": "正文 ] [ nested", "e[66 chars][正文]' != '前中后 [正文]'
+- 前 \\"}]], "content": "正文 ] [ nested", "empty": []}]中 \\"}]], "content": "正文 ] [ nested", "empty": []}]后 [正文]
++ 前中后 [正文]
+
+
+======================================================================
+FAIL: test_worker_failures_object_event_and_reporter_agree (test_phase_1_core.G1Tests.test_worker_failures_object_event_and_reporter_agree) (stage='search')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 111, in test_worker_failures_object_event_and_reporter_agree
+    self.assertEqual(t.status, "failed")
+AssertionError: 'in_progress' != 'failed'
+- in_progress
++ failed
+
+
+======================================================================
+FAIL: test_worker_failures_object_event_and_reporter_agree (test_phase_1_core.G1Tests.test_worker_failures_object_event_and_reporter_agree) (stage='summary')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_1_core.py", line 111, in test_worker_failures_object_event_and_reporter_agree
+    self.assertEqual(t.status, "failed")
+AssertionError: 'in_progress' != 'failed'
+- in_progress
++ failed
+
+
+----------------------------------------------------------------------
+Ran 11 tests in 3.048s
+
+FAILED (failures=115, errors=2)

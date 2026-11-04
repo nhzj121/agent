@@ -1,0 +1,50 @@
+{
+  "axios": {
+    "allowed": "^1.7.9",
+    "firstPublishedOutsideAllReportedRanges": "1.20.0",
+    "latestInRange": "1.21.0",
+    "distTags": {
+      "next": "1.7.0-beta.2",
+      "old-version": "0.30.0",
+      "latest": "1.21.0",
+      "v0x": "0.34.0"
+    }
+  },
+  "vite": {
+    "allowed": "^6.0.7",
+    "firstPublishedOutsideAllReportedRanges": "6.4.4",
+    "latestInRange": "6.4.5",
+    "distTags": {
+      "alpha": "6.0.0-alpha.24",
+      "beta": "8.3.0-beta.1",
+      "latest": "8.3.5",
+      "previous": "6.4.5"
+    }
+  },
+  "vue": {
+    "allowed": "^3.5.13",
+    "firstPublishedOutsideAllReportedRanges": "3.5.42",
+    "latestInRange": "3.5.44",
+    "basis": "vue aggregate range includes @vue/server-renderer indirect advisory",
+    "distTags": {
+      "csp": "1.0.28-csp",
+      "v2-latest": "2.7.16",
+      "legacy": "2.7.16",
+      "alpha": "3.6.0-alpha.7",
+      "beta": "3.6.0-beta.17",
+      "latest": "3.5.44",
+      "rc": "3.6.0-rc.14"
+    }
+  },
+  "rollup": {
+    "allowed": "^4.43.2",
+    "firstPublishedOutsideAllReportedRanges": "4.59.0",
+    "latestInRange": "4.67.4",
+    "distTags": {
+      "backports-2": "2.80.0",
+      "backports-3": "3.30.0",
+      "beta": "5.0.0-2",
+      "latest": "4.67.4"
+    }
+  }
+}

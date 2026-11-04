@@ -1,0 +1,8 @@
+[
+  "/home/nhzj121/.local/bin/uv",
+  "lock",
+  "--project",
+  "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-20261102-bd5dab4b/resolver",
+  "--python",
+  "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/bin/python3.12"
+]

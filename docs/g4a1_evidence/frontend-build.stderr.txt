@@ -1,0 +1,4 @@
+
+(!) outDir /home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g4a1-front-5b3k3zqf/dist is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+

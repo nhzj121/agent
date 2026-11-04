@@ -1,0 +1,18 @@
+{
+  "agents/tool_aware_agent.py": {
+    "path": "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-20261102-bd5dab4b/acceptance-final/runtime/lib/python3.12/site-packages/hello_agents/agents/tool_aware_agent.py",
+    "sha256": "40bfd2bd2a29f6651a286dd3a820b7e956f68849f481e0fb51c5cec8f05161c4"
+  },
+  "agents/simple_agent.py": {
+    "path": "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-20261102-bd5dab4b/acceptance-final/runtime/lib/python3.12/site-packages/hello_agents/agents/simple_agent.py",
+    "sha256": "7901c30072c24d0c5cd7db2f18f3a8fc9102684b013f19d0e2a9e3739f134fec"
+  },
+  "tools/registry.py": {
+    "path": "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-20261102-bd5dab4b/acceptance-final/runtime/lib/python3.12/site-packages/hello_agents/tools/registry.py",
+    "sha256": "a91a6253b9006b2f5d0ba7fb2baf68f363a13f1fbccb8587f63eff081f44f5b7"
+  },
+  "tools/base.py": {
+    "path": "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-20261102-bd5dab4b/acceptance-final/runtime/lib/python3.12/site-packages/hello_agents/tools/base.py",
+    "sha256": "ec8b5bd85c2546477857c8165a18966c45be87448a8bed9c6889a93d489114a5"
+  }
+}

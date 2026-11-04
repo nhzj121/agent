@@ -117,9 +117,9 @@
           <div class="info-item" v-if="totalTasks > 0">
             <label>研究进度</label>
             <div class="progress-bar">
-              <div class="progress-fill" :style="{ width: `${(completedTasks / totalTasks) * 100}%` }"></div>
+              <div class="progress-fill" :style="{ width: `${(finishedTasks / totalTasks) * 100}%` }"></div>
             </div>
-            <p class="progress-text">{{ completedTasks }} / {{ totalTasks }} 任务完成</p>
+            <p class="progress-text">{{ completedTasks }} 成功 / {{ finishedTasks }} 已结束 / {{ totalTasks }} 总任务</p>
           </div>
         </div>
 
@@ -142,20 +142,25 @@
           <div class="status-main">
             <div class="status-chip" :class="{ active: loading }">
               <span class="dot"></span>
-              {{ loading ? "研究进行中" : "研究流程完成" }}
+              {{ RUN_LABELS[runStatus] ?? runStatus }}
             </div>
             <span class="status-meta">
-              任务进度：{{ completedTasks }} / {{ totalTasks || todoTasks.length || 1 }}
+              成功 {{ completedTasks }} · 已结束 {{ finishedTasks }} / {{ totalTasks || 1 }}
               · 阶段记录 {{ progressLogs.length }} 条
             </span>
           </div>
           <div class="status-controls">
+            <button v-if="loading" class="secondary-btn" @click="cancelResearch">停止接收</button>
             <button class="secondary-btn" @click="logsCollapsed = !logsCollapsed">
               {{ logsCollapsed ? "展开流程" : "收起流程" }}
             </button>
           </div>
         </header>
 
+        <p v-if="error" class="error-chip">{{ error }}</p>
+        <ul v-if="runWarnings.length" class="task-notices" aria-label="研究告警">
+          <li v-for="warning in runWarnings" :key="warning">{{ warning }}</li>
+        </ul>
         <div class="timeline-wrapper" v-show="!logsCollapsed && progressLogs.length">
           <transition-group name="timeline" tag="ul" class="timeline">
             <li v-for="(log, index) in progressLogs" :key="`${log}-${index}`">
@@ -198,6 +203,9 @@
                 </p>
               </div>
               <div class="task-chip-group">
+                <span class="task-label" :class="{ 'note-warning': ['error','paused','conflict'].includes(currentTask.noteStatus) }">
+                  笔记：{{ NOTE_LABELS[currentTask.noteStatus] ?? currentTask.noteStatus }}
+                </span>
                 <span class="task-label">查询：{{ currentTaskQuery || "" }}</span>
                 <span
                   v-if="currentTaskNoteId"
@@ -327,6 +335,11 @@
           :class="{ 'block-highlight': reportHighlight }"
         >
           <h3>最终报告</h3>
+          <p :class="{ 'note-warning': ['error','paused','conflict'].includes(reportNoteStatus) }">
+            报告笔记：{{ NOTE_LABELS[reportNoteStatus] ?? reportNoteStatus }}
+            <span v-if="reportNoteId"> · {{ reportNoteId }}</span>
+            <button v-if="reportNotePath" class="link-btn" @click="copyNotePath(reportNotePath)">复制笔记路径</button>
+          </p>
           <pre class="block-pre">{{ reportMarkdown }}</pre>
         </div>
       </section>
@@ -374,6 +387,9 @@ interface TodoTaskView {
   noteId: string | null;
   notePath: string | null;
   toolCalls: ToolCallLog[];
+  noteStatus: string;
+  noteError: string;
+  noteEtag: string | null;
 }
 
 const form = reactive({
@@ -381,6 +397,18 @@ const form = reactive({
   searchApi: ""
 });
 
+const runStatus = ref("idle");
+const activeRunId = ref<string | null>(null);
+const runWarnings = ref<string[]>([]);
+let requestEpoch = 0;
+let pendingToolEvents: {event: ResearchStreamEvent; key: string}[] = [];
+const seenToolEvents = new Set<string>();
+let legacyEventId = 0;
+const TERMINAL_TASKS = new Set(["completed", "skipped", "failed", "cancelled"]);
+const NOTE_LABELS: Record<string, string> = {disabled:"未启用", not_started:"尚未保存",
+ saved:"已保存", error:"保存失败", conflict:"版本冲突", paused:"写入已暂停"};
+const RUN_LABELS: Record<string,string> = {idle:"等待研究", running:"研究进行中",
+ completed:"研究完成", partial:"研究部分完成", failed:"研究失败", cancelled:"已停止接收"};
 const loading = ref(false);
 const error = ref("");
 const progressLogs = ref<string[]>([]);
@@ -390,6 +418,9 @@ const isExpanded = ref(false);
 const todoTasks = ref<TodoTaskView[]>([]);
 const activeTaskId = ref<number | null>(null);
 const reportMarkdown = ref("");
+const reportNoteId = ref<string | null>(null);
+const reportNotePath = ref<string | null>(null);
+const reportNoteStatus = ref("not_started");
 
 const summaryHighlight = ref(false);
 const sourcesHighlight = ref(false);
@@ -410,7 +441,9 @@ const TASK_STATUS_LABEL: Record<string, string> = {
   pending: "待执行",
   in_progress: "进行中",
   completed: "已完成",
-  skipped: "已跳过"
+  skipped: "已跳过",
+  failed: "失败",
+  cancelled: "已取消"
 };
 
 function formatTaskStatus(status: string): string {
@@ -421,6 +454,8 @@ const totalTasks = computed(() => todoTasks.value.length);
 const completedTasks = computed(() =>
   todoTasks.value.filter((task) => task.status === "completed").length
 );
+
+const finishedTasks = computed(() => todoTasks.value.filter(task => TERMINAL_TASKS.has(task.status)).length);
 
 const currentTask = computed(() => {
   if (activeTaskId.value !== null) {
@@ -441,10 +476,13 @@ const currentTaskToolCalls = computed(
 );
 
 const pulse = (flag: typeof summaryHighlight) => {
+  const epoch = requestEpoch;
   flag.value = false;
   requestAnimationFrame(() => {
+    if (epoch !== requestEpoch) return;
     flag.value = true;
     window.setTimeout(() => {
+      if (epoch !== requestEpoch) return;
       flag.value = false;
     }, 1200);
   });
@@ -584,16 +622,30 @@ function ensureRecord(value: unknown): Record<string, unknown> {
 
 function applyNoteMetadata(
   task: TodoTaskView,
-  payload: Record<string, unknown>
+  payload: Record<string, unknown>,
+  authoritative = false
 ): void {
   const noteId = extractOptionalString(payload.note_id);
-  if (noteId) {
+  if (noteId && payload.success !== false) {
     task.noteId = noteId;
   }
   const notePath = extractOptionalString(payload.note_path);
-  if (notePath) {
-    task.notePath = notePath;
+  if (notePath && payload.success !== false) task.notePath = notePath;
+  const status = extractOptionalString(payload.note_status);
+  const failedBefore = ["error","conflict","paused"].includes(task.noteStatus);
+  if (status && !(status === "saved" && failedBefore && payload.persisted !== true && !authoritative)) {
+    task.noteStatus = status;
+    const failure = ensureRecord(payload.note_error);
+    const code = extractOptionalString(failure.code ?? payload.error_code);
+    const detail = extractOptionalString(failure.detail ?? (payload.success === false ? payload.detail : null));
+    task.noteError = ["error","conflict","paused"].includes(status) ? [code, detail].filter(Boolean).join(": ") : "";
+    if (task.noteError) {
+      const notice = "笔记 " + task.noteError;
+      if (!task.notices.includes(notice)) task.notices.push(notice);
+    }
   }
+  const etag = extractOptionalString(payload.note_etag);
+  if (etag && payload.success !== false) task.noteEtag = etag;
 }
 
 function formatToolParameters(parameters: Record<string, unknown>): string {
@@ -621,10 +673,13 @@ async function copyNotePath(path: string | null | undefined) {
     return;
   }
 
+  const epoch = requestEpoch;
   try {
     await navigator.clipboard.writeText(path);
+    if (epoch !== requestEpoch) return;
     progressLogs.value.push(`已复制笔记路径：${path}`);
   } catch (error) {
+    if (epoch !== requestEpoch) return;
     console.warn("无法直接复制到剪贴板", error);
     window.prompt("复制以下笔记路径", path);
     progressLogs.value.push("请手动复制笔记路径");
@@ -632,9 +687,16 @@ async function copyNotePath(path: string | null | undefined) {
 }
 
 function resetWorkflowState() {
+  activeRunId.value = null;
+  runStatus.value = "idle";
+  runWarnings.value = [];
+  pendingToolEvents = [];
+  seenToolEvents.clear();
   todoTasks.value = [];
   activeTaskId.value = null;
   reportMarkdown.value = "";
+  reportNoteId.value = reportNotePath.value = null;
+  reportNoteStatus.value = "not_started";
   progressLogs.value = [];
   summaryHighlight.value = false;
   sourcesHighlight.value = false;
@@ -668,6 +730,307 @@ function upsertTaskMetadata(task: TodoTaskView, payload: Record<string, unknown>
   }
 }
 
+function applyResearchEvent(event: ResearchStreamEvent) {
+  const runId = extractOptionalString(event.run_id);
+  if (runId && activeRunId.value && runId !== activeRunId.value) return;
+  if (runId) activeRunId.value = runId;
+  if (typeof event.run_status === "string") runStatus.value = event.run_status;
+  if (Array.isArray(event.warnings)) runWarnings.value = [...new Set([...runWarnings.value,
+    ...event.warnings.filter((value): value is string => typeof value === "string")])];
+
+if (event.type === "status") {
+  const message =
+    typeof event.message === "string" && event.message.trim()
+      ? event.message
+      : "流程状态更新";
+  progressLogs.value.push(message);
+
+  const payload = event as Record<string, unknown>;
+  const task = findTask(payload.task_id);
+  if (task && message) {
+    task.notices.push(message);
+    applyNoteMetadata(task, payload);
+  }
+  return;
+}
+
+if (event.type === "todo_list") {
+  const tasks = Array.isArray(event.tasks)
+    ? (event.tasks as Record<string, unknown>[])
+    : [];
+
+  todoTasks.value = tasks.map((item, index) => {
+    const rawId =
+      typeof item.id === "number"
+        ? item.id
+        : typeof item.id === "string"
+        ? Number(item.id)
+        : index + 1;
+    const id = Number.isFinite(rawId) ? Number(rawId) : index + 1;
+    const noteId =
+      typeof item.note_id === "string" && item.note_id.trim()
+        ? item.note_id.trim()
+        : null;
+    const notePath =
+      typeof item.note_path === "string" && item.note_path.trim()
+        ? item.note_path.trim()
+        : null;
+
+    return {
+      id,
+      title:
+        typeof item.title === "string" && item.title.trim()
+          ? item.title.trim()
+          : `任务${id}`,
+      intent:
+        typeof item.intent === "string" && item.intent.trim()
+          ? item.intent.trim()
+          : "探索与主题相关的关键信息",
+      query:
+        typeof item.query === "string" && item.query.trim()
+          ? item.query.trim()
+          : form.topic.trim(),
+      status:
+        typeof item.status === "string" && item.status.trim()
+          ? item.status.trim()
+          : "pending",
+      summary: "",
+      sourcesSummary: "",
+      sourceItems: [],
+      notices: [],
+      noteId,
+      notePath,
+      noteStatus: typeof item.note_status === "string" ? item.note_status : "not_started",
+      noteError: "", noteEtag: extractOptionalString(item.note_etag),
+      toolCalls: []
+    } as TodoTaskView;
+  });
+
+  for (const task of todoTasks.value) {
+    const source = tasks.find(item => Number(item.id) === task.id);
+    if (source) applyNoteMetadata(task, source, true);
+  }
+  const pending = pendingToolEvents;
+  pendingToolEvents = [];
+  for (const entry of pending) {
+    seenToolEvents.delete(entry.key);
+    applyResearchEvent(entry.event);
+  }
+  if (todoTasks.value.length) {
+    activeTaskId.value = todoTasks.value[0].id;
+    progressLogs.value.push("已生成任务清单");
+  } else {
+    progressLogs.value.push("未生成任务清单，使用默认任务继续");
+  }
+  return;
+}
+
+if (event.type === "task_status") {
+  const payload = event as Record<string, unknown>;
+  const task = findTask(event.task_id);
+  if (!task) {
+    return;
+  }
+
+  const status =
+    typeof event.status === "string" && event.status.trim()
+      ? event.status.trim()
+      : task.status;
+  if (TERMINAL_TASKS.has(task.status) && status !== task.status) return;
+  upsertTaskMetadata(task, payload);
+  applyNoteMetadata(task, payload);
+  task.status = status;
+
+  if (status === "in_progress") {
+    task.summary = "";
+    task.sourcesSummary = "";
+    task.sourceItems = [];
+    // Preserve earlier note warnings.
+    activeTaskId.value = task.id;
+    progressLogs.value.push(`开始执行任务：${task.title}`);
+  } else if (status === "completed") {
+    if (typeof event.summary === "string" && event.summary.trim()) {
+      task.summary = event.summary.trim();
+    }
+    if (
+      typeof event.sources_summary === "string" &&
+      event.sources_summary.trim()
+    ) {
+      task.sourcesSummary = event.sources_summary.trim();
+      task.sourceItems = parseSources(task.sourcesSummary);
+    }
+    progressLogs.value.push(`完成任务：${task.title}`);
+    if (activeTaskId.value === task.id) {
+      pulse(summaryHighlight);
+      pulse(sourcesHighlight);
+    }
+  } else if (status === "failed" || status === "cancelled") {
+    const detail = extractOptionalString(payload.detail);
+    if (detail && !task.notices.includes(detail)) task.notices.push(detail);
+    progressLogs.value.push(formatTaskStatus(status) + "：" + task.title);
+  } else if (status === "skipped") {
+    progressLogs.value.push(`任务跳过：${task.title}`);
+  }
+  return;
+}
+
+if (event.type === "sources") {
+  const payload = event as Record<string, unknown>;
+  const task = findTask(event.task_id);
+  if (!task) {
+    return;
+  }
+
+  if (TERMINAL_TASKS.has(task.status)) return;
+  const textCandidates = [
+    payload.latest_sources,
+    payload.sources_summary,
+    payload.raw_context
+  ];
+  const latestText = textCandidates
+    .map((value) => (typeof value === "string" ? value.trim() : ""))
+    .find((value) => value);
+
+  if (latestText) {
+    task.sourcesSummary = latestText;
+    task.sourceItems = parseSources(latestText);
+    if (activeTaskId.value === task.id) {
+      pulse(sourcesHighlight);
+    }
+    progressLogs.value.push(`已更新任务来源：${task.title}`);
+  }
+
+  if (typeof payload.backend === "string") {
+    progressLogs.value.push(
+      `当前使用搜索后端：${payload.backend}`
+    );
+  }
+
+  applyNoteMetadata(task, payload);
+
+  return;
+}
+
+if (event.type === "task_summary_chunk") {
+  const payload = event as Record<string, unknown>;
+  const task = findTask(event.task_id);
+  if (!task) {
+    return;
+  }
+  if (TERMINAL_TASKS.has(task.status)) return;
+  const chunk =
+    typeof event.content === "string" ? event.content : "";
+  task.summary += chunk;
+  applyNoteMetadata(task, payload);
+  if (activeTaskId.value === task.id) {
+    pulse(summaryHighlight);
+  }
+  return;
+}
+
+if (event.type === "tool_call") {
+  const key = String(event.run_id ?? activeRunId.value ?? "legacy") + ":" + String(event.event_id);
+  if (typeof event.event_id === "number") {
+    if (seenToolEvents.has(key)) return;
+    seenToolEvents.add(key);
+  }
+  if (event.task_id != null && !findTask(event.task_id)) {
+    pendingToolEvents.push({event, key});
+    return;
+  }
+  const payload = event as Record<string, unknown>;
+  const eventId =
+    typeof payload.event_id === "number"
+      ? payload.event_id
+      : ++legacyEventId;
+  const agent =
+    typeof payload.agent === "string" && payload.agent.trim()
+      ? payload.agent.trim()
+      : "Agent";
+  const tool =
+    typeof payload.tool === "string" && payload.tool.trim()
+      ? payload.tool.trim()
+      : "tool";
+  const parameters = ensureRecord(payload.parameters);
+  const result =
+    typeof payload.result === "string" ? payload.result : "";
+  const noteId = payload.success === false ? null : extractOptionalString(payload.note_id);
+  const notePath = payload.success === false ? null : extractOptionalString(payload.note_path);
+
+  const task = findTask(payload.task_id);
+  if (task) {
+    task.toolCalls.push({
+      eventId,
+      agent,
+      tool,
+      parameters,
+      result,
+      noteId,
+      notePath,
+      timestamp: Date.now()
+    });
+    applyNoteMetadata(task, payload);
+    const logSummary = noteId
+      ? `${agent} 调用了 ${tool}（任务 ${task.id}，笔记 ${noteId}）`
+      : `${agent} 调用了 ${tool}（任务 ${task.id}）`;
+    progressLogs.value.push(logSummary);
+    if (activeTaskId.value === task.id) {
+      pulse(toolHighlight);
+    }
+  } else {
+    progressLogs.value.push(`${agent} 调用了 ${tool}`);
+  }
+  return;
+}
+
+if (event.type === "report_note") {
+  if (event.success !== false) {
+    reportNoteId.value = extractOptionalString(event.note_id);
+    reportNotePath.value = extractOptionalString(event.note_path);
+    reportNoteStatus.value = "saved";
+  }
+  return;
+}
+if (event.type === "final_report") {
+  reportNoteId.value = extractOptionalString(event.note_id);
+  reportNotePath.value = extractOptionalString(event.note_path);
+  if (typeof event.report_note_status === "string") reportNoteStatus.value = event.report_note_status;
+
+  if (Array.isArray(event.tasks)) for (const item of event.tasks) {
+    const snapshot = ensureRecord(item), task = findTask(snapshot.id);
+    if (!task) continue;
+    if (typeof snapshot.status === "string") task.status = snapshot.status;
+    if (typeof snapshot.summary === "string") task.summary = snapshot.summary;
+    applyNoteMetadata(task, snapshot, true);
+    if (Array.isArray(snapshot.notices)) for (const notice of snapshot.notices)
+      if (typeof notice === "string" && !task.notices.includes(notice)) task.notices.push(notice);
+  }
+  if (event.report_note_error) {
+    const failure = ensureRecord(event.report_note_error);
+    const warning = "最终报告笔记 " + String(failure.code ?? "") + ": " + String(failure.detail ?? "");
+    if (!runWarnings.value.includes(warning)) runWarnings.value.push(warning);
+  }
+  const report =
+    typeof event.report === "string" && event.report.trim()
+      ? event.report.trim()
+      : "";
+  reportMarkdown.value = report || "报告生成失败，未获得有效内容";
+  pulse(reportHighlight);
+  progressLogs.value.push("最终报告已生成");
+  return;
+}
+
+if (event.type === "error") {
+  const detail =
+    typeof event.detail === "string" && event.detail.trim()
+      ? event.detail
+      : "研究过程中发生错误";
+  error.value = detail;
+  runStatus.value = "failed";
+  progressLogs.value.push("研究失败，已停止流程");
+}
+}
+
 const handleSubmit = async () => {
   if (!form.topic.trim()) {
     error.value = "请输入研究主题";
@@ -679,10 +1042,12 @@ const handleSubmit = async () => {
     currentController = null;
   }
 
+  requestEpoch += 1;
   loading.value = true;
   error.value = "";
   isExpanded.value = true;
   resetWorkflowState();
+  runStatus.value = "running";
 
   const controller = new AbortController();
   currentController = controller;
@@ -696,263 +1061,35 @@ const handleSubmit = async () => {
     await runResearchStream(
       payload,
       (event: ResearchStreamEvent) => {
-        if (event.type === "status") {
-          const message =
-            typeof event.message === "string" && event.message.trim()
-              ? event.message
-              : "流程状态更新";
-          progressLogs.value.push(message);
-
-          const payload = event as Record<string, unknown>;
-          const task = findTask(payload.task_id);
-          if (task && message) {
-            task.notices.push(message);
-            applyNoteMetadata(task, payload);
-          }
-          return;
-        }
-
-        if (event.type === "todo_list") {
-          const tasks = Array.isArray(event.tasks)
-            ? (event.tasks as Record<string, unknown>[])
-            : [];
-
-          todoTasks.value = tasks.map((item, index) => {
-            const rawId =
-              typeof item.id === "number"
-                ? item.id
-                : typeof item.id === "string"
-                ? Number(item.id)
-                : index + 1;
-            const id = Number.isFinite(rawId) ? Number(rawId) : index + 1;
-            const noteId =
-              typeof item.note_id === "string" && item.note_id.trim()
-                ? item.note_id.trim()
-                : null;
-            const notePath =
-              typeof item.note_path === "string" && item.note_path.trim()
-                ? item.note_path.trim()
-                : null;
-
-            return {
-              id,
-              title:
-                typeof item.title === "string" && item.title.trim()
-                  ? item.title.trim()
-                  : `任务${id}`,
-              intent:
-                typeof item.intent === "string" && item.intent.trim()
-                  ? item.intent.trim()
-                  : "探索与主题相关的关键信息",
-              query:
-                typeof item.query === "string" && item.query.trim()
-                  ? item.query.trim()
-                  : form.topic.trim(),
-              status:
-                typeof item.status === "string" && item.status.trim()
-                  ? item.status.trim()
-                  : "pending",
-              summary: "",
-              sourcesSummary: "",
-              sourceItems: [],
-              notices: [],
-              noteId,
-              notePath,
-              toolCalls: []
-            } as TodoTaskView;
-          });
-
-          if (todoTasks.value.length) {
-            activeTaskId.value = todoTasks.value[0].id;
-            progressLogs.value.push("已生成任务清单");
-          } else {
-            progressLogs.value.push("未生成任务清单，使用默认任务继续");
-          }
-          return;
-        }
-
-        if (event.type === "task_status") {
-          const payload = event as Record<string, unknown>;
-          const task = findTask(event.task_id);
-          if (!task) {
-            return;
-          }
-
-          upsertTaskMetadata(task, payload);
-          applyNoteMetadata(task, payload);
-          const status =
-            typeof event.status === "string" && event.status.trim()
-              ? event.status.trim()
-              : task.status;
-          task.status = status;
-
-          if (status === "in_progress") {
-            task.summary = "";
-            task.sourcesSummary = "";
-            task.sourceItems = [];
-            task.notices = [];
-            activeTaskId.value = task.id;
-            progressLogs.value.push(`开始执行任务：${task.title}`);
-          } else if (status === "completed") {
-            if (typeof event.summary === "string" && event.summary.trim()) {
-              task.summary = event.summary.trim();
-            }
-            if (
-              typeof event.sources_summary === "string" &&
-              event.sources_summary.trim()
-            ) {
-              task.sourcesSummary = event.sources_summary.trim();
-              task.sourceItems = parseSources(task.sourcesSummary);
-            }
-            progressLogs.value.push(`完成任务：${task.title}`);
-            if (activeTaskId.value === task.id) {
-              pulse(summaryHighlight);
-              pulse(sourcesHighlight);
-            }
-          } else if (status === "skipped") {
-            progressLogs.value.push(`任务跳过：${task.title}`);
-          }
-          return;
-        }
-
-        if (event.type === "sources") {
-          const payload = event as Record<string, unknown>;
-          const task = findTask(event.task_id);
-          if (!task) {
-            return;
-          }
-
-          const textCandidates = [
-            payload.latest_sources,
-            payload.sources_summary,
-            payload.raw_context
-          ];
-          const latestText = textCandidates
-            .map((value) => (typeof value === "string" ? value.trim() : ""))
-            .find((value) => value);
-
-          if (latestText) {
-            task.sourcesSummary = latestText;
-            task.sourceItems = parseSources(latestText);
-            if (activeTaskId.value === task.id) {
-              pulse(sourcesHighlight);
-            }
-            progressLogs.value.push(`已更新任务来源：${task.title}`);
-          }
-
-          if (typeof payload.backend === "string") {
-            progressLogs.value.push(
-              `当前使用搜索后端：${payload.backend}`
-            );
-          }
-
-          applyNoteMetadata(task, payload);
-
-          return;
-        }
-
-        if (event.type === "task_summary_chunk") {
-          const payload = event as Record<string, unknown>;
-          const task = findTask(event.task_id);
-          if (!task) {
-            return;
-          }
-          const chunk =
-            typeof event.content === "string" ? event.content : "";
-          task.summary += chunk;
-          applyNoteMetadata(task, payload);
-          if (activeTaskId.value === task.id) {
-            pulse(summaryHighlight);
-          }
-          return;
-        }
-
-        if (event.type === "tool_call") {
-          const payload = event as Record<string, unknown>;
-          const eventId =
-            typeof payload.event_id === "number"
-              ? payload.event_id
-              : Date.now();
-          const agent =
-            typeof payload.agent === "string" && payload.agent.trim()
-              ? payload.agent.trim()
-              : "Agent";
-          const tool =
-            typeof payload.tool === "string" && payload.tool.trim()
-              ? payload.tool.trim()
-              : "tool";
-          const parameters = ensureRecord(payload.parameters);
-          const result =
-            typeof payload.result === "string" ? payload.result : "";
-          const noteId = extractOptionalString(payload.note_id);
-          const notePath = extractOptionalString(payload.note_path);
-
-          const task = findTask(payload.task_id);
-          if (task) {
-            task.toolCalls.push({
-              eventId,
-              agent,
-              tool,
-              parameters,
-              result,
-              noteId,
-              notePath,
-              timestamp: Date.now()
-            });
-            if (noteId) {
-              task.noteId = noteId;
-            }
-            if (notePath) {
-              task.notePath = notePath;
-            }
-            const logSummary = noteId
-              ? `${agent} 调用了 ${tool}（任务 ${task.id}，笔记 ${noteId}）`
-              : `${agent} 调用了 ${tool}（任务 ${task.id}）`;
-            progressLogs.value.push(logSummary);
-            if (activeTaskId.value === task.id) {
-              pulse(toolHighlight);
-            }
-          } else {
-            progressLogs.value.push(`${agent} 调用了 ${tool}`);
-          }
-          return;
-        }
-
-        if (event.type === "final_report") {
-          const report =
-            typeof event.report === "string" && event.report.trim()
-              ? event.report.trim()
-              : "";
-          reportMarkdown.value = report || "报告生成失败，未获得有效内容";
-          pulse(reportHighlight);
-          progressLogs.value.push("最终报告已生成");
-          return;
-        }
-
-        if (event.type === "error") {
-          const detail =
-            typeof event.detail === "string" && event.detail.trim()
-              ? event.detail
-              : "研究过程中发生错误";
-          error.value = detail;
-          progressLogs.value.push("研究失败，已停止流程");
-        }
+        if (currentController !== controller || controller.signal.aborted) return;
+        applyResearchEvent(event);
       },
       { signal: controller.signal }
     );
 
-    if (!reportMarkdown.value) {
-      reportMarkdown.value = "暂无生成的报告";
+    if (currentController !== controller || controller.signal.aborted) return;
+    if (!reportMarkdown.value) throw new Error("研究结束但未收到最终报告");
+    if (runStatus.value === "running") {
+      const count = todoTasks.value.filter(t => t.status === "completed").length;
+      runStatus.value = !todoTasks.value.length || count === todoTasks.value.length ?
+        "completed" : count ? "partial" : "failed";
     }
   } catch (err) {
+    if (currentController !== controller) return;
     if (err instanceof DOMException && err.name === "AbortError") {
-      progressLogs.value.push("已取消当前研究任务");
+      runStatus.value = "cancelled";
+      for (const task of todoTasks.value) if (!TERMINAL_TASKS.has(task.status)) task.status = "cancelled";
+      progressLogs.value.push("已停止接收，后台研究可能仍在继续");
     } else {
       error.value = err instanceof Error ? err.message : "请求失败";
+      runStatus.value = "failed";
+      for (const task of todoTasks.value) if (!TERMINAL_TASKS.has(task.status)) {
+        task.status = "failed"; task.notices.push(error.value);
+      }
     }
   } finally {
-    loading.value = false;
     if (currentController === controller) {
+      loading.value = false;
       currentController = null;
     }
   }
@@ -962,7 +1099,8 @@ const cancelResearch = () => {
   if (!loading.value || !currentController) {
     return;
   }
-  progressLogs.value.push("正在尝试取消当前研究任务…");
+  requestEpoch += 1;
+  progressLogs.value.push("正在停止接收当前研究…");
   currentController.abort();
 };
 
@@ -974,9 +1112,11 @@ const goBack = () => {
 };
 
 const startNewResearch = () => {
-  if (loading.value) {
-    cancelResearch();
-  }
+  requestEpoch += 1;
+  const old = currentController;
+  currentController = null;
+  old?.abort();
+  loading.value = false;
   resetWorkflowState();
   isExpanded.value = false;
   form.topic = "";
@@ -984,6 +1124,7 @@ const startNewResearch = () => {
 };
 
 onBeforeUnmount(() => {
+  requestEpoch += 1;
   if (currentController) {
     currentController.abort();
     currentController = null;
@@ -2301,4 +2442,6 @@ select:focus {
     height: 60vh;
   }
 }
+.note-warning, .task-status.failed { color: #b42318; }
+.task-status.cancelled { color: #667085; }
 </style>

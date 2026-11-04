@@ -1,0 +1,23 @@
+{
+  "removed": [
+    "click@8.3.0",
+    "idna@3.11"
+  ],
+  "added": [
+    "click@8.5.0",
+    "filelock@4.1.0",
+    "filelock@4.2.6",
+    "fsspec@2026.9.0",
+    "hf-xet@1.8.0",
+    "httpcore2@2.14.0",
+    "httpcore2@2.16.0",
+    "httpx2-jsfetch@1.0",
+    "httpx2@2.14.0",
+    "httpx2@2.16.0",
+    "huggingface-hub@2.3.0",
+    "idna@3.20",
+    "packaging@26.3",
+    "truststore@0.10.5"
+  ],
+  "new_revision": 3
+}

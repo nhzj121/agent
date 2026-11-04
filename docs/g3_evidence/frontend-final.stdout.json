@@ -1,0 +1,74 @@
+{
+  "checks": [
+    {
+      "name": "UTF8 byte boundaries + reader release",
+      "ok": true
+    },
+    {
+      "name": "EOF rejects even after final_report",
+      "ok": true
+    },
+    {
+      "name": "callback errors propagate",
+      "ok": true
+    },
+    {
+      "name": "malformed JSON rejects",
+      "ok": true
+    },
+    {
+      "name": "error frame reaches UI and rejects",
+      "ok": true
+    },
+    {
+      "name": "done releases unfinished response",
+      "ok": true
+    },
+    {
+      "name": "CRLF framing",
+      "ok": true
+    },
+    {
+      "name": "AbortSignal propagation",
+      "ok": true
+    },
+    {
+      "name": "Planner buffers + run/event deduplication",
+      "ok": true
+    },
+    {
+      "name": "late event/catch/finally isolation",
+      "ok": true
+    },
+    {
+      "name": "task terminal status/error cannot regress",
+      "ok": true
+    },
+    {
+      "name": "cancel marks only unfinished local tasks",
+      "ok": true
+    },
+    {
+      "name": "actual API + Vue + backend fixture fake-workflow.json",
+      "ok": true
+    },
+    {
+      "name": "actual API + Vue + backend fixture fake-paused.json",
+      "ok": true
+    },
+    {
+      "name": "reader read error and malformed UTF8 release locks",
+      "ok": true
+    },
+    {
+      "name": "unmount prevents late events and finalizers",
+      "ok": true
+    },
+    {
+      "name": "failed tool metadata never attaches counterfeit ID",
+      "ok": true
+    }
+  ],
+  "passed": 17,
+  "failed": 0
+}

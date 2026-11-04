@@ -1,0 +1,8 @@
+test_01_framework_version_and_delivery_freeze_order (test_phase_2b_tool_adapter.ExtensionGateTests.test_01_framework_version_and_delivery_freeze_order) ... ok
+test_02_same_answer_read_update_uses_only_previous_generation (test_phase_2b_tool_adapter.ExtensionGateTests.test_02_same_answer_read_update_uses_only_previous_generation) ... ok
+test_03_distinct_agents_do_not_share_credentials (test_phase_2b_tool_adapter.ExtensionGateTests.test_03_distinct_agents_do_not_share_credentials) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.240s
+
+OK

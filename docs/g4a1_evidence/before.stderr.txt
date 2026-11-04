@@ -1,0 +1,284 @@
+test_cancel_keeps_run_lock_and_capacity_until_blocked_search_really_exits (test_phase_4a_1_execution.ExecutionTests.test_cancel_keeps_run_lock_and_capacity_until_blocked_search_really_exits) ... ERROR
+test_defaults_and_environment (test_phase_4a_1_execution.ExecutionTests.test_defaults_and_environment) ... ERROR
+test_eight_tasks_real_active_workers_bounded (test_phase_4a_1_execution.ExecutionTests.test_eight_tasks_real_active_workers_bounded) ... INFO:services.planner:Planner raw output (truncated): {"tasks": [{"title": "0", "query": "0"}, {"title": "1", "query": "1"}, {"title": "2", "query": "2"}, {"title": "3", "query": "3"}, {"title": "4", "query": "4"}, {"title": "5", "query": "5"}, {"title": "6", "query": "6"}, {"title": "7", "query": "7"}]}
+INFO:services.planner:Planner produced 8 tasks: ['0', '1', '2', '3', '4', '5', '6', '7']
+FAIL
+test_excess_plan_is_rejected_not_truncated (test_phase_4a_1_execution.ExecutionTests.test_excess_plan_is_rejected_not_truncated) ... INFO:services.planner:Planner raw output (truncated): {"tasks": [{"title": "0", "query": "0"}, {"title": "1", "query": "1"}, {"title": "2", "query": "2"}, {"title": "3", "query": "3"}, {"title": "4", "query": "4"}, {"title": "5", "query": "5"}, {"title": "6", "query": "6"}, {"title": "7", "query": "7"}, {"title": "8", "query": "8"}]}
+INFO:services.planner:Planner produced 9 tasks: ['0', '1', '2', '3', '4', '5', '6', '7', '8']
+ERROR:agent:Task execution failed
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 389, in worker
+    for event in self._execute_task(state, task, emit_stream=True, step=step):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 482, in _execute_task
+    search_result, notices, answer_text, backend = dispatch_search(
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 4, got 0)
+ERROR:agent:Task execution failed
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 389, in worker
+    for event in self._execute_task(state, task, emit_stream=True, step=step):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 482, in _execute_task
+    search_result, notices, answer_text, backend = dispatch_search(
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 4, got 0)
+ERROR:agent:Task execution failed
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 389, in worker
+    for event in self._execute_task(state, task, emit_stream=True, step=step):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 482, in _execute_task
+    search_result, notices, answer_text, backend = dispatch_search(
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 4, got 0)
+ERROR:agent:Task execution failed
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 389, in worker
+    for event in self._execute_task(state, task, emit_stream=True, step=step):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 482, in _execute_task
+    search_result, notices, answer_text, backend = dispatch_search(
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 4, got 0)
+ERROR:agent:Task execution failed
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 389, in worker
+    for event in self._execute_task(state, task, emit_stream=True, step=step):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 482, in _execute_task
+    search_result, notices, answer_text, backend = dispatch_search(
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 4, got 0)
+ERROR:agent:Task execution failed
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 389, in worker
+    for event in self._execute_task(state, task, emit_stream=True, step=step):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 482, in _execute_task
+    search_result, notices, answer_text, backend = dispatch_search(
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 4, got 0)
+ERROR:agent:Task execution failed
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 389, in worker
+    for event in self._execute_task(state, task, emit_stream=True, step=step):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 482, in _execute_task
+    search_result, notices, answer_text, backend = dispatch_search(
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 4, got 0)
+ERROR:agent:Task execution failed
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 389, in worker
+    for event in self._execute_task(state, task, emit_stream=True, step=step):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 482, in _execute_task
+    search_result, notices, answer_text, backend = dispatch_search(
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 4, got 0)
+ERROR:agent:Task execution failed
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 389, in worker
+    for event in self._execute_task(state, task, emit_stream=True, step=step):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 482, in _execute_task
+    search_result, notices, answer_text, backend = dispatch_search(
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 4, got 0)
+FAIL
+test_http_admission_429_before_factory_and_recovery (test_phase_4a_1_execution.ExecutionTests.test_http_admission_429_before_factory_and_recovery) ... ERROR
+test_note_write_after_cancel_rejected_without_changing_etag (test_phase_4a_1_execution.ExecutionTests.test_note_write_after_cancel_rejected_without_changing_etag) ... ERROR
+test_search_deadline_blocks_summary_report_and_late_completion (test_phase_4a_1_execution.ExecutionTests.test_search_deadline_blocks_summary_report_and_late_completion) ... ERROR
+test_worker_start_failure_and_stage_exceptions (test_phase_4a_1_execution.ExecutionTests.test_worker_start_failure_and_stage_exceptions) ... INFO:services.planner:Planner raw output (truncated): {"tasks": [{"title": "0", "query": "0"}, {"title": "1", "query": "1"}]}
+INFO:services.planner:Planner produced 2 tasks: ['0', '1']
+
+  test_worker_start_failure_and_stage_exceptions (test_phase_4a_1_execution.ExecutionTests.test_worker_start_failure_and_stage_exceptions) (stage='planner') ... FAIL
+INFO:services.planner:Planner raw output (truncated): {"tasks": [{"title": "0", "query": "0"}, {"title": "1", "query": "1"}]}
+INFO:services.planner:Planner produced 2 tasks: ['0', '1']
+ERROR:agent:Task execution failed
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 389, in worker
+    for event in self._execute_task(state, task, emit_stream=True, step=step):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 482, in _execute_task
+    search_result, notices, answer_text, backend = dispatch_search(
+                                                   ^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1198, in _execute_mock_call
+    raise effect
+RuntimeError: search error
+ERROR:agent:Task execution failed
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 389, in worker
+    for event in self._execute_task(state, task, emit_stream=True, step=step):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 482, in _execute_task
+    search_result, notices, answer_text, backend = dispatch_search(
+                                                   ^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1198, in _execute_mock_call
+    raise effect
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 389, in worker
+    for event in self._execute_task(state, task, emit_stream=True, step=step):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 482, in _execute_task
+    search_result, notices, answer_text, backend = dispatch_search(
+                                                   ^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1198, in _execute_mock_call
+    raise effect
+RuntimeError: search error
+INFO:services.planner:Planner raw output (truncated): {"tasks": [{"title": "0", "query": "0"}, {"title": "1", "query": "1"}]}
+INFO:services.planner:Planner produced 2 tasks: ['0', '1']
+ERROR:agent:Task execution failed
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 389, in worker
+    for event in self._execute_task(state, task, emit_stream=True, step=step):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 557, in _execute_task
+    summary_stream, summary_getter = self.summarizer.stream_task_summary(state, task, context)
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1198, in _execute_mock_call
+    raise effect
+RuntimeError: summary
+ERROR:agent:Task execution failed
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 389, in worker
+    for event in self._execute_task(state, task, emit_stream=True, step=step):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 557, in _execute_task
+    summary_stream, summary_getter = self.summarizer.stream_task_summary(state, task, context)
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1198, in _execute_mock_call
+    raise effect
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 389, in worker
+    for event in self._execute_task(state, task, emit_stream=True, step=step):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/code/chapter14/helloagents-deepresearch/backend/src/agent.py", line 557, in _execute_task
+    summary_stream, summary_getter = self.summarizer.stream_task_summary(state, task, context)
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/mock.py", line 1198, in _execute_mock_call
+    raise effect
+RuntimeError: summary
+INFO:services.planner:Planner raw output (truncated): {"tasks": [{"title": "0", "query": "0"}, {"title": "1", "query": "1"}]}
+INFO:services.planner:Planner produced 2 tasks: ['0', '1']
+  test_worker_start_failure_and_stage_exceptions (test_phase_4a_1_execution.ExecutionTests.test_worker_start_failure_and_stage_exceptions) (stage='reporter') ... FAIL
+INFO:services.planner:Planner raw output (truncated): {"tasks": [{"title": "0", "query": "0"}, {"title": "1", "query": "1"}]}
+INFO:services.planner:Planner produced 2 tasks: ['0', '1']
+
+======================================================================
+ERROR: test_cancel_keeps_run_lock_and_capacity_until_blocked_search_really_exits (test_phase_4a_1_execution.ExecutionTests.test_cancel_keeps_run_lock_and_capacity_until_blocked_search_really_exits)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_4a_1_execution.py", line 100, in test_cancel_keeps_run_lock_and_capacity_until_blocked_search_really_exits
+    from services.execution_control import ExecutionControl, ResearchAdmission, ResearchBusy
+ModuleNotFoundError: No module named 'services.execution_control'
+
+======================================================================
+ERROR: test_defaults_and_environment (test_phase_4a_1_execution.ExecutionTests.test_defaults_and_environment)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_4a_1_execution.py", line 43, in test_defaults_and_environment
+    self.assertEqual((c.max_task_workers,c.max_active_research,c.max_planned_tasks), (3,2,8))
+                      ^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-20261102-bd5dab4b/acceptance-final/runtime/lib/python3.12/site-packages/pydantic/main.py", line 1026, in __getattr__
+    raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}')
+AttributeError: 'Configuration' object has no attribute 'max_task_workers'
+
+======================================================================
+ERROR: test_http_admission_429_before_factory_and_recovery (test_phase_4a_1_execution.ExecutionTests.test_http_admission_429_before_factory_and_recovery)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_4a_1_execution.py", line 136, in test_http_admission_429_before_factory_and_recovery
+    from services.execution_control import ResearchAdmission
+ModuleNotFoundError: No module named 'services.execution_control'
+
+======================================================================
+ERROR: test_note_write_after_cancel_rejected_without_changing_etag (test_phase_4a_1_execution.ExecutionTests.test_note_write_after_cancel_rejected_without_changing_etag)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_4a_1_execution.py", line 177, in test_note_write_after_cancel_rejected_without_changing_etag
+    from services.execution_control import ExecutionControl, bind_execution
+ModuleNotFoundError: No module named 'services.execution_control'
+
+======================================================================
+ERROR: test_search_deadline_blocks_summary_report_and_late_completion (test_phase_4a_1_execution.ExecutionTests.test_search_deadline_blocks_summary_report_and_late_completion)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_4a_1_execution.py", line 82, in test_search_deadline_blocks_summary_report_and_late_completion
+    from services.execution_control import ExecutionControl
+ModuleNotFoundError: No module named 'services.execution_control'
+
+======================================================================
+FAIL: test_eight_tasks_real_active_workers_bounded (test_phase_4a_1_execution.ExecutionTests.test_eight_tasks_real_active_workers_bounded)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_4a_1_execution.py", line 65, in test_eight_tasks_real_active_workers_bounded
+    self.assertLessEqual(peak,3)
+AssertionError: 8 not less than or equal to 3
+
+======================================================================
+FAIL: test_excess_plan_is_rejected_not_truncated (test_phase_4a_1_execution.ExecutionTests.test_excess_plan_is_rejected_not_truncated)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_4a_1_execution.py", line 74, in test_excess_plan_is_rejected_not_truncated
+    with self.assertRaisesRegex(ValueError,"MAX_PLANNED_TASKS"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_worker_start_failure_and_stage_exceptions (test_phase_4a_1_execution.ExecutionTests.test_worker_start_failure_and_stage_exceptions) (stage='planner')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_4a_1_execution.py", line 165, in test_worker_start_failure_and_stage_exceptions
+    with self.assertRaisesRegex(RuntimeError,stage): list(a.run_stream("x"))
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+======================================================================
+FAIL: test_worker_start_failure_and_stage_exceptions (test_phase_4a_1_execution.ExecutionTests.test_worker_start_failure_and_stage_exceptions) (stage='reporter')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_4a_1_execution.py", line 165, in test_worker_start_failure_and_stage_exceptions
+    with self.assertRaisesRegex(RuntimeError,stage): list(a.run_stream("x"))
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.174s
+
+FAILED (failures=4, errors=5)

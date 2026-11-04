@@ -1,0 +1,17 @@
+test_bad_formats_duplicate_keys_mismatched_ids_are_explicit (test_phase_2a_repository.RepositoryTests.test_bad_formats_duplicate_keys_mismatched_ids_are_explicit) ... FAIL
+
+======================================================================
+FAIL: test_bad_formats_duplicate_keys_mismatched_ids_are_explicit (test_phase_2a_repository.RepositoryTests.test_bad_formats_duplicate_keys_mismatched_ids_are_explicit)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_2a_repository.py", line 167, in test_bad_formats_duplicate_keys_mismatched_ids_are_explicit
+    self.error("FORMAT_ERROR", lambda: self.repo.read(LEGACY_ID))
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_2a_repository.py", line 48, in error
+    with self.assertRaises(NoteError) as caught:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: NoteError not raised
+
+----------------------------------------------------------------------
+Ran 1 test in 0.004s
+
+FAILED (failures=1)

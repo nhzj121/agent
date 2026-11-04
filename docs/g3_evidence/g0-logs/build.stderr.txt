@@ -1,0 +1,229 @@
+Building source distribution...
+/home/nhzj121/.cache/uv/builds-v0/.tmpjjncny/lib/python3.12/site-packages/setuptools/config/_apply_pyprojecttoml.py:82: SetuptoolsDeprecationWarning: `project.license` as a TOML table is deprecated
+!!
+
+        ********************************************************************************
+        Please use a simple string containing a SPDX expression for `project.license`. You can also use `project.license-files`. (Both options available on setuptools>=77.0.0).
+
+        By 2027-Feb-18, you need to update your project and remove deprecated calls
+        or your builds will no longer be supported.
+
+        See https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#license for details.
+        ********************************************************************************
+
+!!
+  corresp(dist, value, root_dir)
+running egg_info
+creating src/helloagents_deep_researcher.egg-info
+writing src/helloagents_deep_researcher.egg-info/PKG-INFO
+writing dependency_links to src/helloagents_deep_researcher.egg-info/dependency_links.txt
+writing requirements to src/helloagents_deep_researcher.egg-info/requires.txt
+writing top-level names to src/helloagents_deep_researcher.egg-info/top_level.txt
+writing manifest file 'src/helloagents_deep_researcher.egg-info/SOURCES.txt'
+reading manifest file 'src/helloagents_deep_researcher.egg-info/SOURCES.txt'
+writing manifest file 'src/helloagents_deep_researcher.egg-info/SOURCES.txt'
+/home/nhzj121/.cache/uv/builds-v0/.tmpjjncny/lib/python3.12/site-packages/setuptools/config/_apply_pyprojecttoml.py:82: SetuptoolsDeprecationWarning: `project.license` as a TOML table is deprecated
+!!
+
+        ********************************************************************************
+        Please use a simple string containing a SPDX expression for `project.license`. You can also use `project.license-files`. (Both options available on setuptools>=77.0.0).
+
+        By 2027-Feb-18, you need to update your project and remove deprecated calls
+        or your builds will no longer be supported.
+
+        See https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#license for details.
+        ********************************************************************************
+
+!!
+  corresp(dist, value, root_dir)
+running sdist
+running egg_info
+writing src/helloagents_deep_researcher.egg-info/PKG-INFO
+writing dependency_links to src/helloagents_deep_researcher.egg-info/dependency_links.txt
+writing requirements to src/helloagents_deep_researcher.egg-info/requires.txt
+writing top-level names to src/helloagents_deep_researcher.egg-info/top_level.txt
+reading manifest file 'src/helloagents_deep_researcher.egg-info/SOURCES.txt'
+writing manifest file 'src/helloagents_deep_researcher.egg-info/SOURCES.txt'
+running check
+creating helloagents_deep_researcher-0.0.1
+creating helloagents_deep_researcher-0.0.1/src
+creating helloagents_deep_researcher-0.0.1/src/helloagents_deep_researcher.egg-info
+creating helloagents_deep_researcher-0.0.1/src/services
+creating helloagents_deep_researcher-0.0.1/src/storage
+creating helloagents_deep_researcher-0.0.1/src/tools
+copying files to helloagents_deep_researcher-0.0.1...
+copying README.md -> helloagents_deep_researcher-0.0.1
+copying pyproject.toml -> helloagents_deep_researcher-0.0.1
+copying src/agent.py -> helloagents_deep_researcher-0.0.1/src
+copying src/config.py -> helloagents_deep_researcher-0.0.1/src
+copying src/main.py -> helloagents_deep_researcher-0.0.1/src
+copying src/models.py -> helloagents_deep_researcher-0.0.1/src
+copying src/prompts.py -> helloagents_deep_researcher-0.0.1/src
+copying src/utils.py -> helloagents_deep_researcher-0.0.1/src
+copying src/helloagents_deep_researcher.egg-info/PKG-INFO -> helloagents_deep_researcher-0.0.1/src/helloagents_deep_researcher.egg-info
+copying src/helloagents_deep_researcher.egg-info/SOURCES.txt -> helloagents_deep_researcher-0.0.1/src/helloagents_deep_researcher.egg-info
+copying src/helloagents_deep_researcher.egg-info/dependency_links.txt -> helloagents_deep_researcher-0.0.1/src/helloagents_deep_researcher.egg-info
+copying src/helloagents_deep_researcher.egg-info/requires.txt -> helloagents_deep_researcher-0.0.1/src/helloagents_deep_researcher.egg-info
+copying src/helloagents_deep_researcher.egg-info/top_level.txt -> helloagents_deep_researcher-0.0.1/src/helloagents_deep_researcher.egg-info
+copying src/services/__init__.py -> helloagents_deep_researcher-0.0.1/src/services
+copying src/services/agent_adapter.py -> helloagents_deep_researcher-0.0.1/src/services
+copying src/services/note_ownership.py -> helloagents_deep_researcher-0.0.1/src/services
+copying src/services/note_versions.py -> helloagents_deep_researcher-0.0.1/src/services
+copying src/services/notes.py -> helloagents_deep_researcher-0.0.1/src/services
+copying src/services/planner.py -> helloagents_deep_researcher-0.0.1/src/services
+copying src/services/reporter.py -> helloagents_deep_researcher-0.0.1/src/services
+copying src/services/search.py -> helloagents_deep_researcher-0.0.1/src/services
+copying src/services/summarizer.py -> helloagents_deep_researcher-0.0.1/src/services
+copying src/services/text_processing.py -> helloagents_deep_researcher-0.0.1/src/services
+copying src/services/tool_events.py -> helloagents_deep_researcher-0.0.1/src/services
+copying src/storage/__init__.py -> helloagents_deep_researcher-0.0.1/src/storage
+copying src/storage/file_notes.py -> helloagents_deep_researcher-0.0.1/src/storage
+copying src/storage/manual_edit.py -> helloagents_deep_researcher-0.0.1/src/storage
+copying src/storage/note_codec.py -> helloagents_deep_researcher-0.0.1/src/storage
+copying src/storage/note_repository.py -> helloagents_deep_researcher-0.0.1/src/storage
+copying src/tools/__init__.py -> helloagents_deep_researcher-0.0.1/src/tools
+copying src/tools/project_note_tool.py -> helloagents_deep_researcher-0.0.1/src/tools
+Writing helloagents_deep_researcher-0.0.1/setup.cfg
+Creating tar archive
+removing 'helloagents_deep_researcher-0.0.1' (and everything under it)
+Building wheel from source distribution...
+/home/nhzj121/.cache/uv/builds-v0/.tmpPb3nHr/lib/python3.12/site-packages/setuptools/config/_apply_pyprojecttoml.py:82: SetuptoolsDeprecationWarning: `project.license` as a TOML table is deprecated
+!!
+
+        ********************************************************************************
+        Please use a simple string containing a SPDX expression for `project.license`. You can also use `project.license-files`. (Both options available on setuptools>=77.0.0).
+
+        By 2027-Feb-18, you need to update your project and remove deprecated calls
+        or your builds will no longer be supported.
+
+        See https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#license for details.
+        ********************************************************************************
+
+!!
+  corresp(dist, value, root_dir)
+running egg_info
+writing src/helloagents_deep_researcher.egg-info/PKG-INFO
+writing dependency_links to src/helloagents_deep_researcher.egg-info/dependency_links.txt
+writing requirements to src/helloagents_deep_researcher.egg-info/requires.txt
+writing top-level names to src/helloagents_deep_researcher.egg-info/top_level.txt
+reading manifest file 'src/helloagents_deep_researcher.egg-info/SOURCES.txt'
+writing manifest file 'src/helloagents_deep_researcher.egg-info/SOURCES.txt'
+/home/nhzj121/.cache/uv/builds-v0/.tmpPb3nHr/lib/python3.12/site-packages/setuptools/config/_apply_pyprojecttoml.py:82: SetuptoolsDeprecationWarning: `project.license` as a TOML table is deprecated
+!!
+
+        ********************************************************************************
+        Please use a simple string containing a SPDX expression for `project.license`. You can also use `project.license-files`. (Both options available on setuptools>=77.0.0).
+
+        By 2027-Feb-18, you need to update your project and remove deprecated calls
+        or your builds will no longer be supported.
+
+        See https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#license for details.
+        ********************************************************************************
+
+!!
+  corresp(dist, value, root_dir)
+running bdist_wheel
+running build
+running build_py
+creating build/lib
+copying src/agent.py -> build/lib
+copying src/config.py -> build/lib
+copying src/main.py -> build/lib
+copying src/models.py -> build/lib
+copying src/prompts.py -> build/lib
+copying src/utils.py -> build/lib
+creating build/lib/services
+copying src/services/notes.py -> build/lib/services
+copying src/services/text_processing.py -> build/lib/services
+copying src/services/agent_adapter.py -> build/lib/services
+copying src/services/note_versions.py -> build/lib/services
+copying src/services/note_ownership.py -> build/lib/services
+copying src/services/tool_events.py -> build/lib/services
+copying src/services/planner.py -> build/lib/services
+copying src/services/__init__.py -> build/lib/services
+copying src/services/search.py -> build/lib/services
+copying src/services/summarizer.py -> build/lib/services
+copying src/services/reporter.py -> build/lib/services
+creating build/lib/tools
+copying src/tools/__init__.py -> build/lib/tools
+copying src/tools/project_note_tool.py -> build/lib/tools
+creating build/lib/storage
+copying src/storage/file_notes.py -> build/lib/storage
+copying src/storage/manual_edit.py -> build/lib/storage
+copying src/storage/__init__.py -> build/lib/storage
+copying src/storage/note_repository.py -> build/lib/storage
+copying src/storage/note_codec.py -> build/lib/storage
+running egg_info
+writing src/helloagents_deep_researcher.egg-info/PKG-INFO
+writing dependency_links to src/helloagents_deep_researcher.egg-info/dependency_links.txt
+writing requirements to src/helloagents_deep_researcher.egg-info/requires.txt
+writing top-level names to src/helloagents_deep_researcher.egg-info/top_level.txt
+reading manifest file 'src/helloagents_deep_researcher.egg-info/SOURCES.txt'
+writing manifest file 'src/helloagents_deep_researcher.egg-info/SOURCES.txt'
+installing to build/bdist.linux-x86_64/wheel
+running install
+running install_lib
+creating build/bdist.linux-x86_64/wheel
+copying build/lib/utils.py -> build/bdist.linux-x86_64/wheel/.
+copying build/lib/models.py -> build/bdist.linux-x86_64/wheel/.
+copying build/lib/prompts.py -> build/bdist.linux-x86_64/wheel/.
+copying build/lib/main.py -> build/bdist.linux-x86_64/wheel/.
+creating build/bdist.linux-x86_64/wheel/services
+copying build/lib/services/notes.py -> build/bdist.linux-x86_64/wheel/./services
+copying build/lib/services/text_processing.py -> build/bdist.linux-x86_64/wheel/./services
+copying build/lib/services/agent_adapter.py -> build/bdist.linux-x86_64/wheel/./services
+copying build/lib/services/note_versions.py -> build/bdist.linux-x86_64/wheel/./services
+copying build/lib/services/note_ownership.py -> build/bdist.linux-x86_64/wheel/./services
+copying build/lib/services/tool_events.py -> build/bdist.linux-x86_64/wheel/./services
+copying build/lib/services/planner.py -> build/bdist.linux-x86_64/wheel/./services
+copying build/lib/services/__init__.py -> build/bdist.linux-x86_64/wheel/./services
+copying build/lib/services/search.py -> build/bdist.linux-x86_64/wheel/./services
+copying build/lib/services/summarizer.py -> build/bdist.linux-x86_64/wheel/./services
+copying build/lib/services/reporter.py -> build/bdist.linux-x86_64/wheel/./services
+creating build/bdist.linux-x86_64/wheel/tools
+copying build/lib/tools/__init__.py -> build/bdist.linux-x86_64/wheel/./tools
+copying build/lib/tools/project_note_tool.py -> build/bdist.linux-x86_64/wheel/./tools
+copying build/lib/config.py -> build/bdist.linux-x86_64/wheel/.
+copying build/lib/agent.py -> build/bdist.linux-x86_64/wheel/.
+creating build/bdist.linux-x86_64/wheel/storage
+copying build/lib/storage/file_notes.py -> build/bdist.linux-x86_64/wheel/./storage
+copying build/lib/storage/manual_edit.py -> build/bdist.linux-x86_64/wheel/./storage
+copying build/lib/storage/__init__.py -> build/bdist.linux-x86_64/wheel/./storage
+copying build/lib/storage/note_repository.py -> build/bdist.linux-x86_64/wheel/./storage
+copying build/lib/storage/note_codec.py -> build/bdist.linux-x86_64/wheel/./storage
+running install_egg_info
+Copying src/helloagents_deep_researcher.egg-info to build/bdist.linux-x86_64/wheel/./helloagents_deep_researcher-0.0.1-py3.12.egg-info
+running install_scripts
+creating build/bdist.linux-x86_64/wheel/helloagents_deep_researcher-0.0.1.dist-info/WHEEL
+creating '/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-pvxz77bm/artifacts/.tmp-c9xy216k/helloagents_deep_researcher-0.0.1-py3-none-any.whl' and adding 'build/bdist.linux-x86_64/wheel' to it
+adding 'agent.py'
+adding 'config.py'
+adding 'main.py'
+adding 'models.py'
+adding 'prompts.py'
+adding 'utils.py'
+adding 'services/__init__.py'
+adding 'services/agent_adapter.py'
+adding 'services/note_ownership.py'
+adding 'services/note_versions.py'
+adding 'services/notes.py'
+adding 'services/planner.py'
+adding 'services/reporter.py'
+adding 'services/search.py'
+adding 'services/summarizer.py'
+adding 'services/text_processing.py'
+adding 'services/tool_events.py'
+adding 'storage/__init__.py'
+adding 'storage/file_notes.py'
+adding 'storage/manual_edit.py'
+adding 'storage/note_codec.py'
+adding 'storage/note_repository.py'
+adding 'tools/__init__.py'
+adding 'tools/project_note_tool.py'
+adding 'helloagents_deep_researcher-0.0.1.dist-info/METADATA'
+adding 'helloagents_deep_researcher-0.0.1.dist-info/WHEEL'
+adding 'helloagents_deep_researcher-0.0.1.dist-info/top_level.txt'
+adding 'helloagents_deep_researcher-0.0.1.dist-info/RECORD'
+removing build/bdist.linux-x86_64/wheel
+Successfully built artifacts/helloagents_deep_researcher-0.0.1.tar.gz
+Successfully built artifacts/helloagents_deep_researcher-0.0.1-py3-none-any.whl

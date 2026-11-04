@@ -1,0 +1,7 @@
+{
+  "flock": true,
+  "dir_fd": true,
+  "nofollow": true,
+  "atomic_replace": true,
+  "directory_fsync": true
+}

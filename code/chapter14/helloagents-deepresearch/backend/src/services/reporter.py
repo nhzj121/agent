@@ -3,6 +3,9 @@
 from __future__ import annotations
 
 import json
+from dataclasses import replace
+
+from services.note_versions import GeneratedText
 
 from hello_agents import ToolAwareSimpleAgent
 
@@ -18,10 +21,12 @@ class ReportingService:
     def __init__(self, report_agent: ToolAwareSimpleAgent, config: Configuration) -> None:
         self._agent = report_agent
         self._config = config
+        self.generated_text = None
 
     def generate_report(self, state: SummaryState) -> str:
         """Generate a structured report based on completed tasks."""
 
+        self.generated_text = None
         tasks_block = []
         for task in state.todo_items:
             summary_block = task.summary or "暂无可用信息"
@@ -31,6 +36,8 @@ class ReportingService:
                 f"- 任务目标：{task.intent}\n"
                 f"- 检索查询：{task.query}\n"
                 f"- 执行状态：{task.status}\n"
+                f"- 执行错误：{task.detail or '无'}\n"
+                f"- 笔记状态：{task.note_status}；{task.note_error or '无'}\n"
                 f"- 任务总结：\n{summary_block}\n"
                 f"- 来源概览：\n{sources_block}\n"
             )
@@ -58,14 +65,17 @@ class ReportingService:
 
         prompt = (
             f"研究主题：{state.research_topic}\n"
+            f"研究状态：{state.run_status}；告警：{state.warnings}\n"
             f"任务概览：\n{''.join(tasks_block)}\n"
             f"可用任务笔记：\n{notes_section}\n"
             f"请针对每条任务笔记使用格式：[TOOL_CALL:note:{read_template}] 读取内容，整合所有信息后撰写报告。\n"
             f"如需输出汇总结论，可追加调用：[TOOL_CALL:note:{create_conclusion_template}] 保存报告要点。"
         )
 
-        response = self._agent.run(prompt)
-        self._agent.clear_history()
+        try:
+            response = self._agent.run(prompt)
+        finally:
+            self._agent.clear_history()
 
         report_text = response.strip()
         if self._config.strip_thinking_tokens:
@@ -73,5 +83,9 @@ class ReportingService:
 
         report_text = strip_tool_calls(report_text).strip()
 
-        return report_text or "报告生成失败，请检查输入。"
+        report_text = report_text or "报告生成失败，请检查输入。"
+        artifact = getattr(self._agent, "generated_text", None)
+        if isinstance(artifact, GeneratedText):
+            self.generated_text = replace(artifact, text=report_text)
+        return report_text
 

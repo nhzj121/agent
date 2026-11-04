@@ -1,0 +1,37 @@
+test_phase_2a_processes (unittest.loader._FailedTest.test_phase_2a_processes) ... ERROR
+test_phase_2a_repository (unittest.loader._FailedTest.test_phase_2a_repository) ... ERROR
+
+======================================================================
+ERROR: test_phase_2a_processes (unittest.loader._FailedTest.test_phase_2a_processes)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_phase_2a_processes
+Traceback (most recent call last):
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/loader.py", line 396, in _find_test_path
+    module = self._get_module_from_name(name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/loader.py", line 339, in _get_module_from_name
+    __import__(name)
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_2a_processes.py", line 15, in <module>
+    from storage.file_notes import FileNoteRepository
+ModuleNotFoundError: No module named 'storage'
+
+
+======================================================================
+ERROR: test_phase_2a_repository (unittest.loader._FailedTest.test_phase_2a_repository)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_phase_2a_repository
+Traceback (most recent call last):
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/loader.py", line 396, in _find_test_path
+    module = self._get_module_from_name(name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/unittest/loader.py", line 339, in _get_module_from_name
+    __import__(name)
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_2a_repository.py", line 19, in <module>
+    from storage.file_notes import FileNoteRepository
+ModuleNotFoundError: No module named 'storage'
+
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.000s
+
+FAILED (errors=2)

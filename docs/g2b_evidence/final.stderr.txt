@@ -1,0 +1,45 @@
+test_atomic_identity_creation_across_owner_instances (test_phase_2b_ownership.OwnershipTests.test_atomic_identity_creation_across_owner_instances) ... ok
+test_binding_is_projection_and_cannot_upgrade_frozen_basis (test_phase_2b_ownership.OwnershipTests.test_binding_is_projection_and_cannot_upgrade_frozen_basis) ... ok
+test_duplicate_create_is_id_only_and_cannot_overwrite (test_phase_2b_ownership.OwnershipTests.test_duplicate_create_is_id_only_and_cannot_overwrite) ... ok
+test_existing_report_without_basis_fails_and_stale_basis_conflicts (test_phase_2b_ownership.OwnershipTests.test_existing_report_without_basis_fails_and_stale_basis_conflicts) ... ok
+test_ordinary_conclusion_and_other_run_are_not_final_report (test_phase_2b_ownership.OwnershipTests.test_ordinary_conclusion_and_other_run_are_not_final_report) ... ok
+test_parallel_directory_scans_have_independent_cursors (test_phase_2b_ownership.OwnershipTests.test_parallel_directory_scans_have_independent_cursors) ... ok
+test_reporter_create_and_final_persist_are_one_note (test_phase_2b_ownership.OwnershipTests.test_reporter_create_and_final_persist_are_one_note) ... ok
+test_sync_and_stream_opt_in_workflow_never_construct_legacy_tool (test_phase_2b_ownership.OwnershipTests.test_sync_and_stream_opt_in_workflow_never_construct_legacy_tool) ... INFO:services.planner:Planner raw output (truncated): {"tasks":[{"title":"t","intent":"i","query":"q"}]}
+INFO:services.planner:Planner produced 1 tasks: ['t']
+INFO:services.tool_events:Tool call recorded: agent=任务总结专家 tool=note task_id=1 note_id=note_0349e3b3404a49789d73d838361229ed parsed_parameters={'action': 'create', 'task_id': 1, 'note_id': 'note_0349e3b3404a49789d73d838361229ed'}
+INFO:services.tool_events:Tool call recorded: agent=报告撰写专家 tool=note task_id=1 note_id=note_0349e3b3404a49789d73d838361229ed parsed_parameters={'action': 'read', 'task_id': 1, 'note_id': 'note_0349e3b3404a49789d73d838361229ed'}
+INFO:services.tool_events:Tool call recorded: agent=报告撰写专家 tool=note task_id=None note_id=note_eaba5385b1834a73affda4597adc17e2 parsed_parameters={'action': 'create', 'note_id': 'note_eaba5385b1834a73affda4597adc17e2'}
+INFO:services.planner:Planner raw output (truncated): {"tasks":[{"title":"t","intent":"i","query":"q"}]}
+INFO:services.planner:Planner produced 1 tasks: ['t']
+INFO:services.tool_events:Tool call recorded: agent=任务总结专家 tool=note task_id=1 note_id=note_ddd399db45a24d01939d40f736125337 parsed_parameters={'action': 'create', 'task_id': 1, 'note_id': 'note_ddd399db45a24d01939d40f736125337'}
+INFO:services.tool_events:Tool call recorded: agent=报告撰写专家 tool=note task_id=1 note_id=note_ddd399db45a24d01939d40f736125337 parsed_parameters={'action': 'read', 'task_id': 1, 'note_id': 'note_ddd399db45a24d01939d40f736125337'}
+INFO:services.tool_events:Tool call recorded: agent=报告撰写专家 tool=note task_id=None note_id=note_2dbdb7b427e545bda89860075a19b559 parsed_parameters={'action': 'create', 'note_id': 'note_2dbdb7b427e545bda89860075a19b559'}
+ok
+test_01_framework_version_and_delivery_freeze_order (test_phase_2b_tool_adapter.ExtensionGateTests.test_01_framework_version_and_delivery_freeze_order) ... ok
+test_02_same_answer_read_update_uses_only_previous_generation (test_phase_2b_tool_adapter.ExtensionGateTests.test_02_same_answer_read_update_uses_only_previous_generation) ... ok
+test_03_distinct_agents_do_not_share_credentials (test_phase_2b_tool_adapter.ExtensionGateTests.test_03_distinct_agents_do_not_share_credentials) ... ok
+test_commit_uncertain_revokes_write_and_does_not_return_fake_id (test_phase_2b_versions.VersionTests.test_commit_uncertain_revokes_write_and_does_not_return_fake_id) ... ok
+test_failure_projection_does_not_bind_fake_id (test_phase_2b_versions.VersionTests.test_failure_projection_does_not_bind_fake_id) ... INFO:services.tool_events:Tool call recorded: agent=fake tool=note task_id=1 note_id=None parsed_parameters={'action': 'read', 'task_id': 1}
+ok
+test_fallback_delegation_history_error_and_close (test_phase_2b_versions.VersionTests.test_fallback_delegation_history_error_and_close) ... ok
+test_foreign_tasks_agents_and_runs_do_not_share_grants (test_phase_2b_versions.VersionTests.test_foreign_tasks_agents_and_runs_do_not_share_grants) ... ok
+test_forged_latest_version_or_receipt_does_not_authorize (test_phase_2b_versions.VersionTests.test_forged_latest_version_or_receipt_does_not_authorize) ... ok
+test_fresh_create_delivered_snapshot_authorizes_next_generation (test_phase_2b_versions.VersionTests.test_fresh_create_delivered_snapshot_authorizes_next_generation) ... ok
+test_id_only_create_list_and_failed_read_never_authorize (test_phase_2b_versions.VersionTests.test_id_only_create_list_and_failed_read_never_authorize) ... ok
+test_parser_failure_cannot_reuse_previous_success_for_projection (test_phase_2b_versions.VersionTests.test_parser_failure_cannot_reuse_previous_success_for_projection) ... ok
+test_planner_tags_and_title_do_not_create_trusted_task_binding (test_phase_2b_versions.VersionTests.test_planner_tags_and_title_do_not_create_trusted_task_binding) ... ok
+test_query_limit_type_and_summary_are_compatible_without_grants (test_phase_2b_versions.VersionTests.test_query_limit_type_and_summary_are_compatible_without_grants) ... ok
+test_read_generation_update_sync_and_stream (test_phase_2b_versions.VersionTests.test_read_generation_update_sync_and_stream) ... ok
+test_result_delivery_requires_exact_authentic_message_not_substring (test_phase_2b_versions.VersionTests.test_result_delivery_requires_exact_authentic_message_not_substring) ... ok
+test_reused_agent_execution_cannot_reuse_grant (test_phase_2b_versions.VersionTests.test_reused_agent_execution_cannot_reuse_grant) ... ok
+test_same_answer_read_update_has_no_new_grant (test_phase_2b_versions.VersionTests.test_same_answer_read_update_has_no_new_grant) ... ok
+test_stale_version_is_not_refreshed_before_write (test_phase_2b_versions.VersionTests.test_stale_version_is_not_refreshed_before_write) ... ok
+test_stream_exception_cleans_execution_ledger (test_phase_2b_versions.VersionTests.test_stream_exception_cleans_execution_ledger) ... ok
+test_success_revokes_grant_for_second_write_same_answer (test_phase_2b_versions.VersionTests.test_success_revokes_grant_for_second_write_same_answer) ... ok
+test_trimmed_input_cannot_reuse_delivered_basis (test_phase_2b_versions.VersionTests.test_trimmed_input_cannot_reuse_delivered_basis) ... ok
+
+----------------------------------------------------------------------
+Ran 29 tests in 1.485s
+
+OK

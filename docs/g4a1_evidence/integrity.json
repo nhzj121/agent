@@ -1,0 +1,50 @@
+{
+  "changed_existing": {
+    "code/chapter14/helloagents-deepresearch/backend/src/main.py": {
+      "before": "bcf2c358394548a293d38ee8e1e08c954d978afbd5a4db4eb4d6c976e79b1ce8",
+      "after": "263a521f56c596380a185a4fa69b6552199232e7e69bf773f43ae0e32cfe941a"
+    },
+    "code/chapter14/helloagents-deepresearch/backend/src/config.py": {
+      "before": "6daf6c29e8f2604db53a74e746b9cff32e78a9625ad47ff2590eb6a059dbaa07",
+      "after": "2102f93b336d5e4b6cfa637b7edb4726dc04265b33f3233719ce19fd9afcdc19"
+    },
+    "code/chapter14/helloagents-deepresearch/backend/src/agent.py": {
+      "before": "b680c0de391cc952ae3ff32657b1e6a11e159b468fc557e3059316997ed7f2e2",
+      "after": "89b32a77587c865120ab4bc6322eb406c4138b7797f6da3110669006d979948d"
+    },
+    "code/chapter14/helloagents-deepresearch/backend/src/services/agent_adapter.py": {
+      "before": "eec9731ee5f68bcd9afb40ea705169dd09abdef55276eeadff2380ee7f7b83cf",
+      "after": "398aa01e86b6f8144b60c9e751b1645f7740ed53aa314c06c44d49fe3088a875"
+    },
+    "code/chapter14/helloagents-deepresearch/backend/src/services/summarizer.py": {
+      "before": "c6ce96144fa529b0dd3ef58ec9ab7768e97d763146a77a7aeda255b86e225baf",
+      "after": "8855176a5309b515260c93a53d253d42c64c025bd35c9a4e1a585dd461fbea17"
+    },
+    "tests/acceptance/test_phase_0_environment.py": {
+      "before": "36188757ffe0c3ba0eced84c55d2966dfd589a2703c2f4ee633cda119245f80e",
+      "after": "12e262d786dc450b8f3445c79a607ea4a4243bbde4f85bce0615aef5267acd48"
+    }
+  },
+  "new_modules": {
+    "code/chapter14/helloagents-deepresearch/backend/src/llm/project_llm.py": "cdaf11c9b9498f68a80483add683160d95e26a6a58666aa01d47c1fead1569df",
+    "code/chapter14/helloagents-deepresearch/backend/src/llm/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "code/chapter14/helloagents-deepresearch/backend/src/services/search_runtime.py": "ca9e609c3acd13cae0e6c66dc5833448257bb1a922e8128b73772673f7b777ea",
+    "code/chapter14/helloagents-deepresearch/backend/src/services/execution_control.py": "a23ec82925820938da1c05588d5e4b911357aaed355d3c727ea764b7e7bc84e0",
+    "code/chapter14/helloagents-deepresearch/backend/src/tools/controlled_tool.py": "250c57d8a8e953288abf442a64cb21e62e8dac2332721bd1cb734b72230420d2"
+  },
+  "unchanged_existing_count": 44,
+  "git_status": " M code/chapter14/helloagents-deepresearch/backend/pyproject.toml\n M code/chapter14/helloagents-deepresearch/backend/src/agent.py\n M code/chapter14/helloagents-deepresearch/backend/src/config.py\n M code/chapter14/helloagents-deepresearch/backend/src/main.py\n M code/chapter14/helloagents-deepresearch/backend/src/models.py\n M code/chapter14/helloagents-deepresearch/backend/src/services/notes.py\n M code/chapter14/helloagents-deepresearch/backend/src/services/planner.py\n M code/chapter14/helloagents-deepresearch/backend/src/services/reporter.py\n M code/chapter14/helloagents-deepresearch/backend/src/services/summarizer.py\n M code/chapter14/helloagents-deepresearch/backend/src/services/text_processing.py\n M code/chapter14/helloagents-deepresearch/backend/src/services/tool_events.py\n M code/chapter14/helloagents-deepresearch/backend/src/utils.py\n M code/chapter14/helloagents-deepresearch/backend/uv.lock\n M code/chapter14/helloagents-deepresearch/frontend/src/App.vue\n M code/chapter14/helloagents-deepresearch/frontend/src/services/api.ts\n?? AGENTS.md\n?? \"README (2).md:Zone.Identifier\"\n?? README.md\n?? code/chapter14/helloagents-deepresearch/backend/README.md\n?? code/chapter14/helloagents-deepresearch/backend/scripts/\n?? code/chapter14/helloagents-deepresearch/backend/src/llm/\n?? code/chapter14/helloagents-deepresearch/backend/src/services/agent_adapter.py\n?? code/chapter14/helloagents-deepresearch/backend/src/services/execution_control.py\n?? code/chapter14/helloagents-deepresearch/backend/src/services/note_ownership.py\n?? code/chapter14/helloagents-deepresearch/backend/src/services/note_versions.py\n?? code/chapter14/helloagents-deepresearch/backend/src/services/search_runtime.py\n?? code/chapter14/helloagents-deepresearch/backend/src/storage/\n?? code/chapter14/helloagents-deepresearch/backend/src/tools/\n?? code/chapter14/helloagents-deepresearch/frontend/tests/\n?? docs/\n?? tests/\n",
+  "head": "755ae75958e6fb072c8a075bcbc55ad15d98bb17\n",
+  "g0_work": "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-n_sj55n4",
+  "diff_check": 0,
+  "staged": [],
+  "report_sha256": "311c10e634531a2a21efa4735e1f2fa645bf3e76e68f51ebfdd17f99c81035ed",
+  "report_links_checked": 37,
+  "missing_links": [],
+  "shell_syntax_checked": true,
+  "acceptance_hashes": {
+    "tests/acceptance/test_phase_4a_1_resources.py": "900923668b1e753ef406e4de1e1d77ecc050febcf04d82f51f0cf1fdaff7476d",
+    "tests/acceptance/test_phase_4a_1_execution.py": "ee39a769a04243753bba747f52875bb1c54491129e7af6393c610a26195ff7df"
+  },
+  "final_status": " M code/chapter14/helloagents-deepresearch/backend/pyproject.toml\n M code/chapter14/helloagents-deepresearch/backend/src/agent.py\n M code/chapter14/helloagents-deepresearch/backend/src/config.py\n M code/chapter14/helloagents-deepresearch/backend/src/main.py\n M code/chapter14/helloagents-deepresearch/backend/src/models.py\n M code/chapter14/helloagents-deepresearch/backend/src/services/notes.py\n M code/chapter14/helloagents-deepresearch/backend/src/services/planner.py\n M code/chapter14/helloagents-deepresearch/backend/src/services/reporter.py\n M code/chapter14/helloagents-deepresearch/backend/src/services/summarizer.py\n M code/chapter14/helloagents-deepresearch/backend/src/services/text_processing.py\n M code/chapter14/helloagents-deepresearch/backend/src/services/tool_events.py\n M code/chapter14/helloagents-deepresearch/backend/src/utils.py\n M code/chapter14/helloagents-deepresearch/backend/uv.lock\n M code/chapter14/helloagents-deepresearch/frontend/src/App.vue\n M code/chapter14/helloagents-deepresearch/frontend/src/services/api.ts\n?? AGENTS.md\n?? \"README (2).md:Zone.Identifier\"\n?? README.md\n?? code/chapter14/helloagents-deepresearch/backend/README.md\n?? code/chapter14/helloagents-deepresearch/backend/scripts/\n?? code/chapter14/helloagents-deepresearch/backend/src/llm/\n?? code/chapter14/helloagents-deepresearch/backend/src/services/agent_adapter.py\n?? code/chapter14/helloagents-deepresearch/backend/src/services/execution_control.py\n?? code/chapter14/helloagents-deepresearch/backend/src/services/note_ownership.py\n?? code/chapter14/helloagents-deepresearch/backend/src/services/note_versions.py\n?? code/chapter14/helloagents-deepresearch/backend/src/services/search_runtime.py\n?? code/chapter14/helloagents-deepresearch/backend/src/storage/\n?? code/chapter14/helloagents-deepresearch/backend/src/tools/\n?? code/chapter14/helloagents-deepresearch/frontend/tests/\n?? docs/\n?? tests/\n"
+}

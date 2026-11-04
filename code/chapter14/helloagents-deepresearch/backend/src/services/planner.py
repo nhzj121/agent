@@ -36,8 +36,10 @@ class PlanningService:
             research_topic=state.research_topic,
         )
 
-        response = self._agent.run(prompt)
-        self._agent.clear_history()
+        try:
+            response = self._agent.run(prompt)
+        finally:
+            self._agent.clear_history()
 
         logger.info("Planner raw output (truncated): %s", response[:500])
 

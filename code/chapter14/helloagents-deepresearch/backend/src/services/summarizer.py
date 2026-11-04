@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+import logging
+import sys
+
 from collections.abc import Callable, Iterator
 from typing import Tuple
 
@@ -9,9 +12,13 @@ from hello_agents import ToolAwareSimpleAgent
 
 from models import SummaryState, TodoItem
 from config import Configuration
-from utils import strip_thinking_tokens
+from utils import ThinkingFilter, strip_thinking_tokens
 from services.notes import build_note_guidance
+from services.execution_control import checkpoint, close_thread_streams
 from services.text_processing import strip_tool_calls
+
+
+logger = logging.getLogger(__name__)
 
 
 class SummarizationService:
@@ -21,16 +28,20 @@ class SummarizationService:
         self,
         summarizer_factory: Callable[[], ToolAwareSimpleAgent],
         config: Configuration,
+        task_agent_factory=None,
     ) -> None:
         self._agent_factory = summarizer_factory
+        self._task_agent_factory = task_agent_factory
         self._config = config
 
     def summarize_task(self, state: SummaryState, task: TodoItem, context: str) -> str:
         """Generate a task-specific summary using the summarizer agent."""
 
+        checkpoint()
         prompt = self._build_prompt(state, task, context)
 
-        agent = self._agent_factory()
+        agent = (self._task_agent_factory(task) if self._task_agent_factory is not None
+                 else self._agent_factory())
         try:
             response = agent.run(prompt)
         finally:
@@ -49,65 +60,42 @@ class SummarizationService:
     ) -> Tuple[Iterator[str], Callable[[], str]]:
         """Stream the summary text for a task while collecting full output."""
 
+        checkpoint()
         prompt = self._build_prompt(state, task, context)
         remove_thinking = self._config.strip_thinking_tokens
-        raw_buffer = ""
         visible_output = ""
-        emit_index = 0
-        agent = self._agent_factory()
-
-        def flush_visible() -> Iterator[str]:
-            nonlocal emit_index, raw_buffer
-            while True:
-                start = raw_buffer.find("<think>", emit_index)
-                if start == -1:
-                    if emit_index < len(raw_buffer):
-                        segment = raw_buffer[emit_index:]
-                        emit_index = len(raw_buffer)
-                        if segment:
-                            yield segment
-                    break
-
-                if start > emit_index:
-                    segment = raw_buffer[emit_index:start]
-                    emit_index = start
-                    if segment:
-                        yield segment
-
-                end = raw_buffer.find("</think>", start)
-                if end == -1:
-                    break
-                emit_index = end + len("</think>")
+        agent = (self._task_agent_factory(task) if self._task_agent_factory is not None
+                 else self._agent_factory())
 
         def generator() -> Iterator[str]:
-            nonlocal raw_buffer, visible_output, emit_index
+            nonlocal visible_output
+            thinking = ThinkingFilter()
+            inner = None
             try:
-                for chunk in agent.stream_run(prompt):
-                    raw_buffer += chunk
-                    if remove_thinking:
-                        for segment in flush_visible():
-                            visible_output += segment
-                            if segment:
-                                yield segment
-                    else:
-                        visible_output += chunk
-                        if chunk:
-                            yield chunk
-            finally:
-                if remove_thinking:
-                    for segment in flush_visible():
+                inner = agent.stream_run(prompt)
+                for chunk in inner:
+                    segment = thinking.feed(chunk) if remove_thinking else chunk
+                    if segment:
                         visible_output += segment
-                        if segment:
-                            yield segment
-                agent.clear_history()
+                        yield segment
+            finally:
+                # No yield during close/error. Release only iterators we own.
+                active_error = sys.exc_info()[0] is not None
+                cleanup_error = None
+                for cleanup in (getattr(inner, "close", None), close_thread_streams, agent.clear_history):
+                    if cleanup is None:
+                        continue
+                    try:
+                        cleanup()
+                    except Exception as exc:
+                        if cleanup_error is None:
+                            cleanup_error = exc
+                        logger.warning("Summary cleanup failed", exc_info=True)
+                if cleanup_error is not None and not active_error:
+                    raise cleanup_error
 
         def get_summary() -> str:
-            if remove_thinking:
-                cleaned = strip_thinking_tokens(visible_output)
-            else:
-                cleaned = visible_output
-
-            return strip_tool_calls(cleaned).strip()
+            return strip_tool_calls(visible_output).strip()
 
         return generator(), get_summary
 

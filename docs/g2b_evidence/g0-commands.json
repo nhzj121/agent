@@ -1,0 +1,240 @@
+[
+  {
+    "label": "flock-blocked",
+    "argv": [
+      "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/bin/python3.12",
+      "-I",
+      "-B",
+      "-c",
+      "\nimport fcntl,sys\nwith open(sys.argv[1],\"a+b\") as stream:\n try:\n  fcntl.flock(stream,fcntl.LOCK_EX|fcntl.LOCK_NB)\n  print(\"acquired\")\n except BlockingIOError:\n  print(\"blocked\")\n",
+      "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-a5gr2gls/tmpm9syv3dp/lock"
+    ],
+    "cwd": "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-a5gr2gls",
+    "exit_code": 0
+  },
+  {
+    "label": "flock-released",
+    "argv": [
+      "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/bin/python3.12",
+      "-I",
+      "-B",
+      "-c",
+      "\nimport fcntl,sys\nwith open(sys.argv[1],\"a+b\") as stream:\n try:\n  fcntl.flock(stream,fcntl.LOCK_EX|fcntl.LOCK_NB)\n  print(\"acquired\")\n except BlockingIOError:\n  print(\"blocked\")\n",
+      "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-a5gr2gls/tmpm9syv3dp/lock"
+    ],
+    "cwd": "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-a5gr2gls",
+    "exit_code": 0
+  },
+  {
+    "label": "lock-check",
+    "argv": [
+      "/home/nhzj121/.local/bin/uv",
+      "lock",
+      "--project",
+      "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-a5gr2gls/source",
+      "--python",
+      "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/bin/python3.12",
+      "--check",
+      "--offline"
+    ],
+    "cwd": "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-a5gr2gls",
+    "exit_code": 0
+  },
+  {
+    "label": "build",
+    "argv": [
+      "/home/nhzj121/.local/bin/uv",
+      "build",
+      "--project",
+      "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-a5gr2gls/source",
+      "--python",
+      "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/bin/python3.12",
+      "--out-dir",
+      "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-a5gr2gls/artifacts"
+    ],
+    "cwd": "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-a5gr2gls",
+    "exit_code": 0
+  },
+  {
+    "label": "create-runtime",
+    "argv": [
+      "/home/nhzj121/.local/bin/uv",
+      "venv",
+      "--python",
+      "/home/nhzj121/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/bin/python3.12",
+      "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-a5gr2gls/runtime"
+    ],
+    "cwd": "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-a5gr2gls",
+    "exit_code": 0
+  },
+  {
+    "label": "empty-runtime",
+    "argv": [
+      "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-a5gr2gls/runtime/bin/python",
+      "-I",
+      "-B",
+      "-c",
+      "import importlib.metadata as m,json,sys;print(json.dumps({'prefix':sys.prefix,'base_prefix':sys.base_prefix,'distributions':[d.metadata['Name'] for d in m.distributions()]}))"
+    ],
+    "cwd": "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-a5gr2gls",
+    "exit_code": 0
+  },
+  {
+    "label": "export-lock",
+    "argv": [
+      "/home/nhzj121/.local/bin/uv",
+      "export",
+      "--project",
+      "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-a5gr2gls/source",
+      "--locked",
+      "--no-dev",
+      "--no-emit-project",
+      "--format",
+      "requirements-txt",
+      "--output-file",
+      "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-a5gr2gls/runtime-requirements.txt"
+    ],
+    "cwd": "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-a5gr2gls",
+    "exit_code": 0
+  },
+  {
+    "label": "install-runtime-dependencies",
+    "argv": [
+      "/home/nhzj121/.local/bin/uv",
+      "pip",
+      "install",
+      "--python",
+      "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-a5gr2gls/runtime/bin/python",
+      "--require-hashes",
+      "--no-deps",
+      "-r",
+      "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-a5gr2gls/runtime-requirements.txt"
+    ],
+    "cwd": "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-a5gr2gls",
+    "exit_code": 0
+  },
+  {
+    "label": "install-wheel",
+    "argv": [
+      "/home/nhzj121/.local/bin/uv",
+      "pip",
+      "install",
+      "--python",
+      "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-a5gr2gls/runtime/bin/python",
+      "--no-deps",
+      "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-a5gr2gls/artifacts/helloagents_deep_researcher-0.0.1-py3-none-any.whl"
+    ],
+    "cwd": "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-a5gr2gls",
+    "exit_code": 0
+  },
+  {
+    "label": "dependency-check",
+    "argv": [
+      "/home/nhzj121/.local/bin/uv",
+      "pip",
+      "check",
+      "--python",
+      "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-a5gr2gls/runtime/bin/python"
+    ],
+    "cwd": "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-a5gr2gls",
+    "exit_code": 0
+  },
+  {
+    "label": "installed-imports",
+    "argv": [
+      "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-a5gr2gls/runtime/bin/python",
+      "-I",
+      "-B",
+      "-c",
+      "\nimport os, socket, pathlib, sys\nfrom unittest.mock import patch\n_original_connect = socket.socket.connect\n_original_connect_ex = socket.socket.connect_ex\n_original_getaddrinfo = socket.getaddrinfo\ndef _local_host(host):\n    return host in (None, \"localhost\", \"127.0.0.1\", \"::1\")\ndef _guard_connect(self, address):\n    if self.family == socket.AF_UNIX:\n        return _original_connect(self, address)\n    if not isinstance(address, tuple) or not _local_host(address[0]):\n        raise AssertionError(\"G0 runtime forbids external network connections\")\n    return _original_connect(self, address)\ndef _guard_connect_ex(self, address):\n    if self.family == socket.AF_UNIX:\n        return _original_connect_ex(self, address)\n    if not isinstance(address, tuple) or not _local_host(address[0]):\n        raise AssertionError(\"G0 runtime forbids external network connections\")\n    return _original_connect_ex(self, address)\ndef _guard_getaddrinfo(host, *args, **kwargs):\n    if not _local_host(host):\n        raise AssertionError(\"G0 runtime forbids external DNS lookup\")\n    return _original_getaddrinfo(host, *args, **kwargs)\nsocket.socket.connect = _guard_connect\nsocket.socket.connect_ex = _guard_connect_ex\nsocket.getaddrinfo = _guard_getaddrinfo\n\n\nimport importlib,importlib.metadata as m,json,sys,pathlib\nnames=[\"main\",\"agent\",\"config\",\"models\",\"prompts\",\"utils\",\"services.planner\",\n       \"services.search\",\"services.summarizer\",\"services.reporter\",\n       \"services.notes\",\"services.text_processing\",\"services.tool_events\",\n       \"tools.project_note_tool\",\"services.agent_adapter\",\"services.note_versions\",\"services.note_ownership\",\n       \"storage.note_repository\",\"storage.file_notes\",\"storage.note_codec\",\"storage.manual_edit\",\n       \"hello_agents\",\"huggingface_hub\",\"yaml\"]\nlocations={name:importlib.import_module(name).__file__ for name in names}\nprefix=pathlib.Path(sys.prefix)\nassert all(pathlib.Path(path).is_relative_to(prefix) for path in locations.values()),locations\nprint(\"G0_JSON=\"+json.dumps({\"prefix\":sys.prefix,\"base_prefix\":sys.base_prefix,\n\"sys_path\":sys.path,\"locations\":locations,\n\"versions\":{d.metadata[\"Name\"]:d.version for d in m.distributions()}}))\n"
+    ],
+    "cwd": "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-a5gr2gls/unrelated-working-directory",
+    "exit_code": 0
+  },
+  {
+    "label": "installed-metadata",
+    "argv": [
+      "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-a5gr2gls/runtime/bin/python",
+      "-I",
+      "-B",
+      "-c",
+      "\nimport os, socket, pathlib, sys\nfrom unittest.mock import patch\n_original_connect = socket.socket.connect\n_original_connect_ex = socket.socket.connect_ex\n_original_getaddrinfo = socket.getaddrinfo\ndef _local_host(host):\n    return host in (None, \"localhost\", \"127.0.0.1\", \"::1\")\ndef _guard_connect(self, address):\n    if self.family == socket.AF_UNIX:\n        return _original_connect(self, address)\n    if not isinstance(address, tuple) or not _local_host(address[0]):\n        raise AssertionError(\"G0 runtime forbids external network connections\")\n    return _original_connect(self, address)\ndef _guard_connect_ex(self, address):\n    if self.family == socket.AF_UNIX:\n        return _original_connect_ex(self, address)\n    if not isinstance(address, tuple) or not _local_host(address[0]):\n        raise AssertionError(\"G0 runtime forbids external network connections\")\n    return _original_connect_ex(self, address)\ndef _guard_getaddrinfo(host, *args, **kwargs):\n    if not _local_host(host):\n        raise AssertionError(\"G0 runtime forbids external DNS lookup\")\n    return _original_getaddrinfo(host, *args, **kwargs)\nsocket.socket.connect = _guard_connect\nsocket.socket.connect_ex = _guard_connect_ex\nsocket.getaddrinfo = _guard_getaddrinfo\n\n\nimport importlib.metadata as m,json\nprint(\"G0_JSON=\"+json.dumps({d.metadata[\"Name\"]:d.version for d in m.distributions()}))\n"
+    ],
+    "cwd": "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-a5gr2gls/unrelated-working-directory",
+    "exit_code": 0
+  },
+  {
+    "label": "fake-http-smoke",
+    "argv": [
+      "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-a5gr2gls/runtime/bin/python",
+      "-I",
+      "-B",
+      "-c",
+      "\nimport os, socket, pathlib, sys\nfrom unittest.mock import patch\n_original_connect = socket.socket.connect\n_original_connect_ex = socket.socket.connect_ex\n_original_getaddrinfo = socket.getaddrinfo\ndef _local_host(host):\n    return host in (None, \"localhost\", \"127.0.0.1\", \"::1\")\ndef _guard_connect(self, address):\n    if self.family == socket.AF_UNIX:\n        return _original_connect(self, address)\n    if not isinstance(address, tuple) or not _local_host(address[0]):\n        raise AssertionError(\"G0 runtime forbids external network connections\")\n    return _original_connect(self, address)\ndef _guard_connect_ex(self, address):\n    if self.family == socket.AF_UNIX:\n        return _original_connect_ex(self, address)\n    if not isinstance(address, tuple) or not _local_host(address[0]):\n        raise AssertionError(\"G0 runtime forbids external network connections\")\n    return _original_connect_ex(self, address)\ndef _guard_getaddrinfo(host, *args, **kwargs):\n    if not _local_host(host):\n        raise AssertionError(\"G0 runtime forbids external DNS lookup\")\n    return _original_getaddrinfo(host, *args, **kwargs)\nsocket.socket.connect = _guard_connect\nsocket.socket.connect_ex = _guard_connect_ex\nsocket.getaddrinfo = _guard_getaddrinfo\n\n\nimport json\nimport main\nfrom types import SimpleNamespace\nfrom models import TodoItem\nfrom fastapi.testclient import TestClient\nfrom hello_agents import HelloAgentsLLM\nfrom hello_agents.tools import SearchTool\nfrom hello_agents.tools.builtin.note_tool import NoteTool\nfrom loguru import logger\nlogger.disable(\"main\")\ndef forbidden(*args,**kwargs):\n raise AssertionError(\"Real API/notes execution forbidden in G0\")\ncalls=[]\nclass FakeCoordinator:\n def __init__(self,config): calls.append((\"init\",config.enable_notes))\n def run(self,topic):\n  calls.append((\"run\",topic))\n  return SimpleNamespace(report_markdown=\"G0 fake report\",running_summary=None,\n   todo_items=[TodoItem(id=1,title=\"fake\",intent=\"fake\",query=\"fake\",\n                       status=\"completed\",summary=\"fake summary\")])\n def run_stream(self,topic):\n  calls.append((\"stream\",topic))\n  yield {\"type\":\"status\",\"message\":\"fake started\"}\n  if topic==\"fake-error\": raise RuntimeError(\"G0 fake stage failure\")\n  yield {\"type\":\"todo_list\",\"tasks\":[]}\n  yield {\"type\":\"final_report\",\"report\":\"G0 fake report\"}\n  yield {\"type\":\"done\"}\nwith patch.object(main,\"DeepResearchAgent\",FakeCoordinator), \\\n patch.object(HelloAgentsLLM,\"__init__\",forbidden), \\\n patch.object(SearchTool,\"run\",forbidden), \\\n patch.object(NoteTool,\"__init__\",forbidden):\n with TestClient(main.app) as client:\n  health=client.get(\"/healthz\")\n  sync=client.post(\"/research\",json={\"topic\":\"fake\"})\n  stream=client.post(\"/research/stream\",json={\"topic\":\"fake\"})\n  error=client.post(\"/research/stream\",json={\"topic\":\"fake-error\"})\nassert health.status_code==200 and health.json()=={\"status\":\"ok\"}\nassert sync.status_code==200 and sync.json()[\"report_markdown\"]==\"G0 fake report\"\nframes=lambda response:[json.loads(frame[6:]) for frame in response.text.strip().split(\"\\n\\n\")]\nassert [e[\"type\"] for e in frames(stream)]==[\"status\",\"todo_list\",\"final_report\",\"done\"]\nassert stream.headers[\"content-type\"].startswith(\"text/event-stream\")\nassert error.status_code==200 and frames(error)[-1][\"type\"]==\"error\"\nassert all(not item[1] for item in calls if item[0]==\"init\")\nassert not pathlib.Path(os.environ[\"NOTES_WORKSPACE\"]).exists()\nprint(\"G0_JSON=\"+json.dumps({\"health\":200,\"research\":200,\n\"stream_types\":[e[\"type\"] for e in frames(stream)],\"error_type\":\"error\",\"calls\":calls}))\n"
+    ],
+    "cwd": "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-a5gr2gls/unrelated-working-directory",
+    "exit_code": 0
+  },
+  {
+    "label": "startup-installed",
+    "argv": [
+      "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-a5gr2gls/runtime/bin/python",
+      "-I",
+      "-B",
+      "-c",
+      "\nimport os, socket, pathlib, sys\nfrom unittest.mock import patch\n_original_connect = socket.socket.connect\n_original_connect_ex = socket.socket.connect_ex\n_original_getaddrinfo = socket.getaddrinfo\ndef _local_host(host):\n    return host in (None, \"localhost\", \"127.0.0.1\", \"::1\")\ndef _guard_connect(self, address):\n    if self.family == socket.AF_UNIX:\n        return _original_connect(self, address)\n    if not isinstance(address, tuple) or not _local_host(address[0]):\n        raise AssertionError(\"G0 runtime forbids external network connections\")\n    return _original_connect(self, address)\ndef _guard_connect_ex(self, address):\n    if self.family == socket.AF_UNIX:\n        return _original_connect_ex(self, address)\n    if not isinstance(address, tuple) or not _local_host(address[0]):\n        raise AssertionError(\"G0 runtime forbids external network connections\")\n    return _original_connect_ex(self, address)\ndef _guard_getaddrinfo(host, *args, **kwargs):\n    if not _local_host(host):\n        raise AssertionError(\"G0 runtime forbids external DNS lookup\")\n    return _original_getaddrinfo(host, *args, **kwargs)\nsocket.socket.connect = _guard_connect\nsocket.socket.connect_ex = _guard_connect_ex\nsocket.getaddrinfo = _guard_getaddrinfo\n\nimport hello_agents\nfrom hello_agents.tools import SearchTool\nfrom hello_agents.tools.builtin.note_tool import NoteTool\ndef _forbidden(*args, **kwargs):\n    raise AssertionError(\"Real LLM/search/notes forbidden in G0 health startup\")\nhello_agents.HelloAgentsLLM.__init__ = _forbidden\nSearchTool.run = _forbidden\nNoteTool.__init__ = _forbidden\nimport runpy\nsys.argv = [\"uvicorn\"] + sys.argv[1:]\nrunpy.run_module(\"uvicorn\", run_name=\"__main__\")\n",
+      "main:app",
+      "--host",
+      "127.0.0.1",
+      "--port",
+      "33963",
+      "--log-level",
+      "warning"
+    ],
+    "cwd": "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-a5gr2gls/unrelated-working-directory",
+    "health_status": 200,
+    "exit_after_owned_process_termination": -15
+  },
+  {
+    "label": "startup-app-dir",
+    "argv": [
+      "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-a5gr2gls/runtime/bin/python",
+      "-I",
+      "-B",
+      "-c",
+      "\nimport os, socket, pathlib, sys\nfrom unittest.mock import patch\n_original_connect = socket.socket.connect\n_original_connect_ex = socket.socket.connect_ex\n_original_getaddrinfo = socket.getaddrinfo\ndef _local_host(host):\n    return host in (None, \"localhost\", \"127.0.0.1\", \"::1\")\ndef _guard_connect(self, address):\n    if self.family == socket.AF_UNIX:\n        return _original_connect(self, address)\n    if not isinstance(address, tuple) or not _local_host(address[0]):\n        raise AssertionError(\"G0 runtime forbids external network connections\")\n    return _original_connect(self, address)\ndef _guard_connect_ex(self, address):\n    if self.family == socket.AF_UNIX:\n        return _original_connect_ex(self, address)\n    if not isinstance(address, tuple) or not _local_host(address[0]):\n        raise AssertionError(\"G0 runtime forbids external network connections\")\n    return _original_connect_ex(self, address)\ndef _guard_getaddrinfo(host, *args, **kwargs):\n    if not _local_host(host):\n        raise AssertionError(\"G0 runtime forbids external DNS lookup\")\n    return _original_getaddrinfo(host, *args, **kwargs)\nsocket.socket.connect = _guard_connect\nsocket.socket.connect_ex = _guard_connect_ex\nsocket.getaddrinfo = _guard_getaddrinfo\n\nimport hello_agents\nfrom hello_agents.tools import SearchTool\nfrom hello_agents.tools.builtin.note_tool import NoteTool\ndef _forbidden(*args, **kwargs):\n    raise AssertionError(\"Real LLM/search/notes forbidden in G0 health startup\")\nhello_agents.HelloAgentsLLM.__init__ = _forbidden\nSearchTool.run = _forbidden\nNoteTool.__init__ = _forbidden\nimport runpy\nsys.argv = [\"uvicorn\"] + sys.argv[1:]\nrunpy.run_module(\"uvicorn\", run_name=\"__main__\")\n",
+      "main:app",
+      "--host",
+      "127.0.0.1",
+      "--port",
+      "48709",
+      "--log-level",
+      "warning",
+      "--app-dir",
+      "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-a5gr2gls/source/src"
+    ],
+    "cwd": "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-a5gr2gls/unrelated-working-directory",
+    "health_status": 200,
+    "exit_after_owned_process_termination": -15
+  },
+  {
+    "label": "startup-src-cwd",
+    "argv": [
+      "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-a5gr2gls/runtime/bin/python",
+      "-I",
+      "-B",
+      "-c",
+      "\nimport os, socket, pathlib, sys\nfrom unittest.mock import patch\n_original_connect = socket.socket.connect\n_original_connect_ex = socket.socket.connect_ex\n_original_getaddrinfo = socket.getaddrinfo\ndef _local_host(host):\n    return host in (None, \"localhost\", \"127.0.0.1\", \"::1\")\ndef _guard_connect(self, address):\n    if self.family == socket.AF_UNIX:\n        return _original_connect(self, address)\n    if not isinstance(address, tuple) or not _local_host(address[0]):\n        raise AssertionError(\"G0 runtime forbids external network connections\")\n    return _original_connect(self, address)\ndef _guard_connect_ex(self, address):\n    if self.family == socket.AF_UNIX:\n        return _original_connect_ex(self, address)\n    if not isinstance(address, tuple) or not _local_host(address[0]):\n        raise AssertionError(\"G0 runtime forbids external network connections\")\n    return _original_connect_ex(self, address)\ndef _guard_getaddrinfo(host, *args, **kwargs):\n    if not _local_host(host):\n        raise AssertionError(\"G0 runtime forbids external DNS lookup\")\n    return _original_getaddrinfo(host, *args, **kwargs)\nsocket.socket.connect = _guard_connect\nsocket.socket.connect_ex = _guard_connect_ex\nsocket.getaddrinfo = _guard_getaddrinfo\n\nimport hello_agents\nfrom hello_agents.tools import SearchTool\nfrom hello_agents.tools.builtin.note_tool import NoteTool\ndef _forbidden(*args, **kwargs):\n    raise AssertionError(\"Real LLM/search/notes forbidden in G0 health startup\")\nhello_agents.HelloAgentsLLM.__init__ = _forbidden\nSearchTool.run = _forbidden\nNoteTool.__init__ = _forbidden\nimport runpy\nsys.argv = [\"uvicorn\"] + sys.argv[1:]\nrunpy.run_module(\"uvicorn\", run_name=\"__main__\")\n",
+      "main:app",
+      "--host",
+      "127.0.0.1",
+      "--port",
+      "43781",
+      "--log-level",
+      "warning"
+    ],
+    "cwd": "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/venv/g0-a5gr2gls/source/src",
+    "health_status": 200,
+    "exit_after_owned_process_termination": -15
+  }
+]

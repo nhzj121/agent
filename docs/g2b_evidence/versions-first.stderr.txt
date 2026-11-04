@@ -1,0 +1,30 @@
+test_01_framework_version_and_delivery_freeze_order (test_phase_2b_tool_adapter.ExtensionGateTests.test_01_framework_version_and_delivery_freeze_order) ... ok
+test_02_same_answer_read_update_uses_only_previous_generation (test_phase_2b_tool_adapter.ExtensionGateTests.test_02_same_answer_read_update_uses_only_previous_generation) ... ok
+test_03_distinct_agents_do_not_share_credentials (test_phase_2b_tool_adapter.ExtensionGateTests.test_03_distinct_agents_do_not_share_credentials) ... ok
+test_failure_projection_does_not_bind_fake_id (test_phase_2b_versions.VersionTests.test_failure_projection_does_not_bind_fake_id) ... INFO:services.tool_events:Tool call recorded: agent=fake tool=note task_id=1 note_id=None parsed_parameters={'action': 'read', 'task_id': 1}
+ok
+test_fallback_delegation_history_error_and_close (test_phase_2b_versions.VersionTests.test_fallback_delegation_history_error_and_close) ... ok
+test_foreign_tasks_agents_and_runs_do_not_share_grants (test_phase_2b_versions.VersionTests.test_foreign_tasks_agents_and_runs_do_not_share_grants) ... ok
+test_forged_latest_version_or_receipt_does_not_authorize (test_phase_2b_versions.VersionTests.test_forged_latest_version_or_receipt_does_not_authorize) ... ok
+test_fresh_create_delivered_snapshot_authorizes_next_generation (test_phase_2b_versions.VersionTests.test_fresh_create_delivered_snapshot_authorizes_next_generation) ... ok
+test_id_only_create_list_and_failed_read_never_authorize (test_phase_2b_versions.VersionTests.test_id_only_create_list_and_failed_read_never_authorize) ... ok
+test_read_generation_update_sync_and_stream (test_phase_2b_versions.VersionTests.test_read_generation_update_sync_and_stream) ... 
+  test_read_generation_update_sync_and_stream (test_phase_2b_versions.VersionTests.test_read_generation_update_sync_and_stream) (stream=True) ... FAIL
+test_result_delivery_requires_exact_authentic_message_not_substring (test_phase_2b_versions.VersionTests.test_result_delivery_requires_exact_authentic_message_not_substring) ... ok
+test_reused_agent_execution_cannot_reuse_grant (test_phase_2b_versions.VersionTests.test_reused_agent_execution_cannot_reuse_grant) ... ok
+test_same_answer_read_update_has_no_new_grant (test_phase_2b_versions.VersionTests.test_same_answer_read_update_has_no_new_grant) ... ok
+test_stale_version_is_not_refreshed_before_write (test_phase_2b_versions.VersionTests.test_stale_version_is_not_refreshed_before_write) ... ok
+test_success_revokes_grant_for_second_write_same_answer (test_phase_2b_versions.VersionTests.test_success_revokes_grant_for_second_write_same_answer) ... ok
+
+======================================================================
+FAIL: test_read_generation_update_sync_and_stream (test_phase_2b_versions.VersionTests.test_read_generation_update_sync_and_stream) (stream=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/nhzj121/Agent/codex/projects/hello-agents/deep_search/hello-agents-source/tests/acceptance/test_phase_2b_versions.py", line 80, in test_read_generation_update_sync_and_stream
+    self.assertIn('"content": "v1"', llm.messages[1][-1]["content"])
+AssertionError: '"content": "v1"' not found in '工具执行结果：\n🔧 工具 note 执行结果：\n✅ 笔记操作成功\nID: note_2c0de60f59c343d08d869e3927df1929\nreceipt_id: 86e86e30887443edbbef6e0e67a6a589\n{"content": "new", "created_at": "2026-11-03T06:35:17.609054+00:00", "etag": "f849550cbf22cc421332625a5a6bf8ef0d9122e2b2bc3cc89194f24e17af3218", "extra": {"idempotency_key": "run:task:1", "purpose": "task", "run_id": "run", "task_id": 1}, "id": "note_2c0de60f59c343d08d869e3927df1929", "note_type": "general", "tags": [], "title": "t", "updated_at": "2026-11-03T06:35:17.621703+00:00"}\n\n请基于这些结果给出完整的回答。'
+
+----------------------------------------------------------------------
+Ran 15 tests in 0.632s
+
+FAILED (failures=1)
