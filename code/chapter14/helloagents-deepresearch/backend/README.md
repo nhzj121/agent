@@ -1,4 +1,4 @@
-# M2 / M3：内存研究队列与并发配额
+# M2 / M3 / M4：研究管理、并发配额与历史结果
 
 当前后端采用单进程内存管理，同时执行 **3 个研究主题**，最多 **7 个等待**。
 启动时只运行一个 Uvicorn worker。等待项按提交顺序进入，容量满时返回 429，
@@ -29,8 +29,25 @@
 所有子任务退出后才释放执行位置；已完成的结果保留，不再生成后续总结或报告。
 取消不会回滚此前已经完成的笔记写入。
 
-研究登记、事件和快照仅保存在内存。后端退出后不恢复、不续跑；
-研究笔记文件保留；多研究界面和历史持久化不在 M3 范围内。
+研究执行和当前进程的流式事件在内存中管理；SQLite 持久化研究元数据、任务清单、
+已完成任务的完整 Markdown 总结与来源，以及完整最终报告。流程日志、工具调用、
+流式片段不保存到历史。进行中的总结片段不作为完整结果恢复。
+
+默认数据库为 `backend/data/research.sqlite3`，可用 `RESEARCH_DB_PATH` 修改；
+相对路径固定以 backend 目录为基准。Python 自带 SQLite，无需安装数据库服务。
+元数据、任务结果和报告在同一事务中保存；仅在清单、任务状态、来源或报告等结果更新时写入，
+不逐字符写库。写入失败会在快照/列表的 `persistence_error` 中提示；首次登记失败返回 503。
+
+服务重启后，历史记录可继续查看。原先 `PENDING / RUNNING / CANCELLING` 的研究统一变成
+`INTERRUPTED`（已中断），未完成的子任务同样标为已中断；正常关闭服务时也保留中断记录。
+已完成的任务、报告、笔记 ID 和路径继续保留，绝不重新排队、创建 Agent 或自动续跑。
+终态研究的取消接口保持幂等，不会重启研究。只有启用 M4 后保存的记录能恢复；
+此前仅存在内存里的记录不会从 notes 自动补录。
+
+任务笔记和展示总结由不同生成阶段产出，不能用 notes 重建完全相同的展示正文。
+历史直接读取 SQLite 正文，笔记仍在研究独立目录中保存，数据库仅记录其关联。
+备份时停止后端，再复制 data 和 notes 目录。单数据库只允许一个后端进程持有，
+避免另一个实例把正在执行的研究误标为中断。不要配置多个 Uvicorn worker。
 
 ## 接口
 
@@ -39,16 +56,19 @@
 | 接口 | 用途 |
 | --- | --- |
 | `POST /researches` | 传入 `topic` 和可选 `search_api`，返回 202 与 `research_id` |
-| `GET /researches` | 返回当前进程中的研究列表 |
+| `GET /researches` | 返回当前研究及已保存历史的列表 |
 | `GET /researches/{research_id}` | 查询任务、总结、来源、日志、工具调用、报告和状态快照 |
 | `GET /researches/{research_id}/events?after=0` | SSE 订阅或回放，支持 `Last-Event-ID` |
 | `POST /researches/{research_id}/cancel` | 幂等取消，不影响其他研究 |
 | `GET /researches/{research_id}/report` | 查询最终报告；尚无报告返回 409 |
 
-状态：`PENDING / RUNNING / CANCELLING / COMPLETED / PARTIAL / FAILED / CANCELLED`。
+状态：`PENDING / RUNNING / CANCELLING / COMPLETED / PARTIAL / FAILED / CANCELLED / INTERRUPTED`。
 研究快照包含 `snapshot_seq`；先获取快照，再从 `after=snapshot_seq` 订阅，
 可避免重复累计之前的总结片段。事件具有研究内递增的 `seq`、`research_id` 和 UTC `timestamp`。
-本次进程不存在的研究返回 404；超出当前事件范围的游标返回 409。
+不存在的研究返回 404；超出当前事件范围的游标返回 409。
+重启后的历史记录只保留结果快照，`history_only=true`、日志/工具调用为空；
+不再提供旧过程的 SSE 回放，早于保留范围的游标返回 410，应改读研究快照。
+`event_epoch` 在每次数据库启动时递增，用于前端区分重启前后的事件序号。
 
 旧 `POST /research`、`POST /research/stream` 仍可用，均经过同一管理器排队。
 旧流式接口保留 data-only 帧格式，并通过 `X-Research-ID` 响应头返回研究编号。
@@ -60,7 +80,7 @@
 2. 取消排队研究，确认它不会启动；重复取消不应改变终态。
 3. 取消运行中研究，确认先显示取消中，清理完成后下一项才运行。
 4. 关闭事件连接后查询研究，应继续运行；使用事件序号可重新获取后续事件。
-5. 确认报告、任务及笔记目录属于对应研究。重启后列表应为空，旧研究不会自动恢复。
+5. 确认报告、任务及笔记目录属于对应研究。重启后历史列表及完整结果仍在，未结束项显示已中断，且不自动续跑。
 
 本地简单回归：在 backend 目录运行 `.venv/bin/python -m unittest discover -s tests -v`。
 测试使用隔离替身及临时笔记目录，不调用真实模型、搜索或生产笔记。

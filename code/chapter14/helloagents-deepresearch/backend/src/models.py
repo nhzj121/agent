@@ -47,7 +47,7 @@ class SummaryStateInput:
 class ResearchOutcome:
     """Terminal execution result, independent of report text or transport end."""
 
-    status: Literal["completed", "partial", "failed", "cancelled"]
+    status: Literal["completed", "partial", "failed", "cancelled", "interrupted"]
     total_tasks: int
     completed_tasks: int
     failed_tasks: int
@@ -55,6 +55,7 @@ class ResearchOutcome:
     report_available: bool
     error: Optional[str] = None
     cancelled_tasks: int = 0
+    interrupted_tasks: int = 0
 
 
 @dataclass(kw_only=True)

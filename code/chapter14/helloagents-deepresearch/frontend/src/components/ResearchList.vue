@@ -5,14 +5,14 @@
       <button type="button" class="refresh" :disabled="refreshing" @click="$emit('refresh')">{{ refreshing ? '刷新中' : '刷新' }}</button>
     </header>
     <p v-if="error" class="list-error" role="status">{{ error }}</p>
-    <p v-if="!items.length" class="empty">{{ refreshing ? '正在读取研究列表…' : '当前后端进程暂无研究。' }}</p>
+    <p v-if="!items.length" class="empty">{{ refreshing ? '正在读取研究列表…' : '暂无研究记录。' }}</p>
     <ul v-else>
       <li v-for="item in items" :key="item.research_id" :class="{ selected: item.research_id === selectedId }">
         <button type="button" class="research-select" :aria-pressed="item.research_id === selectedId" @click="$emit('select', item.research_id)">
           <span class="title">{{ item.topic }}</span>
           <span class="row"><span class="status" :class="item.status.toLowerCase()">{{ STATUS_LABEL[item.status] || item.status }}</span><span>{{ item.progress.completed_tasks }}/{{ item.progress.total_tasks }} 任务完成</span></span>
           <span class="row"><span>{{ item.report_available ? '报告已生成' : '尚无报告' }}</span><time :datetime="item.created_at">{{ formatTime(item.created_at) }}</time></span>
-          <span class="research-id" :title="item.research_id">ID：{{ item.research_id.slice(0, 12) }}</span>
+          <span class="research-id" :title="item.research_id">ID：{{ item.research_id.slice(0, 12) }}{{ item.history_only ? " · 历史" : "" }}</span>
         </button>
         <button v-if="isResearchActive(item.status)" type="button" class="cancel"
           :aria-label="`取消研究：${item.topic}`" :disabled="cancelling[item.research_id] || item.status === 'CANCELLING'"
@@ -37,7 +37,7 @@ const queuedCount = computed(() => props.items.filter(item => item.status === "P
 function formatTime(value: string) {
   const date = new Date(value);
   return Number.isNaN(date.getTime()) ? value : date.toLocaleString("zh-CN", {
-    month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit"
+    year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit"
   });
 }
 </script>
@@ -61,7 +61,7 @@ li.selected { border-color: #93b4ff; background: #f1f6ff; }
 .status.running { color: #1d4ed8; background: #dbeafe; }
 .status.completed { color: #15803d; background: #dcfce7; }
 .status.failed { color: #b91c1c; background: #fee2e2; }
-.status.partial, .status.cancelling { color: #92400e; background: #fef3c7; }
+.status.partial, .status.cancelling, .status.interrupted { color: #92400e; background: #fef3c7; }
 .research-id { color: #94a3b8; font-size: 10px; }
 .cancel { margin: 0 12px 10px; }
 .list-error { margin: 8px 12px; font-size: 12px; color: #b91c1c; overflow-wrap: anywhere; }

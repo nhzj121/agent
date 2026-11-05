@@ -12,6 +12,7 @@ export interface TodoTaskView {
 }
 export interface ResearchSession {
   id: string; topic: string; status: ResearchStatus; createdAt: string;
+  eventEpoch: string; historyOnly: boolean; persistenceError: string;
   lastSeq: number; tasks: TodoTaskView[]; report: string; logs: string[];
   outcome: ResearchOutcome | null; notice: string;
   connection: "connecting" | "live" | "offline" | "ended" | "missing";
@@ -22,15 +23,19 @@ export interface ResearchSession {
 export const isResearchActive = (status: string) => ["PENDING", "RUNNING", "CANCELLING"].includes(status);
 export const STATUS_LABEL: Record<string, string> = {
   PENDING: "排队中", RUNNING: "进行中", CANCELLING: "取消中", COMPLETED: "已完成",
-  PARTIAL: "部分完成", FAILED: "失败", CANCELLED: "已取消"
+  PARTIAL: "部分完成", FAILED: "失败", CANCELLED: "已取消", INTERRUPTED: "已中断"
 };
 export const text = (value: unknown): string => typeof value === "string" ? value : "";
+// Restart generations are durable counters; a delayed old response must not win.
+export const isOlderEpoch = (next: string, current: string) =>
+  /^\d+$/.test(next) && /^\d+$/.test(current) && BigInt(next) < BigInt(current);
 const optional = (value: unknown) => text(value).trim() || null;
 const record = (value: unknown): Record<string, unknown> =>
   value && typeof value === "object" && !Array.isArray(value) ? value as Record<string, unknown> : {};
 
 export function createSession(item: ResearchSummary): ResearchSession {
   return { id: item.research_id, topic: item.topic, status: item.status, createdAt: item.created_at,
+    eventEpoch: item.event_epoch || "", historyOnly: Boolean(item.history_only), persistenceError: item.persistence_error || "",
     lastSeq: 0, tasks: [], report: "", logs: [], outcome: null, notice: "",
     connection: "connecting", connectionError: "", activeTaskId: null,
     resultView: "tasks", detailView: "summary", logsCollapsed: false };
@@ -58,7 +63,7 @@ function logFrom(event: ResearchStreamEvent): string {
   if (event.type === "status") return text(event.message);
   if (event.type === "research_status") return `研究状态：${STATUS_LABEL[text(event.status)] || text(event.status)}`;
   if (event.type === "task_status") {
-    const status: Record<string, string> = { in_progress: "开始执行", completed: "完成", skipped: "跳过", failed: "失败", cancelled: "取消" };
+    const status: Record<string, string> = { in_progress: "开始执行", completed: "完成", skipped: "跳过", failed: "失败", cancelled: "取消", interrupted: "中断" };
     return `任务 ${event.task_id}：${status[text(event.status)] || text(event.status)}${event.detail ? `，${event.detail}` : ""}`;
   }
   if (event.type === "tool_call") return `${text(event.agent) || "Agent"} 调用了 ${text(event.tool)}${event.task_id ? `（任务 ${event.task_id}）` : ""}`;
@@ -70,11 +75,17 @@ function outcomeNotice(outcome: ResearchOutcome | null): string {
   if (outcome.status === "partial") return `研究部分完成：成功 ${outcome.completed_tasks}/${outcome.total_tasks}，失败 ${outcome.failed_tasks}，跳过 ${outcome.skipped_tasks}。`;
   if (outcome.status === "failed") return "研究未成功完成。";
   if (outcome.status === "cancelled") return "后台已确认研究取消。";
+  if (outcome.status === "interrupted") return "研究已中断，未自动续跑，已完成结果可继续查看。";
   return "";
 }
 
 export function applySnapshot(session: ResearchSession, snapshot: ResearchSnapshot): boolean {
-  if (snapshot.research_id !== session.id || snapshot.snapshot_seq < session.lastSeq) return false;
+  const epoch = snapshot.event_epoch || "";
+  if (snapshot.research_id !== session.id || isOlderEpoch(epoch, session.eventEpoch)) return false;
+  if (epoch === session.eventEpoch && snapshot.snapshot_seq < session.lastSeq) return false;
+  session.eventEpoch = epoch;
+  session.historyOnly = Boolean(snapshot.history_only);
+  session.persistenceError = snapshot.persistence_error || "";
   session.topic = snapshot.topic;
   session.status = snapshot.status;
   session.createdAt = snapshot.created_at;
@@ -94,6 +105,10 @@ export function applySnapshot(session: ResearchSession, snapshot: ResearchSnapsh
 }
 
 export function applyResearchEvent(session: ResearchSession, event: ResearchStreamEvent): boolean {
+  if (event.research_id === session.id && event.event_epoch && event.event_epoch !== session.eventEpoch) {
+    if (isOlderEpoch(event.event_epoch, session.eventEpoch)) return false;
+    throw new Error("研究服务已重启，需要重新读取结果快照");
+  }
   if (event.research_id !== session.id || !Number.isInteger(event.seq) || Number(event.seq) <= session.lastSeq) return false;
   if (Number(event.seq) !== session.lastSeq + 1) throw new Error("事件序号不连续，需要重新同步研究快照");
   const task = session.tasks.find(task => task.id === Number(event.task_id));

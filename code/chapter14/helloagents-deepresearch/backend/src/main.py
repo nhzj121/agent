@@ -17,7 +17,8 @@ from pydantic import BaseModel, Field
 from config import Configuration, SearchAPI
 from agent import DeepResearchAgent
 from models import ResearchOutcome
-from services.research_manager import ResearchManager, ResearchQueueFull
+from services.research_manager import ResearchManager, ResearchQueueFull, ResearchHistoryUnavailable
+from services.research_store import SQLiteResearchStore
 
 # 添加控制台日志处理程序
 logger.add(
@@ -84,12 +85,15 @@ def _build_config(payload: ResearchRequest) -> Configuration:
 
 def create_app(*, agent_factory=None, config: Configuration | None = None) -> FastAPI:
     # Resolve the factory at execution time; every research gets a fresh agent.
+    settings = config or Configuration.from_env()
+    store = SQLiteResearchStore(settings.research_db_path)
     manager = ResearchManager(agent_factory or (
         lambda config, runtime: DeepResearchAgent(config=config, runtime=runtime)
-    ), config=config)
+    ), config=settings, store=store)
 
     @asynccontextmanager
     async def lifespan(app):
+        await asyncio.to_thread(manager.start)
         log_startup_configuration()
         try:
             yield
@@ -150,12 +154,14 @@ def create_app(*, agent_factory=None, config: Configuration | None = None) -> Fa
         try:
             return manager.get(research_id)
         except KeyError as exc:
-            raise HTTPException(status_code=404, detail="研究不存在，服务重启后内存记录会清空") from exc
+            raise HTTPException(status_code=404, detail="研究不存在或历史记录已移除") from exc
 
     def event_response(research_id: str, after: int = 0, *, legacy=False) -> StreamingResponse:
         lookup(research_id)
         try:
             manager.validate_cursor(research_id, after)
+        except ResearchHistoryUnavailable as exc:
+            raise HTTPException(status_code=410, detail=str(exc)) from exc
         except ValueError as exc:
             raise HTTPException(status_code=409, detail=str(exc)) from exc
 

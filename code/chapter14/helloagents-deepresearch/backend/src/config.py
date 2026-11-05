@@ -16,6 +16,8 @@ class SearchAPI(Enum):
 class Configuration(BaseModel):
     """Configuration options for the deep research assistant."""
 
+    research_db_path: str = Field(default="data/research.sqlite3", min_length=1)
+
     max_concurrent_researches: int = Field(default=3, ge=1)
     max_pending_researches: int = Field(default=7, ge=0)
     max_task_workers: int = Field(default=5, ge=1)

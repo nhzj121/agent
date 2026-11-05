@@ -399,7 +399,7 @@ import {
   type ResearchSummary, type ResearchSnapshot, type ResearchOutcome
 } from "./services/api";
 import {
-  createSession, applySnapshot, applyResearchEvent, isResearchActive, STATUS_LABEL,
+  createSession, applySnapshot, applyResearchEvent, isResearchActive, isOlderEpoch, STATUS_LABEL,
   type ResearchSession
 } from "./services/researchState";
 
@@ -425,7 +425,13 @@ const researchStatusLabel = computed(() => {
   if (selectedSession.value?.connection === "missing") return "研究记录已失效";
   return STATUS_LABEL[selectedSession.value?.status || ""] || "正在读取研究";
 });
-const researchNotice = computed(() => selectedSession.value?.connectionError || selectedSession.value?.notice || "");
+const researchNotice = computed(() => {
+  const session = selectedSession.value;
+  if (!session) return "";
+  return [session.connectionError, session.persistenceError, session.notice,
+    session.historyOnly ? "历史记录仅保留任务清单、已完成任务总结、来源和最终报告，未保存流程及工具调用记录。" : ""]
+    .filter(Boolean).join("\n");
+});
 const todoTasks = computed(() => selectedSession.value?.tasks || []);
 const reportMarkdown = computed(() => selectedSession.value?.report || "");
 const progressLogs = computed(() => selectedSession.value?.logs || []);
@@ -459,7 +465,7 @@ const currentTaskToolCalls = computed(() => currentTask.value?.toolCalls || []);
 const summaryHighlight = ref(false), sourcesHighlight = ref(false), reportHighlight = ref(false), toolHighlight = ref(false);
 const searchOptions = ["advanced", "duckduckgo", "tavily", "perplexity", "searxng"];
 const TASK_STATUS_LABEL: Record<string, string> = {
-  pending: "待执行", in_progress: "进行中", completed: "已完成", skipped: "已跳过", failed: "失败", cancelled: "已取消"
+  pending: "待执行", in_progress: "进行中", completed: "已完成", skipped: "已跳过", failed: "失败", cancelled: "已取消", interrupted: "已中断"
 };
 const formatTaskStatus = (status: string) => TASK_STATUS_LABEL[status] || status;
 function formatToolParameters(parameters: Record<string, unknown>): string {
@@ -505,11 +511,15 @@ function detachView() {
 function mergeSummary(item: ResearchSummary) {
   const index = researches.value.findIndex(row => row.research_id === item.research_id);
   if (index < 0) researches.value.unshift(item);
-  else if (researches.value[index].snapshot_seq <= item.snapshot_seq) researches.value[index] = item;
+  else {
+    const previous = researches.value[index];
+    if (isOlderEpoch(item.event_epoch || "", previous.event_epoch || "")) return;
+    if (item.event_epoch !== previous.event_epoch || previous.snapshot_seq <= item.snapshot_seq) researches.value[index] = item;
+  }
 }
 function updateSummary(session: ResearchSession) {
   const previous = researches.value.find(row => row.research_id === session.id);
-  if (!previous) return;
+  if (!previous || previous.event_epoch !== (session.eventEpoch || undefined)) return;
   mergeSummary({ ...previous, topic: session.topic, status: session.status, snapshot_seq: session.lastSeq,
     report_available: Boolean(session.report), error: session.outcome?.error || null,
     progress: { total_tasks: session.tasks.length, completed_tasks: session.tasks.filter(task => task.status === "completed").length } });
@@ -524,18 +534,26 @@ async function refreshResearches() {
     const previous = new Map(researches.value.map(row => [row.research_id, row]));
     researches.value = result.researches.map(row => {
       const old = previous.get(row.research_id);
-      return old && old.snapshot_seq > row.snapshot_seq ? old : row;
+      if (old && isOlderEpoch(row.event_epoch || "", old.event_epoch || "")) return old;
+      return old && old.event_epoch === row.event_epoch && old.snapshot_seq > row.snapshot_seq ? old : row;
     });
     listError.value = "";
     for (const row of result.researches) {
       const session = sessions[row.research_id];
-      if (session && row.snapshot_seq >= session.lastSeq) session.status = row.status;
+      if (session && !isOlderEpoch(row.event_epoch || "", session.eventEpoch)) {
+        if (row.event_epoch !== session.eventEpoch || row.snapshot_seq >= session.lastSeq) {
+          session.status = row.status;
+          session.persistenceError = row.persistence_error || "";
+        }
+        if (row.research_id === activeResearchId.value && isExpanded.value
+            && row.event_epoch !== session.eventEpoch && session.connection !== "connecting") void selectResearch(row.research_id);
+      }
     }
     const selected = selectedSession.value;
     if (selected && !result.researches.some(row => row.research_id === selected.id)) {
       detachView();
       selected.connection = "missing";
-      selected.connectionError = "当前后端已无此研究记录。服务重启后内存记录会清空。";
+      selected.connectionError = "当前服务未找到此研究记录，请刷新列表。";
       remember(null);
     }
   } catch (err) {
@@ -560,6 +578,7 @@ async function selectResearch(id: string) {
   try {
     const snapshot = await getResearch(id, controller.signal);
     if (!isCurrent()) return;
+    if (isOlderEpoch(snapshot.event_epoch || "", session.eventEpoch)) throw new Error("收到旧服务的响应，正在重新同步历史结果");
     applySnapshot(session, snapshot);
     mergeSummary(snapshot);
     if (!isResearchActive(session.status)) { session.connection = "ended"; return; }
@@ -573,7 +592,7 @@ async function selectResearch(id: string) {
     if (!isCurrent() || controller.signal.aborted) return;
     const missing = err instanceof ResearchAPIError && err.status === 404;
     session.connection = missing ? "missing" : "offline";
-    session.connectionError = missing ? "当前后端已无此研究记录，可能已重启。"
+    session.connectionError = missing ? "当前服务未找到此研究记录，请刷新列表。"
       : `进度连接异常：${err instanceof Error ? err.message : "请求失败"}。后台研究不会因此取消，将尝试重新同步。`;
     if (!missing) retryTimer = setTimeout(() => { if (isCurrent() && isExpanded.value) void selectResearch(id); }, 3000);
   }
@@ -2142,6 +2161,7 @@ select:focus {
 }
 
 .research-result-notice {
+  white-space: pre-line;
   margin: 0;
   padding: 12px 16px;
   color: #92400e;

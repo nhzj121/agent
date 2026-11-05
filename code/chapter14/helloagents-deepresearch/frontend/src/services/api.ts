@@ -5,15 +5,16 @@ export interface ResearchRequest {
   search_api?: string;
 }
 
-export type ResearchStatus = "PENDING" | "RUNNING" | "CANCELLING" | "COMPLETED" | "PARTIAL" | "FAILED" | "CANCELLED";
+export type ResearchStatus = "PENDING" | "RUNNING" | "CANCELLING" | "COMPLETED" | "PARTIAL" | "FAILED" | "CANCELLED" | "INTERRUPTED";
 
 export interface ResearchOutcome {
-  status: "completed" | "partial" | "failed" | "cancelled";
+  status: "completed" | "partial" | "failed" | "cancelled" | "interrupted";
   total_tasks: number;
   completed_tasks: number;
   failed_tasks: number;
   skipped_tasks: number;
   cancelled_tasks: number;
+  interrupted_tasks?: number;
   report_available: boolean;
   error: string | null;
 }
@@ -27,6 +28,9 @@ export interface ResearchSummary {
   started_at: string | null;
   finished_at: string | null;
   snapshot_seq: number;
+  event_epoch?: string;
+  history_only?: boolean;
+  persistence_error?: string | null;
   report_available: boolean;
   error: string | null;
   progress: { total_tasks: number; completed_tasks: number };
@@ -45,6 +49,7 @@ export interface ResearchStreamEvent {
   research_id?: string;
   seq?: number;
   timestamp?: string;
+  event_epoch?: string;
   outcome?: ResearchOutcome;
   [key: string]: unknown;
 }

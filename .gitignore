@@ -76,3 +76,8 @@ coverage/
 Thumbs.db
 *.swp
 *.swo
+
+# Local research results, SQLite WAL and ownership lock
+code/chapter14/helloagents-deepresearch/backend/data/
+
+tests/
