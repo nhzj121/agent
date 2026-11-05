@@ -1,24 +1,78 @@
+
+# ==============================
 # Python
+# ==============================
+
+# Virtual environments
 .venv/
 venv/
-__pycache__/
-*.pyc
 
-# Frontend
+# Python caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Build artifacts
+*.egg-info/
+build/
+htmlcov/
+.coverage
+.coverage.*
+
+
+# ==============================
+# Frontend / Node.js
+# ==============================
+
 node_modules/
 dist/
+coverage/
+.vite/
 
-# Local configuration / secrets
+
+# ==============================
+# Environment / Secrets
+# ==============================
+
 .env
 .env.*
 !.env.example
 !.env.sample
 
-# Logs
-*.log
 
-# Python generated package metadata
-*.egg-info/
+# ==============================
+# Runtime Notes
+# ==============================
 
-# Runtime research notes
+# Original NoteTool workspace
 **/backend/notes/
+
+# Previous / future files_v2 workspace
+**/backend/notes-v2/
+
+# files_v2 internal runtime files
+.files-v2-workspace.json
+.notes.lock
+.notes-control.json
+.note-tmp-*
+
+
+# ==============================
+# Logs / Temporary Evidence
+# ==============================
+
+*.log
+.local-evidence/
+.local-notes/
+
+
+# ==============================
+# Editor / OS
+# ==============================
+
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
