@@ -58,19 +58,20 @@ class ToolCallTracker:
             if note_id is None:
                 note_id = self._extract_note_id(result_text)
 
-        event = ToolCallEvent(
-            id=len(self._events) + 1,
-            agent=agent_name,
-            tool=tool_name,
-            raw_parameters=raw_parameters,
-            parsed_parameters=parsed_parameters,
-            result=result_text,
-            task_id=task_id,
-            note_id=note_id,
-        )
-
         with self._lock:
+            # Allocate the ID and append in the same critical section.
+            event = ToolCallEvent(
+                id=len(self._events) + 1,
+                agent=agent_name,
+                tool=tool_name,
+                raw_parameters=raw_parameters,
+                parsed_parameters=parsed_parameters,
+                result=result_text,
+                task_id=task_id,
+                note_id=note_id,
+            )
             self._events.append(event)
+            sink = self._event_sink
 
         logger.info(
             "Tool call recorded: agent=%s tool=%s task_id=%s note_id=%s parsed_parameters=%s",
@@ -81,7 +82,7 @@ class ToolCallTracker:
             parsed_parameters,
         )
 
-        sink = self._event_sink
+        # Invoke outside the lock: listeners may inspect/drain the tracker.
         if sink:
             sink(self._build_payload(event, step=None))
 
@@ -140,7 +141,8 @@ class ToolCallTracker:
     def set_event_sink(self, sink: Optional[Callable[[dict[str, Any]], None]]) -> None:
         """Register a callback for immediate tool event notifications."""
 
-        self._event_sink = sink
+        with self._lock:
+            self._event_sink = sink
 
     def _build_payload(self, event: ToolCallEvent, step: Optional[int]) -> dict[str, Any]:
         payload = {

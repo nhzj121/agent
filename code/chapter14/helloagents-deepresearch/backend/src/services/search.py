@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 import logging
+from threading import local
 from typing import Any, Optional, Tuple
 
 from hello_agents.tools import SearchTool
 
 from config import Configuration
+from services.runtime import ResearchRuntime
 from utils import (
     deduplicate_and_format_sources,
     format_sources,
@@ -17,34 +19,46 @@ from utils import (
 logger = logging.getLogger(__name__)
 
 MAX_TOKENS_PER_SOURCE = 2000
-_GLOBAL_SEARCH_TOOL = SearchTool(backend="hybrid")
+_SEARCH_TOOLS = local()
 
 
 def dispatch_search(
     query: str,
     config: Configuration,
     loop_count: int,
+    runtime: ResearchRuntime | None = None,
 ) -> Tuple[dict[str, Any] | None, list[str], Optional[str], str]:
     """Execute configured search backend and normalise response payload."""
 
+    runtime = runtime or ResearchRuntime()
+    runtime.check_cancelled()
     search_api = get_config_value(config.search_api)
 
     try:
-        raw_response = _GLOBAL_SEARCH_TOOL.run(
-            {
-                "input": query,
-                "backend": search_api,
-                "mode": "structured",
-                "fetch_full_page": config.fetch_full_page,
-                "max_results": 5,
-                "max_tokens_per_source": MAX_TOKENS_PER_SOURCE,
-                "loop_count": loop_count,
-            }
-        )
+        with runtime.search_slot():
+            # The SDK clients are local to a worker thread, not shared by studies.
+            tool = getattr(_SEARCH_TOOLS, "tool", None)
+            if tool is None:
+                tool = _SEARCH_TOOLS.tool = SearchTool(backend="hybrid")
+            raw_response = tool.run(
+                {
+                    "input": query,
+                    "backend": search_api,
+                    "mode": "structured",
+                    "fetch_full_page": config.fetch_full_page,
+                    "max_results": 5,
+                    "max_tokens_per_source": MAX_TOKENS_PER_SOURCE,
+                    "loop_count": loop_count,
+                }
+            )
     except Exception as exc:  # pragma: no cover - defensive logging
+        if runtime is not None:
+            runtime.check_cancelled()
         logger.exception("Search backend %s failed: %s", search_api, exc)
         raise
 
+    if runtime is not None:
+        runtime.check_cancelled()
     if isinstance(raw_response, str):
         notices = [raw_response]
         logger.warning("Search backend %s returned text notice: %s", search_api, raw_response)

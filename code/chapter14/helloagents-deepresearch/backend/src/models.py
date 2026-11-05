@@ -2,7 +2,7 @@
 
 import operator
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import List, Literal, Optional
 
 from typing_extensions import Annotated
 
@@ -44,8 +44,23 @@ class SummaryStateInput:
 
 
 @dataclass(kw_only=True)
+class ResearchOutcome:
+    """Terminal execution result, independent of report text or transport end."""
+
+    status: Literal["completed", "partial", "failed", "cancelled"]
+    total_tasks: int
+    completed_tasks: int
+    failed_tasks: int
+    skipped_tasks: int
+    report_available: bool
+    error: Optional[str] = None
+    cancelled_tasks: int = 0
+
+
+@dataclass(kw_only=True)
 class SummaryStateOutput:
     running_summary: str = field(default=None)  # Backward-compatible文本
     report_markdown: Optional[str] = field(default=None)
     todo_items: List[TodoItem] = field(default_factory=list)
+    outcome: Optional[ResearchOutcome] = field(default=None)
 

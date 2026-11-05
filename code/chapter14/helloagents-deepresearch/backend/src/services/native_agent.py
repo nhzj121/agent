@@ -6,8 +6,11 @@ import json
 import logging
 import re
 from collections.abc import Callable, Iterator
+from contextlib import contextmanager
 from dataclasses import dataclass
 from typing import Any
+
+from services.runtime import ResearchCancelled, ResearchRuntime
 
 from hello_agents import HelloAgentsLLM
 from hello_agents.tools import ToolRegistry
@@ -50,7 +53,9 @@ class NativeToolAgent:
         system_prompt: str,
         tool_registry: ToolRegistry | None = None,
         tool_call_listener: Callable[[dict[str, Any]], None] | None = None,
+        runtime: ResearchRuntime | None = None,
     ) -> None:
+        self.runtime = runtime or ResearchRuntime()
         self.name = name
         self.llm = llm
         self.system_prompt = system_prompt
@@ -60,6 +65,10 @@ class NativeToolAgent:
         self.executions: list[ToolExecution] = []
         self._history: list[dict[str, Any]] = []
         self._executed: dict[str, tuple[str, str]] = {}
+
+    def _check_cancelled(self) -> None:
+        if self.runtime is not None:
+            self.runtime.check_cancelled()
 
     def clear_history(self) -> None:
         self._history.clear()
@@ -91,9 +100,11 @@ class NativeToolAgent:
             schemas.append(schema)
         return schemas
 
+    @contextmanager
     def _open_stream(
         self, messages: list[dict[str, Any]], tools: list[dict[str, Any]] | None = None
     ) -> Any:
+        self._check_cancelled()
         request: dict[str, Any] = {
             "model": self.llm.model,
             "messages": messages,
@@ -105,8 +116,13 @@ class NativeToolAgent:
         if tools:
             request["tools"] = tools
             request["tool_choice"] = "auto"
-        # The pinned HelloAgents client is accessed only inside this adapter.
-        return self.llm._client.chat.completions.create(**request)
+        # Hold the permit until the entire response is consumed and closed.
+        # Tool execution happens after this context, so it never holds an LLM slot.
+        with self.runtime.llm_slot():
+            response = self.llm._client.chat.completions.create(**request)
+            with response:
+                self._check_cancelled()
+                yield response
 
     def _collect_round(
         self, messages: list[dict[str, Any]], tools: list[dict[str, Any]]
@@ -117,6 +133,7 @@ class NativeToolAgent:
         finish: str | None = None
         with self._open_stream(messages, tools) as response:
             for chunk in response:
+                self._check_cancelled()
                 for choice in chunk.choices:
                     delta = choice.delta
                     if delta.content:
@@ -137,6 +154,7 @@ class NativeToolAgent:
                                 call["function"]["name"] += fragment.function.name
                             if fragment.function.arguments:
                                 call["function"]["arguments"] += fragment.function.arguments
+        self._check_cancelled()
         text = "".join(content)
         self._check_text(text)
         ordered = [calls[index] for index in sorted(calls)]
@@ -149,6 +167,7 @@ class NativeToolAgent:
         return message
 
     def _execute(self, call: dict[str, Any]) -> str:
+        self._check_cancelled()
         call_id = call["id"]
         name = call["function"]["name"]
         raw = call["function"]["arguments"]
@@ -171,6 +190,8 @@ class NativeToolAgent:
             return result
         try:
             result = str(tool.run(parameters))
+        except ResearchCancelled:
+            raise
         except Exception as exc:
             result = f"❌ 工具调用失败：{exc}"
         tracked_parameters = dict(parameters)
@@ -184,6 +205,7 @@ class NativeToolAgent:
                 "raw_parameters": raw, "parsed_parameters": tracked_parameters,
                 "result": result,
             })
+        self._check_cancelled()
         if result.lstrip().startswith("❌"):
             raise AgentProtocolError(f"工具 {name!r} 执行失败：{result}")
         return result
@@ -233,6 +255,7 @@ class NativeToolAgent:
         finish: str | None = None
         with self._open_stream(messages) as response:
             for chunk in response:
+                self._check_cancelled()
                 for choice in chunk.choices:
                     if choice.delta.tool_calls:
                         raise AgentProtocolError("最终总结阶段意外返回工具调用，未确认完成")
@@ -243,6 +266,7 @@ class NativeToolAgent:
                     if len(pending) > 64:
                         yield pending[:-64]
                         pending = pending[-64:]
+        self._check_cancelled()
         self._check_finish(finish)
         if pending:
             yield pending

@@ -16,6 +16,12 @@ class SearchAPI(Enum):
 class Configuration(BaseModel):
     """Configuration options for the deep research assistant."""
 
+    max_concurrent_researches: int = Field(default=3, ge=1)
+    max_pending_researches: int = Field(default=7, ge=0)
+    max_task_workers: int = Field(default=5, ge=1)
+    max_llm_concurrency: int = Field(default=15, ge=1)
+    max_search_concurrency: int = Field(default=15, ge=1)
+
     max_web_research_loops: int = Field(
         default=3,
         title="Research Depth",

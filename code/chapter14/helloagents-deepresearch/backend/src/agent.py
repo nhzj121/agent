@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 import re
+from dataclasses import asdict
 from pathlib import Path
 from queue import Empty, Queue
 from threading import Lock, Thread
@@ -11,7 +12,6 @@ from typing import Any, Callable, Iterator
 
 from hello_agents import HelloAgentsLLM
 from hello_agents.tools import ToolRegistry
-from hello_agents.tools.builtin.note_tool import NoteTool
 
 from config import Configuration
 from prompts import (
@@ -19,8 +19,10 @@ from prompts import (
     task_summarizer_instructions,
     todo_planner_system_prompt,
 )
-from models import SummaryState, SummaryStateOutput, TodoItem
+from models import ResearchOutcome, SummaryState, SummaryStateOutput, TodoItem
 from services.native_agent import NativeToolAgent
+from services.research_notes import ResearchNoteTool
+from services.runtime import ResearchCancelled, ResearchRuntime
 from services.planner import PlanningService
 from services.reporter import ReportingService
 from services.search import dispatch_search, prepare_research_context
@@ -33,13 +35,19 @@ logger = logging.getLogger(__name__)
 class DeepResearchAgent:
     """Coordinator orchestrating TODO-based research workflow using HelloAgents."""
 
-    def __init__(self, config: Configuration | None = None) -> None:
+    def __init__(self, config: Configuration | None = None, runtime: ResearchRuntime | None = None) -> None:
         """Initialise the coordinator with configuration and shared tools."""
-        self.config = config or Configuration.from_env()
+        self.runtime = runtime or ResearchRuntime()
+        self._check_cancelled()
+        self.config = (config or Configuration.from_env()).model_copy(deep=True)
+        if self.config.enable_notes:
+            self.config.notes_workspace = str(
+                Path(self.config.notes_workspace).resolve() / self.runtime.research_id
+            )
         self.llm = self._init_llm()
 
         self.note_tool = (
-            NoteTool(workspace=self.config.notes_workspace)
+            ResearchNoteTool(workspace=self.config.notes_workspace, runtime=self.runtime)
             if self.config.enable_notes
             else None
         )
@@ -79,7 +87,7 @@ class DeepResearchAgent:
     # ------------------------------------------------------------------
     def _init_llm(self) -> HelloAgentsLLM:
         """Instantiate HelloAgentsLLM following configuration preferences."""
-        llm_kwargs: dict[str, Any] = {"temperature": 0.0}
+        llm_kwargs: dict[str, Any] = {"temperature": 1.0}
 
         model_id = self.config.llm_model_id or self.config.local_llm
         if model_id:
@@ -115,7 +123,13 @@ class DeepResearchAgent:
             system_prompt=system_prompt,
             tool_registry=self.tools_registry,
             tool_call_listener=self._tool_tracker.record,
+            runtime=self.runtime,
         )
+
+    def _check_cancelled(self) -> None:
+        runtime = getattr(self, "runtime", None)
+        if runtime is not None:
+            runtime.check_cancelled()
 
     def _set_tool_event_sink(self, sink: Callable[[dict[str, Any]], None] | None) -> None:
         """Enable or disable immediate tool event callbacks."""
@@ -124,8 +138,10 @@ class DeepResearchAgent:
 
     def run(self, topic: str) -> SummaryStateOutput:
         """Execute the research workflow and return the final report."""
+        self._check_cancelled()
         state = SummaryState(research_topic=topic)
         state.todo_items = self.planner.plan_todo_list(state)
+        self._check_cancelled()
         self._drain_tool_events(state)
 
         if not state.todo_items:
@@ -133,27 +149,35 @@ class DeepResearchAgent:
             state.todo_items = [self.planner.create_fallback_task(state)]
 
         for task in state.todo_items:
-            self._execute_task(state, task, emit_stream=False)
+            try:
+                # _execute_task is a generator even when emit_stream is false.
+                for _ in self._execute_task(state, task, emit_stream=False):
+                    pass
+            except ResearchCancelled:
+                raise
+            except Exception as exc:
+                logger.exception("Task execution failed", exc_info=exc)
+                self._task_failure(task, exc)
 
-        report = self.reporting.generate_report(state)
+        report, outcome, _ = self._finalize_research(state)
         self._drain_tool_events(state)
-        state.structured_report = report
-        state.running_summary = report
-        self._persist_final_report(state, report)
 
         return SummaryStateOutput(
             running_summary=report,
             report_markdown=report,
             todo_items=state.todo_items,
+            outcome=outcome,
         )
 
     def run_stream(self, topic: str) -> Iterator[dict[str, Any]]:
         """Execute the workflow yielding incremental progress events."""
+        self._check_cancelled()
         state = SummaryState(research_topic=topic)
         logger.debug("Starting streaming research: topic=%s", topic)
         yield {"type": "status", "message": "初始化研究流程"}
 
         state.todo_items = self.planner.plan_todo_list(state)
+        self._check_cancelled()
         for event in self._drain_tool_events(state, step=0):
             yield event
         if not state.todo_items:
@@ -200,8 +224,9 @@ class DeepResearchAgent:
 
         threads: list[Thread] = []
 
-        def worker(task: TodoItem, step: int) -> None:
+        def execute_one(task: TodoItem, step: int) -> None:
             try:
+                self._check_cancelled()
                 enqueue(
                     {
                         "type": "task_status",
@@ -217,38 +242,41 @@ class DeepResearchAgent:
 
                 for event in self._execute_task(state, task, emit_stream=True, step=step):
                     enqueue(event, task=task)
+            except ResearchCancelled:
+                task.status = "cancelled"
+                enqueue({"type": "task_status", "status": "cancelled"}, task=task)
             except Exception as exc:  # pragma: no cover - defensive guardrail
                 logger.exception("Task execution failed", exc_info=exc)
-                task.status = "failed"
-                task.notices.append(str(exc))
-                enqueue(
-                    {
-                        "type": "task_status",
-                        "task_id": task.id,
-                        "status": "failed",
-                        "detail": str(exc),
-                        "title": task.title,
-                        "intent": task.intent,
-                        "note_id": task.note_id,
-                        "note_path": task.note_path,
-                    },
-                    task=task,
-                )
+                enqueue(self._task_failure(task, exc), task=task)
             finally:
                 enqueue({"type": "__task_done__", "task_id": task.id})
 
+        pending_tasks: Queue[TodoItem] = Queue()
         for task in state.todo_items:
-            step = channel_map.get(task.id, {}).get("step", 0)
-            thread = Thread(target=worker, args=(task, step), daemon=True)
-            threads.append(thread)
-            thread.start()
+            pending_tasks.put(task)
+
+        def worker() -> None:
+            while True:
+                try:
+                    task = pending_tasks.get_nowait()
+                except Empty:
+                    return
+                execute_one(task, channel_map[task.id]["step"])
 
         active_workers = len(state.todo_items)
         finished_workers = 0
 
         try:
+            for _ in range(min(self.config.max_task_workers, active_workers)):
+                thread = Thread(target=worker, daemon=True)
+                thread.start()
+                threads.append(thread)
             while finished_workers < active_workers:
-                event = event_queue.get()
+                # Keep collecting completed work while cancellation unwinds workers.
+                try:
+                    event = event_queue.get(timeout=0.2)
+                except Empty:
+                    continue
                 if event.get("type") == "__task_done__":
                     finished_workers += 1
                     continue
@@ -266,24 +294,87 @@ class DeepResearchAgent:
             for thread in threads:
                 thread.join()
 
-        report = self.reporting.generate_report(state)
+        self._check_cancelled()
+        yield {"type": "status", "stage": "report", "message": "正在汇总研究并生成最终报告"}
+        report, outcome, note_event = self._finalize_research(state)
         final_step = len(state.todo_items) + 1
         for event in self._drain_tool_events(state, step=final_step):
             yield event
-        state.structured_report = report
-        state.running_summary = report
-
-        note_event = self._persist_final_report(state, report)
         if note_event:
             yield note_event
+        if outcome.report_available:
+            yield {
+                "type": "final_report",
+                "report": report,
+                "note_id": state.report_note_id,
+                "note_path": state.report_note_path,
+            }
+        # Transport completion is not equivalent to research success.
+        yield {"type": "done", "outcome": asdict(outcome)}
 
-        yield {
-            "type": "final_report",
-            "report": report,
-            "note_id": state.report_note_id,
-            "note_path": state.report_note_path,
+    @staticmethod
+    def _task_failure(task: TodoItem, error: Exception) -> dict[str, Any]:
+        task.status = "failed"
+        detail = str(error)
+        task.notices.append(detail)
+        return {
+            "type": "task_status", "task_id": task.id, "status": "failed",
+            "detail": detail, "title": task.title, "intent": task.intent,
+            "note_id": task.note_id, "note_path": task.note_path,
         }
-        yield {"type": "done"}
+
+    def _finalize_research(
+        self, state: SummaryState
+    ) -> tuple[str, ResearchOutcome, dict[str, Any] | None]:
+        """Apply the same terminal policy to synchronous and SSE research."""
+        self._check_cancelled()
+        completed = sum(task.status == "completed" for task in state.todo_items)
+        failed = sum(task.status == "failed" for task in state.todo_items)
+        skipped = sum(task.status == "skipped" for task in state.todo_items)
+        report = ""
+        error: str | None = None
+        note_event = None
+        if completed:
+            try:
+                report = self.reporting.generate_report(state).strip()
+                if not report:
+                    raise ValueError("报告生成失败，未获得有效内容")
+            except ResearchCancelled:
+                raise
+            except Exception as exc:
+                logger.exception("Report generation failed", exc_info=exc)
+                error = f"最终报告生成失败：{exc}"
+            if report:
+                state.structured_report = report
+                state.running_summary = report
+                try:
+                    note_event = self._persist_final_report(state, report)
+                    if self.note_tool is not None and note_event is None:
+                        error = "最终报告已生成，但报告笔记保存失败"
+                except ResearchCancelled:
+                    raise
+                except Exception as exc:
+                    logger.exception("Report persistence failed", exc_info=exc)
+                    error = f"最终报告已生成，但报告笔记保存失败：{exc}"
+        else:
+            error = "没有成功完成的研究子任务，未生成最终报告"
+
+        status = "failed"
+        if completed:
+            status = (
+                "completed" if completed == len(state.todo_items) and report and not error
+                else "partial"
+            )
+        outcome = ResearchOutcome(
+            status=status,
+            total_tasks=len(state.todo_items),
+            completed_tasks=completed,
+            failed_tasks=failed,
+            skipped_tasks=skipped,
+            report_available=bool(report),
+            error=error,
+        )
+        return report, outcome, note_event
 
     # ------------------------------------------------------------------
     # Execution helpers
@@ -297,13 +388,16 @@ class DeepResearchAgent:
         step: int | None = None,
     ) -> Iterator[dict[str, Any]]:
         """Run search + summarization for a single task."""
+        self._check_cancelled()
         task.status = "in_progress"
 
         search_result, notices, answer_text, backend = dispatch_search(
             task.query,
             self.config,
             state.research_loop_count,
+            runtime=getattr(self, "runtime", None),
         )
+        self._check_cancelled()
         self._last_search_notices = notices
         task.notices = notices
 
@@ -345,6 +439,7 @@ class DeepResearchAgent:
             if not emit_stream:
                 self._drain_tool_events(state)
 
+        self._check_cancelled()
         sources_summary, context = prepare_research_context(
             search_result,
             answer_text,
@@ -395,6 +490,7 @@ class DeepResearchAgent:
             summary_text = self.summarizer.summarize_task(state, task, context)
             self._drain_tool_events(state)
 
+        self._check_cancelled()
         task.summary = summary_text.strip() if summary_text else "暂无可用信息"
         task.status = "completed"
 
@@ -447,6 +543,7 @@ class DeepResearchAgent:
         }
 
     def _persist_final_report(self, state: SummaryState, report: str) -> dict[str, Any] | None:
+        self._check_cancelled()
         if not self.note_tool or not report or not report.strip():
             return None
 
@@ -458,6 +555,7 @@ class DeepResearchAgent:
         response = ""
 
         if note_id:
+            self._check_cancelled()
             response = self.note_tool.run(
                 {
                     "action": "update",
@@ -472,6 +570,7 @@ class DeepResearchAgent:
                 note_id = None
 
         if not note_id:
+            self._check_cancelled()
             response = self.note_tool.run(
                 {
                     "action": "create",
@@ -483,6 +582,7 @@ class DeepResearchAgent:
             )
             note_id = self._extract_note_id_from_text(response)
 
+        self._check_cancelled()
         if not note_id:
             return None
 

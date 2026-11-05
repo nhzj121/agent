@@ -72,5 +72,7 @@ class ReportingService:
         if self._config.strip_thinking_tokens:
             report_text = strip_thinking_tokens(report_text)
 
-        return report_text or "报告生成失败，请检查输入。"
+        if not report_text:
+            raise ValueError("报告生成失败，未获得有效内容")
+        return report_text
 

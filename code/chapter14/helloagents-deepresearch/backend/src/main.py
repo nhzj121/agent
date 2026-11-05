@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
+import asyncio
 import json
+from contextlib import asynccontextmanager
 import sys
 from typing import Any, Dict, Iterator, Optional
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Header, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from loguru import logger
@@ -14,6 +16,8 @@ from pydantic import BaseModel, Field
 
 from config import Configuration, SearchAPI
 from agent import DeepResearchAgent
+from models import ResearchOutcome
+from services.research_manager import ResearchManager, ResearchQueueFull
 
 # 添加控制台日志处理程序
 logger.add(
@@ -49,6 +53,9 @@ class ResearchResponse(BaseModel):
     report_markdown: str = Field(
         ..., description="Markdown-formatted research report including sections"
     )
+    outcome: ResearchOutcome | None = Field(
+        default=None, description="Research completion status and task counts"
+    )
     todo_items: list[dict[str, Any]] = Field(
         default_factory=list,
         description="Structured TODO items with summaries and sources",
@@ -75,8 +82,22 @@ def _build_config(payload: ResearchRequest) -> Configuration:
     return Configuration.from_env(overrides=overrides)
 
 
-def create_app() -> FastAPI:
-    app = FastAPI(title="HelloAgents Deep Researcher")
+def create_app(*, agent_factory=None, config: Configuration | None = None) -> FastAPI:
+    # Resolve the factory at execution time; every research gets a fresh agent.
+    manager = ResearchManager(agent_factory or (
+        lambda config, runtime: DeepResearchAgent(config=config, runtime=runtime)
+    ), config=config)
+
+    @asynccontextmanager
+    async def lifespan(app):
+        log_startup_configuration()
+        try:
+            yield
+        finally:
+            await asyncio.to_thread(manager.close)
+
+    app = FastAPI(title="HelloAgents Deep Researcher", lifespan=lifespan)
+    app.state.research_manager = manager
 
     app.add_middleware(
         CORSMiddleware,
@@ -84,9 +105,9 @@ def create_app() -> FastAPI:
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
+        expose_headers=["X-Research-ID"],
     )
 
-    @app.on_event("startup")
     def log_startup_configuration() -> None:
         config = Configuration.from_env()
 
@@ -115,62 +136,89 @@ def create_app() -> FastAPI:
     def health_check() -> Dict[str, str]:
         return {"status": "ok"}
 
+    def submit(payload: ResearchRequest) -> dict:
+        try:
+            return manager.submit(payload.topic, _build_config(payload))
+        except ValueError as exc:
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
+        except ResearchQueueFull as exc:
+            raise HTTPException(status_code=429, detail=str(exc)) from exc
+        except RuntimeError as exc:
+            raise HTTPException(status_code=503, detail=str(exc)) from exc
+
+    def lookup(research_id: str) -> dict:
+        try:
+            return manager.get(research_id)
+        except KeyError as exc:
+            raise HTTPException(status_code=404, detail="研究不存在，服务重启后内存记录会清空") from exc
+
+    def event_response(research_id: str, after: int = 0, *, legacy=False) -> StreamingResponse:
+        lookup(research_id)
+        try:
+            manager.validate_cursor(research_id, after)
+        except ValueError as exc:
+            raise HTTPException(status_code=409, detail=str(exc)) from exc
+
+        def iterator() -> Iterator[str]:
+            for event in manager.events(research_id, after):
+                if event is None:
+                    yield ": keep-alive\n\n"
+                else:
+                    prefix = "" if legacy else f"id: {event['seq']}\n"
+                    yield prefix + f"data: {json.dumps(event, ensure_ascii=False)}\n\n"
+
+        return StreamingResponse(iterator(), media_type="text/event-stream", headers={
+            "Cache-Control": "no-cache", "X-Accel-Buffering": "no", "X-Research-ID": research_id,
+        })
+
+    @app.post("/researches", status_code=202)
+    def create_research(payload: ResearchRequest) -> dict:
+        """Register a research; execution and event subscriptions are independent."""
+        return submit(payload)
+
+    @app.get("/researches")
+    def list_researches() -> dict:
+        return {"researches": manager.list()}
+
+    @app.get("/researches/{research_id}")
+    def get_research(research_id: str) -> dict:
+        return lookup(research_id)
+
+    @app.get("/researches/{research_id}/events")
+    def research_events(research_id: str, after: int = Query(default=0, ge=0),
+                        last_event_id: str | None = Header(default=None)) -> StreamingResponse:
+        if last_event_id is not None:
+            try:
+                after = max(after, int(last_event_id))
+            except ValueError as exc:
+                raise HTTPException(status_code=400, detail="Last-Event-ID 必须是事件序号") from exc
+        return event_response(research_id, after)
+
+    @app.post("/researches/{research_id}/cancel")
+    def cancel_research(research_id: str) -> dict:
+        lookup(research_id)
+        return manager.cancel(research_id)
+
+    @app.get("/researches/{research_id}/report")
+    def research_report(research_id: str) -> dict:
+        snapshot = lookup(research_id)
+        if not snapshot["report_available"]:
+            raise HTTPException(status_code=409, detail="当前研究尚无最终报告")
+        return {"research_id": research_id, "report_markdown": snapshot["report_markdown"],
+                "outcome": snapshot["outcome"]}
+
     @app.post("/research", response_model=ResearchResponse)
     def run_research(payload: ResearchRequest) -> ResearchResponse:
-        try:
-            config = _build_config(payload)
-            agent = DeepResearchAgent(config=config)
-            result = agent.run(payload.topic)
-        except ValueError as exc:  # Likely due to unsupported configuration
-            raise HTTPException(status_code=400, detail=str(exc)) from exc
-        except Exception as exc:  # pragma: no cover - defensive guardrail
-            raise HTTPException(status_code=500, detail="Research failed") from exc
-
-        todo_payload = [
-            {
-                "id": item.id,
-                "title": item.title,
-                "intent": item.intent,
-                "query": item.query,
-                "status": item.status,
-                "summary": item.summary,
-                "sources_summary": item.sources_summary,
-                "note_id": item.note_id,
-                "note_path": item.note_path,
-            }
-            for item in result.todo_items
-        ]
-
-        return ResearchResponse(
-            report_markdown=(result.report_markdown or result.running_summary or ""),
-            todo_items=todo_payload,
-        )
+        job = submit(payload)
+        result = manager.wait(job["research_id"])
+        return ResearchResponse(report_markdown=result["report_markdown"],
+                                todo_items=result["todo_items"], outcome=result["outcome"])
 
     @app.post("/research/stream")
     def stream_research(payload: ResearchRequest) -> StreamingResponse:
-        try:
-            config = _build_config(payload)
-            agent = DeepResearchAgent(config=config)
-        except ValueError as exc:
-            raise HTTPException(status_code=400, detail=str(exc)) from exc
-
-        def event_iterator() -> Iterator[str]:
-            try:
-                for event in agent.run_stream(payload.topic):
-                    yield f"data: {json.dumps(event, ensure_ascii=False)}\n\n"
-            except Exception as exc:  # pragma: no cover - defensive guardrail
-                logger.exception("Streaming research failed")
-                error_payload = {"type": "error", "detail": str(exc)}
-                yield f"data: {json.dumps(error_payload, ensure_ascii=False)}\n\n"
-
-        return StreamingResponse(
-            event_iterator(),
-            media_type="text/event-stream",
-            headers={
-                "Cache-Control": "no-cache",
-                "Connection": "keep-alive",
-            },
-        )
+        job = submit(payload)
+        # Preserve the original data-only SSE framing for existing clients.
+        return event_response(job["research_id"], legacy=True)
 
     return app
 

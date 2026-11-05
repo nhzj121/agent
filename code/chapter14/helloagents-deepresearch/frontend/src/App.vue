@@ -51,27 +51,20 @@
           </section>
 
           <div class="form-actions">
-            <button class="submit" type="submit" :disabled="loading">
+            <button class="submit" type="submit" :disabled="submitting">
               <span class="submit-label">
                 <svg
-                  v-if="loading"
+                  v-if="submitting"
                   class="spinner"
                   viewBox="0 0 24 24"
                   aria-hidden="true"
                 >
                   <circle cx="12" cy="12" r="9" stroke-width="3" />
                 </svg>
-                {{ loading ? "研究进行中..." : "开始研究" }}
+                {{ submitting ? "正在提交…" : "开始研究" }}
               </span>
             </button>
-            <button
-              v-if="loading"
-              type="button"
-              class="secondary-btn"
-              @click="cancelResearch"
-            >
-              取消研究
-            </button>
+
           </div>
         </form>
 
@@ -83,9 +76,10 @@
           </svg>
           {{ error }}
         </p>
-        <p v-else-if="loading" class="hint muted">
-          正在收集线索与证据，实时进展见右侧区域。
-        </p>
+        <p class="hint muted">可以连续提交多个主题，已有研究会继续在后台运行。</p>
+        <ResearchList class="form-research-list" :items="researches" :selected-id="activeResearchId"
+          :refreshing="refreshing" :error="listError" :cancelling="cancelling" :action-errors="actionErrors"
+          @select="selectResearch" @cancel="cancelResearch" @refresh="refreshResearches" />
       </section>
     </div>
 
@@ -94,7 +88,7 @@
       <!-- 左侧：研究信息 -->
       <aside class="sidebar">
         <div class="sidebar-header">
-          <button class="back-btn" @click="goBack" :disabled="loading">
+          <button class="back-btn" @click="goBack">
             <svg viewBox="0 0 24 24" width="20" height="20">
               <path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
@@ -102,6 +96,10 @@
           </button>
           <h2>🔍 深度研究助手</h2>
         </div>
+
+        <ResearchList :items="researches" :selected-id="activeResearchId" :refreshing="refreshing"
+          :error="listError" :cancelling="cancelling" :action-errors="actionErrors"
+          @select="selectResearch" @cancel="cancelResearch" @refresh="refreshResearches" />
 
         <div class="research-info">
           <details class="research-overview" open>
@@ -111,10 +109,10 @@
                 <span class="disclosure-action disclosure-expand">展开 ＋</span>
                 <span class="disclosure-action disclosure-collapse">收起 −</span>
               </span>
-              <span class="topic-display">{{ form.topic }}</span>
-              <span class="status-chip" :class="{ active: loading }">
+              <span class="topic-display">{{ selectedSession?.topic }}</span>
+              <span class="status-chip" :class="{ active: loading, partial: researchStatus === 'partial', failed: researchStatus === 'failed' }">
                 <span class="dot"></span>
-                {{ loading ? "研究进行中" : "研究流程完成" }}
+                {{ researchStatusLabel }}
               </span>
             </summary>
 
@@ -164,6 +162,9 @@
         </div>
 
         <div class="sidebar-actions">
+          <button v-if="loading" class="secondary-btn" :disabled="cancelRequested" @click="cancelResearch(activeResearchId)">
+            {{ cancelRequested ? '取消中…' : '取消当前研究' }}
+          </button>
           <button class="new-research-btn" @click="startNewResearch">
             <svg viewBox="0 0 24 24" width="18" height="18">
               <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>
@@ -176,8 +177,17 @@
       <!-- 右侧：研究结果 -->
       <section
         class="panel panel-result"
-        v-if="todoTasks.length || reportMarkdown || progressLogs.length"
+        v-if="selectedSession"
       >
+        <p
+          v-if="researchNotice"
+          class="research-result-notice"
+          :class="{ failed: researchStatus === 'failed' }"
+          role="status"
+        >{{ researchNotice }}</p>
+        <p v-if="selectedSession?.connection === 'connecting'" class="hint muted" role="status">正在同步研究进展…</p>
+        <button v-if="selectedSession && ['offline', 'missing'].includes(selectedSession.connection)" class="secondary-btn"
+          @click="selectResearch(selectedSession.id)">重新同步当前研究</button>
         <nav class="result-tabs" aria-label="研究内容切换">
           <button
             type="button"
@@ -372,7 +382,7 @@
             <h3>最终报告</h3>
             <MarkdownContent :content="reportMarkdown" />
           </div>
-          <p v-else class="view-empty muted">等待最终报告生成。</p>
+          <p v-else class="view-empty muted">{{ loading ? '等待最终报告生成。' : (researchStatus ? '本次未生成最终报告。' : '当前未收到最终报告。') }}</p>
         </section>
       </section>
 
@@ -381,673 +391,242 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onBeforeUnmount, reactive, ref, watch } from "vue";
+import { computed, onBeforeUnmount, onMounted, reactive, ref } from "vue";
 import MarkdownContent from "./components/MarkdownContent.vue";
-
+import ResearchList from "./components/ResearchList.vue";
 import {
-  runResearchStream,
-  type ResearchStreamEvent
+  createResearch, listResearches, getResearch, watchResearchEvents, cancelResearchById, ResearchAPIError,
+  type ResearchSummary, type ResearchSnapshot, type ResearchOutcome
 } from "./services/api";
+import {
+  createSession, applySnapshot, applyResearchEvent, isResearchActive, STATUS_LABEL,
+  type ResearchSession
+} from "./services/researchState";
 
-interface SourceItem {
-  title: string;
-  url: string;
-  snippet: string;
-  raw: string;
-}
-
-interface ToolCallLog {
-  eventId: number;
-  agent: string;
-  tool: string;
-  parameters: Record<string, unknown>;
-  result: string;
-  noteId: string | null;
-  notePath: string | null;
-  timestamp: number;
-}
-
-interface TodoTaskView {
-  id: number;
-  title: string;
-  intent: string;
-  query: string;
-  status: string;
-  summary: string;
-  sourcesSummary: string;
-  sourceItems: SourceItem[];
-  notices: string[];
-  noteId: string | null;
-  notePath: string | null;
-  toolCalls: ToolCallLog[];
-}
-
-const form = reactive({
-  topic: "",
-  searchApi: ""
-});
-
-const loading = ref(false);
+const form = reactive({ topic: "", searchApi: "" });
+const researches = ref<ResearchSummary[]>([]);
+const sessions = reactive<Record<string, ResearchSession>>({});
+const cancelling = reactive<Record<string, boolean>>({});
+const actionErrors = reactive<Record<string, string>>({});
+const activeResearchId = ref<string | null>(null);
+const selectedSession = computed(() => activeResearchId.value ? sessions[activeResearchId.value] : undefined);
+const submitting = ref(false);
+const refreshing = ref(false);
 const error = ref("");
-const progressLogs = ref<string[]>([]);
-const logsCollapsed = ref(false);
+const listError = ref("");
 const isExpanded = ref(false);
-
-// Presentation state only; research data and stream handling remain unchanged.
-const resultView = ref<"tasks" | "report">("tasks");
-const taskDetailView = ref<"sources" | "summary" | "tools">("summary");
-watch(isExpanded, () => {
-  resultView.value = "tasks";
-  taskDetailView.value = "summary";
+const loading = computed(() => Boolean(selectedSession.value && selectedSession.value.connection !== "missing" && isResearchActive(selectedSession.value.status)));
+const cancelRequested = computed(() => Boolean(activeResearchId.value && (cancelling[activeResearchId.value] || selectedSession.value?.status === "CANCELLING")));
+const researchStatus = computed(() => {
+  const status = selectedSession.value?.status;
+  return status && !isResearchActive(status) ? status.toLowerCase() as ResearchOutcome["status"] : null;
 });
-
-const todoTasks = ref<TodoTaskView[]>([]);
-const activeTaskId = ref<number | null>(null);
-const reportMarkdown = ref("");
-
-const summaryHighlight = ref(false);
-const sourcesHighlight = ref(false);
-const reportHighlight = ref(false);
-const toolHighlight = ref(false);
-
-let currentController: AbortController | null = null;
-
-const searchOptions = [
-  "advanced",
-  "duckduckgo",
-  "tavily",
-  "perplexity",
-  "searxng"
-];
-
-const TASK_STATUS_LABEL: Record<string, string> = {
-  pending: "待执行",
-  in_progress: "进行中",
-  completed: "已完成",
-  skipped: "已跳过",
-  failed: "失败"
-};
-
-function formatTaskStatus(status: string): string {
-  return TASK_STATUS_LABEL[status] ?? status;
-}
-
+const researchStatusLabel = computed(() => {
+  if (selectedSession.value?.connection === "missing") return "研究记录已失效";
+  return STATUS_LABEL[selectedSession.value?.status || ""] || "正在读取研究";
+});
+const researchNotice = computed(() => selectedSession.value?.connectionError || selectedSession.value?.notice || "");
+const todoTasks = computed(() => selectedSession.value?.tasks || []);
+const reportMarkdown = computed(() => selectedSession.value?.report || "");
+const progressLogs = computed(() => selectedSession.value?.logs || []);
+const activeTaskId = computed({
+  get: () => selectedSession.value?.activeTaskId ?? null,
+  set: (value: number | null) => { if (selectedSession.value) selectedSession.value.activeTaskId = value; }
+});
+const resultView = computed({
+  get: () => selectedSession.value?.resultView || "tasks",
+  set: (value: "tasks" | "report") => { if (selectedSession.value) selectedSession.value.resultView = value; }
+});
+const taskDetailView = computed({
+  get: () => selectedSession.value?.detailView || "summary",
+  set: (value: "sources" | "summary" | "tools") => { if (selectedSession.value) selectedSession.value.detailView = value; }
+});
+const logsCollapsed = computed({
+  get: () => selectedSession.value?.logsCollapsed || false,
+  set: (value: boolean) => { if (selectedSession.value) selectedSession.value.logsCollapsed = value; }
+});
 const totalTasks = computed(() => todoTasks.value.length);
-const completedTasks = computed(() =>
-  todoTasks.value.filter((task) => task.status === "completed").length
-);
-
-const currentTask = computed(() => {
-  if (activeTaskId.value !== null) {
-    return todoTasks.value.find((task) => task.id === activeTaskId.value) ?? null;
-  }
-  return todoTasks.value[0] ?? null;
-});
-
-const currentTaskSources = computed(() => currentTask.value?.sourceItems ?? []);
-const currentTaskSummary = computed(() => currentTask.value?.summary ?? "");
-const currentTaskTitle = computed(() => currentTask.value?.title ?? "");
-const currentTaskIntent = computed(() => currentTask.value?.intent ?? "");
-const currentTaskQuery = computed(() => currentTask.value?.query ?? "");
-const currentTaskNoteId = computed(() => currentTask.value?.noteId ?? "");
-const currentTaskNotePath = computed(() => currentTask.value?.notePath ?? "");
-const currentTaskToolCalls = computed(
-  () => currentTask.value?.toolCalls ?? []
-);
-
-const pulse = (flag: typeof summaryHighlight) => {
-  flag.value = false;
-  requestAnimationFrame(() => {
-    flag.value = true;
-    window.setTimeout(() => {
-      flag.value = false;
-    }, 1200);
-  });
+const completedTasks = computed(() => todoTasks.value.filter(task => task.status === "completed").length);
+const currentTask = computed(() => todoTasks.value.find(task => task.id === activeTaskId.value) || todoTasks.value[0] || null);
+const currentTaskSources = computed(() => currentTask.value?.sourceItems || []);
+const currentTaskSummary = computed(() => currentTask.value?.summary || "");
+const currentTaskTitle = computed(() => currentTask.value?.title || "");
+const currentTaskIntent = computed(() => currentTask.value?.intent || "");
+const currentTaskQuery = computed(() => currentTask.value?.query || "");
+const currentTaskNoteId = computed(() => currentTask.value?.noteId || "");
+const currentTaskNotePath = computed(() => currentTask.value?.notePath || "");
+const currentTaskToolCalls = computed(() => currentTask.value?.toolCalls || []);
+const summaryHighlight = ref(false), sourcesHighlight = ref(false), reportHighlight = ref(false), toolHighlight = ref(false);
+const searchOptions = ["advanced", "duckduckgo", "tavily", "perplexity", "searxng"];
+const TASK_STATUS_LABEL: Record<string, string> = {
+  pending: "待执行", in_progress: "进行中", completed: "已完成", skipped: "已跳过", failed: "失败", cancelled: "已取消"
 };
-
-function parseSources(raw: string): SourceItem[] {
-  if (!raw) {
-    return [];
-  }
-
-  const items: SourceItem[] = [];
-  const lines = raw.split("\n");
-
-  let current: SourceItem | null = null;
-  const truncate = (value: string, max = 360) => {
-    const trimmed = value.trim();
-    return trimmed.length > max ? `${trimmed.slice(0, max)}…` : trimmed;
-  };
-
-  const flush = () => {
-    if (!current) {
-      return;
-    }
-    const normalized: SourceItem = {
-      title: current.title?.trim() || "",
-      url: current.url?.trim() || "",
-      snippet: current.snippet ? truncate(current.snippet) : "",
-      raw: current.raw ? truncate(current.raw, 420) : ""
-    };
-
-    if (
-      normalized.title ||
-      normalized.url ||
-      normalized.snippet ||
-      normalized.raw
-    ) {
-      if (!normalized.title && normalized.url) {
-        normalized.title = normalized.url;
-      }
-      items.push(normalized);
-    }
-    current = null;
-  };
-
-  const ensureCurrent = () => {
-    if (!current) {
-      current = { title: "", url: "", snippet: "", raw: "" };
-    }
-  };
-
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (!trimmed) {
-      continue;
-    }
-
-    if (/^\*/.test(trimmed) && trimmed.includes(" : ")) {
-      flush();
-      const withoutBullet = trimmed.replace(/^\*\s*/, "");
-      const [titlePart, urlPart] = withoutBullet.split(" : ");
-      current = {
-        title: titlePart?.trim() || "",
-        url: urlPart?.trim() || "",
-        snippet: "",
-        raw: ""
-      };
-      continue;
-    }
-
-    if (/^(Source|信息来源)\s*:/.test(trimmed)) {
-      flush();
-      const [, titlePart = ""] = trimmed.split(/:\s*(.+)/);
-      current = {
-        title: titlePart.trim(),
-        url: "",
-        snippet: "",
-        raw: ""
-      };
-      continue;
-    }
-
-    if (/^URL\s*:/.test(trimmed)) {
-      ensureCurrent();
-      const [, urlPart = ""] = trimmed.split(/:\s*(.+)/);
-      current!.url = urlPart.trim();
-      continue;
-    }
-
-    if (
-      /^(Most relevant content from source|信息内容)\s*:/.test(trimmed)
-    ) {
-      ensureCurrent();
-      const [, contentPart = ""] = trimmed.split(/:\s*(.+)/);
-      current!.snippet = contentPart.trim();
-      continue;
-    }
-
-    if (
-      /^(Full source content limited to|信息内容限制为)\s*:/.test(trimmed)
-    ) {
-      ensureCurrent();
-      const [, rawPart = ""] = trimmed.split(/:\s*(.+)/);
-      current!.raw = rawPart.trim();
-      continue;
-    }
-
-    if (/^https?:\/\//.test(trimmed)) {
-      ensureCurrent();
-      if (!current!.url) {
-        current!.url = trimmed;
-        continue;
-      }
-    }
-
-    ensureCurrent();
-    current!.raw = current!.raw ? `${current!.raw}\n${trimmed}` : trimmed;
-  }
-
-  flush();
-  return items;
-}
-
-function extractOptionalString(value: unknown): string | null {
-  if (typeof value !== "string") {
-    return null;
-  }
-  const trimmed = value.trim();
-  return trimmed ? trimmed : null;
-}
-
-function ensureRecord(value: unknown): Record<string, unknown> {
-  if (value && typeof value === "object" && !Array.isArray(value)) {
-    return value as Record<string, unknown>;
-  }
-  return {};
-}
-
-function applyNoteMetadata(
-  task: TodoTaskView,
-  payload: Record<string, unknown>
-): void {
-  const noteId = extractOptionalString(payload.note_id);
-  if (noteId) {
-    task.noteId = noteId;
-  }
-  const notePath = extractOptionalString(payload.note_path);
-  if (notePath) {
-    task.notePath = notePath;
-  }
-}
-
+const formatTaskStatus = (status: string) => TASK_STATUS_LABEL[status] || status;
 function formatToolParameters(parameters: Record<string, unknown>): string {
-  try {
-    return JSON.stringify(parameters, null, 2);
-  } catch (error) {
-    console.warn("无法格式化工具参数", error, parameters);
-    return Object.entries(parameters)
-      .map(([key, value]) => `${key}: ${String(value)}`)
-      .join("\n");
+  try { return JSON.stringify(parameters, null, 2); }
+  catch (err) {
+    console.warn("无法格式化工具参数", err, parameters);
+    return Object.entries(parameters).map(([key, value]) => `${key}: ${String(value)}`).join("\n");
   }
 }
-
 function formatToolResult(result: string): string {
-  const trimmed = result.trim();
-  const limit = 900;
-  if (trimmed.length > limit) {
-    return `${trimmed.slice(0, limit)}…`;
-  }
-  return trimmed;
+  const value = result.trim();
+  return value.length > 900 ? `${value.slice(0, 900)}…` : value;
 }
-
 async function copyNotePath(path: string | null | undefined) {
-  if (!path) {
-    return;
-  }
-
+  if (!path) return;
+  const session = selectedSession.value;
   try {
     await navigator.clipboard.writeText(path);
-    progressLogs.value.push(`已复制笔记路径：${path}`);
-  } catch (error) {
-    console.warn("无法直接复制到剪贴板", error);
+    session?.logs.push(`已复制笔记路径：${path}`);
+  } catch (err) {
+    console.warn("无法直接复制到剪贴板", err);
     window.prompt("复制以下笔记路径", path);
-    progressLogs.value.push("请手动复制笔记路径");
+    session?.logs.push("请手动复制笔记路径");
   }
 }
 
-function resetWorkflowState() {
-  todoTasks.value = [];
-  activeTaskId.value = null;
-  reportMarkdown.value = "";
-  progressLogs.value = [];
-  summaryHighlight.value = false;
-  sourcesHighlight.value = false;
-  reportHighlight.value = false;
-  toolHighlight.value = false;
-  logsCollapsed.value = false;
+const lifetime = new AbortController();
+let detailController: AbortController | null = null;
+let retryTimer: ReturnType<typeof setTimeout> | undefined;
+let pollTimer: ReturnType<typeof setInterval> | undefined;
+let creationVersion = 0;
+let disposed = false;
+const storageKey = "deep-research-selected-id";
+function remember(id: string | null) {
+  try { if (id) sessionStorage.setItem(storageKey, id); else sessionStorage.removeItem(storageKey); } catch { /* Storage is optional. */ }
 }
-
-function findTask(taskId: unknown): TodoTaskView | undefined {
-  const numeric =
-    typeof taskId === "number"
-      ? taskId
-      : typeof taskId === "string"
-      ? Number(taskId)
-      : NaN;
-  if (Number.isNaN(numeric)) {
-    return undefined;
-  }
-  return todoTasks.value.find((task) => task.id === numeric);
+function detachView() {
+  clearTimeout(retryTimer);
+  retryTimer = undefined;
+  detailController?.abort();
+  detailController = null;
 }
-
-function upsertTaskMetadata(task: TodoTaskView, payload: Record<string, unknown>) {
-  if (typeof payload.title === "string" && payload.title.trim()) {
-    task.title = payload.title.trim();
-  }
-  if (typeof payload.intent === "string" && payload.intent.trim()) {
-    task.intent = payload.intent.trim();
-  }
-  if (typeof payload.query === "string" && payload.query.trim()) {
-    task.query = payload.query.trim();
-  }
+function mergeSummary(item: ResearchSummary) {
+  const index = researches.value.findIndex(row => row.research_id === item.research_id);
+  if (index < 0) researches.value.unshift(item);
+  else if (researches.value[index].snapshot_seq <= item.snapshot_seq) researches.value[index] = item;
 }
-
-const handleSubmit = async () => {
-  if (!form.topic.trim()) {
-    error.value = "请输入研究主题";
-    return;
-  }
-
-  if (currentController) {
-    currentController.abort();
-    currentController = null;
-  }
-
-  loading.value = true;
-  error.value = "";
-  isExpanded.value = true;
-  resetWorkflowState();
-
-  const controller = new AbortController();
-  currentController = controller;
-
-  const payload = {
-    topic: form.topic.trim(),
-    search_api: form.searchApi || undefined
-  };
-
+function updateSummary(session: ResearchSession) {
+  const previous = researches.value.find(row => row.research_id === session.id);
+  if (!previous) return;
+  mergeSummary({ ...previous, topic: session.topic, status: session.status, snapshot_seq: session.lastSeq,
+    report_available: Boolean(session.report), error: session.outcome?.error || null,
+    progress: { total_tasks: session.tasks.length, completed_tasks: session.tasks.filter(task => task.status === "completed").length } });
+}
+async function refreshResearches() {
+  if (refreshing.value || disposed) return;
+  refreshing.value = true;
+  const version = creationVersion;
   try {
-    await runResearchStream(
-      payload,
-      (event: ResearchStreamEvent) => {
-        if (event.type === "status") {
-          const message =
-            typeof event.message === "string" && event.message.trim()
-              ? event.message
-              : "流程状态更新";
-          progressLogs.value.push(message);
-
-          const payload = event as Record<string, unknown>;
-          const task = findTask(payload.task_id);
-          if (task && message) {
-            task.notices.push(message);
-            applyNoteMetadata(task, payload);
-          }
-          return;
-        }
-
-        if (event.type === "todo_list") {
-          const tasks = Array.isArray(event.tasks)
-            ? (event.tasks as Record<string, unknown>[])
-            : [];
-
-          todoTasks.value = tasks.map((item, index) => {
-            const rawId =
-              typeof item.id === "number"
-                ? item.id
-                : typeof item.id === "string"
-                ? Number(item.id)
-                : index + 1;
-            const id = Number.isFinite(rawId) ? Number(rawId) : index + 1;
-            const noteId =
-              typeof item.note_id === "string" && item.note_id.trim()
-                ? item.note_id.trim()
-                : null;
-            const notePath =
-              typeof item.note_path === "string" && item.note_path.trim()
-                ? item.note_path.trim()
-                : null;
-
-            return {
-              id,
-              title:
-                typeof item.title === "string" && item.title.trim()
-                  ? item.title.trim()
-                  : `任务${id}`,
-              intent:
-                typeof item.intent === "string" && item.intent.trim()
-                  ? item.intent.trim()
-                  : "探索与主题相关的关键信息",
-              query:
-                typeof item.query === "string" && item.query.trim()
-                  ? item.query.trim()
-                  : form.topic.trim(),
-              status:
-                typeof item.status === "string" && item.status.trim()
-                  ? item.status.trim()
-                  : "pending",
-              summary: "",
-              sourcesSummary: "",
-              sourceItems: [],
-              notices: [],
-              noteId,
-              notePath,
-              toolCalls: []
-            } as TodoTaskView;
-          });
-
-          if (todoTasks.value.length) {
-            activeTaskId.value = todoTasks.value[0].id;
-            progressLogs.value.push("已生成任务清单");
-          } else {
-            progressLogs.value.push("未生成任务清单，使用默认任务继续");
-          }
-          return;
-        }
-
-        if (event.type === "task_status") {
-          const payload = event as Record<string, unknown>;
-          const task = findTask(event.task_id);
-          if (!task) {
-            return;
-          }
-
-          upsertTaskMetadata(task, payload);
-          applyNoteMetadata(task, payload);
-          const status =
-            typeof event.status === "string" && event.status.trim()
-              ? event.status.trim()
-              : task.status;
-          task.status = status;
-
-          if (status === "in_progress") {
-            task.summary = "";
-            task.sourcesSummary = "";
-            task.sourceItems = [];
-            task.notices = [];
-            activeTaskId.value = task.id;
-            progressLogs.value.push(`开始执行任务：${task.title}`);
-          } else if (status === "completed") {
-            if (typeof event.summary === "string" && event.summary.trim()) {
-              task.summary = event.summary.trim();
-            }
-            if (
-              typeof event.sources_summary === "string" &&
-              event.sources_summary.trim()
-            ) {
-              task.sourcesSummary = event.sources_summary.trim();
-              task.sourceItems = parseSources(task.sourcesSummary);
-            }
-            progressLogs.value.push(`完成任务：${task.title}`);
-            if (activeTaskId.value === task.id) {
-              pulse(summaryHighlight);
-              pulse(sourcesHighlight);
-            }
-          } else if (status === "skipped") {
-            progressLogs.value.push(`任务跳过：${task.title}`);
-          } else if (status === "failed") {
-            const detail = typeof payload.detail === "string" ? payload.detail : "任务执行失败";
-            task.notices.push(detail);
-            progressLogs.value.push(`任务失败：${task.title}，${detail}`);
-          }
-          return;
-        }
-
-        if (event.type === "sources") {
-          const payload = event as Record<string, unknown>;
-          const task = findTask(event.task_id);
-          if (!task) {
-            return;
-          }
-
-          const textCandidates = [
-            payload.latest_sources,
-            payload.sources_summary,
-            payload.raw_context
-          ];
-          const latestText = textCandidates
-            .map((value) => (typeof value === "string" ? value.trim() : ""))
-            .find((value) => value);
-
-          if (latestText) {
-            task.sourcesSummary = latestText;
-            task.sourceItems = parseSources(latestText);
-            if (activeTaskId.value === task.id) {
-              pulse(sourcesHighlight);
-            }
-            progressLogs.value.push(`已更新任务来源：${task.title}`);
-          }
-
-          if (typeof payload.backend === "string") {
-            progressLogs.value.push(
-              `当前使用搜索后端：${payload.backend}`
-            );
-          }
-
-          applyNoteMetadata(task, payload);
-
-          return;
-        }
-
-        if (event.type === "task_summary_chunk") {
-          const payload = event as Record<string, unknown>;
-          const task = findTask(event.task_id);
-          if (!task) {
-            return;
-          }
-          const chunk =
-            typeof event.content === "string" ? event.content : "";
-          task.summary += chunk;
-          applyNoteMetadata(task, payload);
-          if (activeTaskId.value === task.id) {
-            pulse(summaryHighlight);
-          }
-          return;
-        }
-
-        if (event.type === "tool_call") {
-          const payload = event as Record<string, unknown>;
-          const eventId =
-            typeof payload.event_id === "number"
-              ? payload.event_id
-              : Date.now();
-          const agent =
-            typeof payload.agent === "string" && payload.agent.trim()
-              ? payload.agent.trim()
-              : "Agent";
-          const tool =
-            typeof payload.tool === "string" && payload.tool.trim()
-              ? payload.tool.trim()
-              : "tool";
-          const parameters = ensureRecord(payload.parameters);
-          const result =
-            typeof payload.result === "string" ? payload.result : "";
-          const noteId = extractOptionalString(payload.note_id);
-          const notePath = extractOptionalString(payload.note_path);
-
-          const task = findTask(payload.task_id);
-          if (task) {
-            task.toolCalls.push({
-              eventId,
-              agent,
-              tool,
-              parameters,
-              result,
-              noteId,
-              notePath,
-              timestamp: Date.now()
-            });
-            if (noteId) {
-              task.noteId = noteId;
-            }
-            if (notePath) {
-              task.notePath = notePath;
-            }
-            const logSummary = noteId
-              ? `${agent} 调用了 ${tool}（任务 ${task.id}，笔记 ${noteId}）`
-              : `${agent} 调用了 ${tool}（任务 ${task.id}）`;
-            progressLogs.value.push(logSummary);
-            if (activeTaskId.value === task.id) {
-              pulse(toolHighlight);
-            }
-          } else {
-            progressLogs.value.push(`${agent} 调用了 ${tool}`);
-          }
-          return;
-        }
-
-        if (event.type === "final_report") {
-          const report =
-            typeof event.report === "string" && event.report.trim()
-              ? event.report.trim()
-              : "";
-          reportMarkdown.value = report || "报告生成失败，未获得有效内容";
-          pulse(reportHighlight);
-          progressLogs.value.push("最终报告已生成");
-          return;
-        }
-
-        if (event.type === "error") {
-          const detail =
-            typeof event.detail === "string" && event.detail.trim()
-              ? event.detail
-              : "研究过程中发生错误";
-          error.value = detail;
-          progressLogs.value.push("研究失败，已停止流程");
-        }
-      },
-      { signal: controller.signal }
-    );
-
-    if (!reportMarkdown.value) {
-      reportMarkdown.value = "暂无生成的报告";
+    const result = await listResearches(lifetime.signal);
+    if (disposed || version !== creationVersion) return;
+    const previous = new Map(researches.value.map(row => [row.research_id, row]));
+    researches.value = result.researches.map(row => {
+      const old = previous.get(row.research_id);
+      return old && old.snapshot_seq > row.snapshot_seq ? old : row;
+    });
+    listError.value = "";
+    for (const row of result.researches) {
+      const session = sessions[row.research_id];
+      if (session && row.snapshot_seq >= session.lastSeq) session.status = row.status;
+    }
+    const selected = selectedSession.value;
+    if (selected && !result.researches.some(row => row.research_id === selected.id)) {
+      detachView();
+      selected.connection = "missing";
+      selected.connectionError = "当前后端已无此研究记录。服务重启后内存记录会清空。";
+      remember(null);
     }
   } catch (err) {
-    if (err instanceof DOMException && err.name === "AbortError") {
-      progressLogs.value.push("已取消当前研究任务");
-    } else {
-      error.value = err instanceof Error ? err.message : "请求失败";
-    }
-  } finally {
-    loading.value = false;
-    if (currentController === controller) {
-      currentController = null;
-    }
-  }
-};
+    if (!disposed) listError.value = `研究列表读取失败：${err instanceof Error ? err.message : "连接异常"}`;
+  } finally { refreshing.value = false; }
+}
 
-const cancelResearch = () => {
-  if (!loading.value || !currentController) {
-    return;
+async function selectResearch(id: string) {
+  const item = researches.value.find(row => row.research_id === id);
+  if (!item || disposed) return;
+  detachView();
+  activeResearchId.value = id;
+  isExpanded.value = true;
+  remember(id);
+  if (!sessions[id]) sessions[id] = createSession(item);
+  const session = sessions[id];
+  session.connection = "connecting";
+  session.connectionError = "";
+  const controller = new AbortController();
+  detailController = controller;
+  const isCurrent = () => !disposed && detailController === controller && activeResearchId.value === id;
+  try {
+    const snapshot = await getResearch(id, controller.signal);
+    if (!isCurrent()) return;
+    applySnapshot(session, snapshot);
+    mergeSummary(snapshot);
+    if (!isResearchActive(session.status)) { session.connection = "ended"; return; }
+    session.connection = "live";
+    await watchResearchEvents(id, event => {
+      if (!isCurrent()) return;
+      if (applyResearchEvent(session, event)) updateSummary(session);
+    }, { signal: controller.signal, after: session.lastSeq });
+    if (isCurrent() && session.outcome === null) throw new Error("事件连接已结束，正在重新同步后台状态");
+  } catch (err) {
+    if (!isCurrent() || controller.signal.aborted) return;
+    const missing = err instanceof ResearchAPIError && err.status === 404;
+    session.connection = missing ? "missing" : "offline";
+    session.connectionError = missing ? "当前后端已无此研究记录，可能已重启。"
+      : `进度连接异常：${err instanceof Error ? err.message : "请求失败"}。后台研究不会因此取消，将尝试重新同步。`;
+    if (!missing) retryTimer = setTimeout(() => { if (isCurrent() && isExpanded.value) void selectResearch(id); }, 3000);
   }
-  progressLogs.value.push("正在尝试取消当前研究任务…");
-  currentController.abort();
-};
+}
 
-const goBack = () => {
-  if (loading.value) {
-    return; // 研究进行中不允许返回
-  }
-  isExpanded.value = false;
-};
+async function handleSubmit() {
+  if (submitting.value) return;
+  if (!form.topic.trim()) { error.value = "请输入研究主题"; return; }
+  submitting.value = true;
+  error.value = "";
+  try {
+    const snapshot = await createResearch({ topic: form.topic.trim(), search_api: form.searchApi || undefined }, lifetime.signal);
+    if (disposed) return;
+    creationVersion++;
+    mergeSummary(snapshot);
+    sessions[snapshot.research_id] = createSession(snapshot);
+    applySnapshot(sessions[snapshot.research_id], snapshot);
+    void selectResearch(snapshot.research_id);
+  } catch (err) {
+    if (!disposed) error.value = err instanceof ResearchAPIError && err.status === 429
+      ? "研究名额已满，请等待研究结束或取消等待项后再提交。"
+      : `提交研究未成功确认：${err instanceof Error ? err.message : "连接异常"}。可刷新列表核对。`;
+  } finally { submitting.value = false; }
+}
 
-const startNewResearch = () => {
-  if (loading.value) {
-    cancelResearch();
-  }
-  resetWorkflowState();
-  isExpanded.value = false;
-  form.topic = "";
-  form.searchApi = "";
-};
+async function cancelResearch(id: string | null) {
+  if (!id || cancelling[id]) return;
+  cancelling[id] = true;
+  actionErrors[id] = "";
+  try {
+    const snapshot = await cancelResearchById(id, lifetime.signal);
+    if (disposed) return;
+    mergeSummary(snapshot);
+    if (!sessions[id]) sessions[id] = createSession(snapshot);
+    applySnapshot(sessions[id], snapshot);
+    if (sessions[id].status === "CANCELLING") sessions[id].notice = "取消请求已接收，等待当前调用退出并完成清理。";
+    void refreshResearches();
+  } catch (err) {
+    if (!disposed) actionErrors[id] = `取消未确认：${err instanceof Error ? err.message : "请求失败"}`;
+  } finally { cancelling[id] = false; }
+}
+function goBack() { detachView(); isExpanded.value = false; }
+function startNewResearch() { goBack(); form.topic = ""; form.searchApi = ""; error.value = ""; }
 
-onBeforeUnmount(() => {
-  if (currentController) {
-    currentController.abort();
-    currentController = null;
-  }
+onMounted(async () => {
+  await refreshResearches();
+  if (disposed) return;
+  let saved: string | null = null;
+  try { saved = sessionStorage.getItem(storageKey); } catch { /* Storage is optional. */ }
+  if (!activeResearchId.value && saved && researches.value.some(row => row.research_id === saved)) void selectResearch(saved);
+  pollTimer = setInterval(() => { void refreshResearches(); }, 3000);
 });
+onBeforeUnmount(() => { disposed = true; lifetime.abort(); detachView(); clearInterval(pollTimer); });
 </script>
 
 
@@ -2544,4 +2123,42 @@ select:focus {
   margin: 0;
   padding: 22px;
 }
+
+.status-chip.partial {
+  color: #92400e;
+  background: #fffbeb;
+  border-color: #fcd34d;
+}
+
+.status-chip.failed {
+  color: #991b1b;
+  background: #fef2f2;
+  border-color: #fca5a5;
+}
+
+.status-chip:not(.active) .dot {
+  animation: none;
+  box-shadow: none;
+}
+
+.research-result-notice {
+  margin: 0;
+  padding: 12px 16px;
+  color: #92400e;
+  background: #fffbeb;
+  border: 1px solid #fcd34d;
+  border-radius: 12px;
+  overflow-wrap: anywhere;
+}
+
+.research-result-notice.failed {
+  color: #991b1b;
+  background: #fef2f2;
+  border-color: #fca5a5;
+}
+/* M1 keeps the detail layout and gives the list its own compact scroll area. */
+.form-research-list { margin-top: 28px; border-top: 1px solid #e2e8f0; padding-top: 22px; }
+.panel-centered:hover { transform: none; }
+.sidebar > .research-list, .sidebar-header, .sidebar-actions { flex-shrink: 0; }
+.research-info { flex-shrink: 0; }
 </style>
