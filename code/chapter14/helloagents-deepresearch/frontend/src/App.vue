@@ -104,23 +104,63 @@
         </div>
 
         <div class="research-info">
-          <div class="info-item">
-            <label>研究主题</label>
-            <p class="topic-display">{{ form.topic }}</p>
-          </div>
+          <details class="research-overview" open>
+            <summary class="research-overview-heading">
+              <span class="overview-label-row">
+                <span class="overview-label">研究主题</span>
+                <span class="disclosure-action disclosure-expand">展开 ＋</span>
+                <span class="disclosure-action disclosure-collapse">收起 −</span>
+              </span>
+              <span class="topic-display">{{ form.topic }}</span>
+              <span class="status-chip" :class="{ active: loading }">
+                <span class="dot"></span>
+                {{ loading ? "研究进行中" : "研究流程完成" }}
+              </span>
+            </summary>
 
-          <div class="info-item" v-if="form.searchApi">
-            <label>搜索引擎</label>
-            <p>{{ form.searchApi }}</p>
-          </div>
+            <div class="research-overview-body">
+              <div class="info-item" v-if="totalTasks > 0">
+                <label>研究进度</label>
+                <div
+                  class="progress-bar"
+                  role="progressbar"
+                  aria-label="研究任务完成进度"
+                  :aria-valuenow="completedTasks"
+                  :aria-valuemax="totalTasks"
+                  aria-valuemin="0"
+                >
+                  <div class="progress-fill" :style="{ width: `${(completedTasks / totalTasks) * 100}%` }"></div>
+                </div>
+                <p class="progress-text">{{ completedTasks }} / {{ totalTasks }} 任务完成</p>
+              </div>
 
-          <div class="info-item" v-if="totalTasks > 0">
-            <label>研究进度</label>
-            <div class="progress-bar">
-              <div class="progress-fill" :style="{ width: `${(completedTasks / totalTasks) * 100}%` }"></div>
+              <p class="status-meta">研究流程阶段记录：{{ progressLogs.length }} 条</p>
+
+              <div class="research-flow">
+                <button
+                  type="button"
+                  class="flow-toggle"
+                  :aria-expanded="!logsCollapsed"
+                  aria-controls="research-flow-records"
+                  @click="logsCollapsed = !logsCollapsed"
+                >
+                  <span>研究流程</span>
+                  <span class="disclosure-action">{{ logsCollapsed ? "展开 ＋" : "收起 −" }}</span>
+                </button>
+                <div id="research-flow-records" v-show="!logsCollapsed">
+                  <div class="timeline-wrapper" v-if="progressLogs.length">
+                    <transition-group name="timeline" tag="ul" class="timeline">
+                      <li v-for="(log, index) in progressLogs" :key="`${log}-${index}`">
+                        <span class="timeline-node"></span>
+                        <p>{{ log }}</p>
+                      </li>
+                    </transition-group>
+                  </div>
+                  <p v-else class="muted">暂无流程记录</p>
+                </div>
+              </div>
             </div>
-            <p class="progress-text">{{ completedTasks }} / {{ totalTasks }} 任务完成</p>
-          </div>
+          </details>
         </div>
 
         <div class="sidebar-actions">
@@ -138,197 +178,202 @@
         class="panel panel-result"
         v-if="todoTasks.length || reportMarkdown || progressLogs.length"
       >
-        <header class="status-bar">
-          <div class="status-main">
-            <div class="status-chip" :class="{ active: loading }">
-              <span class="dot"></span>
-              {{ loading ? "研究进行中" : "研究流程完成" }}
-            </div>
-            <span class="status-meta">
-              任务进度：{{ completedTasks }} / {{ totalTasks || todoTasks.length || 1 }}
-              · 阶段记录 {{ progressLogs.length }} 条
-            </span>
-          </div>
-          <div class="status-controls">
-            <button class="secondary-btn" @click="logsCollapsed = !logsCollapsed">
-              {{ logsCollapsed ? "展开流程" : "收起流程" }}
-            </button>
-          </div>
-        </header>
+        <nav class="result-tabs" aria-label="研究内容切换">
+          <button
+            type="button"
+            class="view-tab"
+            :aria-pressed="resultView === 'tasks'"
+            aria-controls="research-tasks-view"
+            @click="resultView = 'tasks'"
+          >任务清单</button>
+          <button
+            type="button"
+            class="view-tab"
+            :aria-pressed="resultView === 'report'"
+            aria-controls="research-report-view"
+            @click="resultView = 'report'"
+          >最终报告</button>
+        </nav>
 
-        <div class="timeline-wrapper" v-show="!logsCollapsed && progressLogs.length">
-          <transition-group name="timeline" tag="ul" class="timeline">
-            <li v-for="(log, index) in progressLogs" :key="`${log}-${index}`">
-              <span class="timeline-node"></span>
-              <p>{{ log }}</p>
-            </li>
-          </transition-group>
-        </div>
+        <section id="research-tasks-view" v-show="resultView === 'tasks'" aria-label="研究任务">
+          <div class="tasks-section" v-if="todoTasks.length">
+            <aside class="tasks-list">
+              <h3>任务清单</h3>
+              <ul>
+                <li
+                  v-for="task in todoTasks"
+                  :key="task.id"
+                  :class="['task-item', { active: task.id === activeTaskId, completed: task.status === 'completed' }]"
+                >
+                  <button
+                    type="button"
+                    class="task-button"
+                    @click="activeTaskId = task.id"
+                  >
+                    <span class="task-title">{{ task.title }}</span>
+                    <span class="task-status" :class="task.status">
+                      {{ formatTaskStatus(task.status) }}
+                    </span>
+                  </button>
+                  <p class="task-intent">{{ task.intent }}</p>
+                </li>
+              </ul>
+            </aside>
 
-        <div class="tasks-section" v-if="todoTasks.length">
-          <aside class="tasks-list">
-            <h3>任务清单</h3>
-            <ul>
-              <li
-                v-for="task in todoTasks"
-                :key="task.id"
-                :class="['task-item', { active: task.id === activeTaskId, completed: task.status === 'completed' }]"
-              >
+            <article class="task-detail" v-if="currentTask">
+              <header class="task-header">
+                <div>
+                  <h3>{{ currentTaskTitle || "当前任务" }}</h3>
+                  <p class="muted" v-if="currentTaskIntent">
+                    {{ currentTaskIntent }}
+                  </p>
+                </div>
+                <div class="task-chip-group">
+                  <span class="task-label">查询：{{ currentTaskQuery || "" }}</span>
+                </div>
+              </header>
+
+              <nav class="task-detail-tabs" aria-label="任务详情切换">
                 <button
                   type="button"
-                  class="task-button"
-                  @click="activeTaskId = task.id"
-                >
-                  <span class="task-title">{{ task.title }}</span>
-                  <span class="task-status" :class="task.status">
-                    {{ formatTaskStatus(task.status) }}
-                  </span>
-                </button>
-                <p class="task-intent">{{ task.intent }}</p>
-              </li>
-            </ul>
-          </aside>
+                  class="view-tab"
+                  :aria-pressed="taskDetailView === 'sources'"
+                  aria-controls="task-sources-view"
+                  @click="taskDetailView = 'sources'"
+                >最新来源</button>
+                <button
+                  type="button"
+                  class="view-tab"
+                  :aria-pressed="taskDetailView === 'summary'"
+                  aria-controls="task-summary-view"
+                  @click="taskDetailView = 'summary'"
+                >任务总结</button>
+                <button
+                  type="button"
+                  class="view-tab"
+                  :aria-pressed="taskDetailView === 'tools'"
+                  aria-controls="task-tools-view"
+                  @click="taskDetailView = 'tools'"
+                >工具调用</button>
+              </nav>
 
-          <article class="task-detail" v-if="currentTask">
-            <header class="task-header">
-              <div>
-                <h3>{{ currentTaskTitle || "当前任务" }}</h3>
-                <p class="muted" v-if="currentTaskIntent">
-                  {{ currentTaskIntent }}
-                </p>
-              </div>
-              <div class="task-chip-group">
-                <span class="task-label">查询：{{ currentTaskQuery || "" }}</span>
-                <span
-                  v-if="currentTaskNoteId"
-                  class="task-label note-chip"
-                  :title="currentTaskNoteId"
-                >
-                  笔记：{{ currentTaskNoteId }}
-                </span>
-                <span
-                  v-if="currentTaskNotePath"
-                  class="task-label note-chip path-chip"
-                  :title="currentTaskNotePath"
-                >
-                  <span class="path-label">路径：</span>
-                  <span class="path-text">{{ currentTaskNotePath }}</span>
-                  <button
-                    class="chip-action"
-                    type="button"
-                    @click="copyNotePath(currentTaskNotePath)"
-                  >
-                    复制
-                  </button>
-                </span>
-              </div>
-            </header>
-
-            <section v-if="currentTask && currentTask.notices.length" class="task-notices">
-              <h4>系统提示</h4>
-              <ul>
-                <li v-for="(notice, idx) in currentTask.notices" :key="`${notice}-${idx}`">
-                  {{ notice }}
-                </li>
-              </ul>
-            </section>
-
-            <section
-              class="sources-block"
-              :class="{ 'block-highlight': sourcesHighlight }"
-            >
-              <h3>最新来源</h3>
-              <template v-if="currentTaskSources.length">
-                <ul class="sources-list">
-                  <li
-                    v-for="(item, index) in currentTaskSources"
-                    :key="`${item.title}-${index}`"
-                    class="source-item"
-                  >
-                    <a
-                      class="source-link"
-                      :href="item.url || '#'"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {{ item.title || item.url || `来源 ${index + 1}` }}
-                    </a>
-                    <div v-if="item.snippet || item.raw" class="source-tooltip">
-                      <p v-if="item.snippet">{{ item.snippet }}</p>
-                      <p v-if="item.raw" class="muted-text">{{ item.raw }}</p>
-                    </div>
+              <section v-if="currentTask && currentTask.notices.length" class="task-notices">
+                <h4>系统提示</h4>
+                <ul>
+                  <li v-for="(notice, idx) in currentTask.notices" :key="`${notice}-${idx}`">
+                    {{ notice }}
                   </li>
                 </ul>
-              </template>
-              <p v-else class="muted">暂无可用来源</p>
-            </section>
+              </section>
 
-            <section
-              class="summary-block"
-              :class="{ 'block-highlight': summaryHighlight }"
-            >
-              <h3>任务总结</h3>
-              <pre class="block-pre">{{ currentTaskSummary || "暂无可用信息" }}</pre>
-            </section>
-
-            <section
-              class="tools-block"
-              :class="{ 'block-highlight': toolHighlight }"
-              v-if="currentTaskToolCalls.length"
-            >
-              <h3>工具调用记录</h3>
-              <ul class="tool-list">
-                <li
-                  v-for="entry in currentTaskToolCalls"
-                  :key="`${entry.eventId}-${entry.timestamp}`"
-                  class="tool-entry"
-                >
-                  <div class="tool-entry-header">
-                    <span class="tool-entry-title">
-                      #{{ entry.eventId }} {{ entry.agent }} → {{ entry.tool }}
-                    </span>
-                    <span
-                      v-if="entry.noteId"
-                      class="tool-entry-note"
+              <section
+                id="task-sources-view"
+                v-show="taskDetailView === 'sources'"
+                class="sources-block"
+                :class="{ 'block-highlight': sourcesHighlight }"
+              >
+                <h3>最新来源</h3>
+                <template v-if="currentTaskSources.length">
+                  <ul class="sources-list">
+                    <li
+                      v-for="(item, index) in currentTaskSources"
+                      :key="`${item.title}-${index}`"
+                      class="source-item"
                     >
-                      笔记：{{ entry.noteId }}
-                    </span>
-                  </div>
-                  <p v-if="entry.notePath" class="tool-entry-path">
-                    笔记路径：
-                    <button
-                      class="link-btn"
-                      type="button"
-                      @click="copyNotePath(entry.notePath)"
-                    >
-                      复制
-                    </button>
-                    <span class="path-text">{{ entry.notePath }}</span>
-                  </p>
-                  <p class="tool-subtitle">参数</p>
-                  <pre class="tool-pre">{{ formatToolParameters(entry.parameters) }}</pre>
-                  <template v-if="entry.result">
-                    <p class="tool-subtitle">执行结果</p>
-                    <pre class="tool-pre">{{ formatToolResult(entry.result) }}</pre>
-                  </template>
-                </li>
-              </ul>
-            </section>
-          </article>
+                      <a
+                        class="source-link"
+                        :href="item.url || '#'"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {{ item.title || item.url || `来源 ${index + 1}` }}
+                      </a>
+                      <div v-if="item.snippet || item.raw" class="source-tooltip">
+                        <p v-if="item.snippet">{{ item.snippet }}</p>
+                        <p v-if="item.raw" class="muted-text">{{ item.raw }}</p>
+                      </div>
+                    </li>
+                  </ul>
+                </template>
+                <p v-else class="muted">暂无可用来源</p>
+              </section>
 
-          <article class="task-detail" v-else>
-            <p class="muted">等待任务规划或执行结果。</p>
-          </article>
-        </div>
+              <section
+                id="task-summary-view"
+                v-show="taskDetailView === 'summary'"
+                class="summary-block"
+                :class="{ 'block-highlight': summaryHighlight }"
+              >
+                <h3>任务总结</h3>
+                <pre class="block-pre">{{ currentTaskSummary || "暂无可用信息" }}</pre>
+              </section>
 
-        <div
-          v-if="reportMarkdown"
-          class="report-block"
-          :class="{ 'block-highlight': reportHighlight }"
-        >
-          <h3>最终报告</h3>
-          <pre class="block-pre">{{ reportMarkdown }}</pre>
-        </div>
+              <section
+                id="task-tools-view"
+                v-show="taskDetailView === 'tools'"
+                class="tools-block"
+                :class="{ 'block-highlight': toolHighlight }"
+              >
+                <h3>工具调用记录</h3>
+                <p v-if="!currentTaskToolCalls.length" class="muted">暂无工具调用记录</p>
+                <ul class="tool-list" v-else>
+                  <li
+                    v-for="entry in currentTaskToolCalls"
+                    :key="`${entry.eventId}-${entry.timestamp}`"
+                    class="tool-entry"
+                  >
+                    <div class="tool-entry-header">
+                      <span class="tool-entry-title">
+                        #{{ entry.eventId }} {{ entry.agent }} → {{ entry.tool }}
+                      </span>
+                      <span
+                        v-if="entry.noteId"
+                        class="tool-entry-note"
+                      >
+                        笔记：{{ entry.noteId }}
+                      </span>
+                    </div>
+                    <p v-if="entry.notePath" class="tool-entry-path">
+                      笔记路径：
+                      <button
+                        class="link-btn"
+                        type="button"
+                        @click="copyNotePath(entry.notePath)"
+                      >
+                        复制
+                      </button>
+                      <span class="path-text">{{ entry.notePath }}</span>
+                    </p>
+                    <p class="tool-subtitle">参数</p>
+                    <pre class="tool-pre">{{ formatToolParameters(entry.parameters) }}</pre>
+                    <template v-if="entry.result">
+                      <p class="tool-subtitle">执行结果</p>
+                      <pre class="tool-pre">{{ formatToolResult(entry.result) }}</pre>
+                    </template>
+                  </li>
+                </ul>
+              </section>
+            </article>
+
+            <article class="task-detail" v-else>
+              <p class="muted">等待任务规划或执行结果。</p>
+            </article>
+          </div>
+
+          <p v-else class="view-empty muted">等待任务规划或执行结果。</p>
+        </section>
+
+        <section id="research-report-view" v-show="resultView === 'report'" aria-label="研究最终报告">
+          <div
+            v-if="reportMarkdown"
+            class="report-block"
+            :class="{ 'block-highlight': reportHighlight }"
+          >
+            <h3>最终报告</h3>
+            <pre class="block-pre">{{ reportMarkdown }}</pre>
+          </div>
+          <p v-else class="view-empty muted">等待最终报告生成。</p>
+        </section>
       </section>
 
     </div>
@@ -336,7 +381,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onBeforeUnmount, reactive, ref } from "vue";
+import { computed, onBeforeUnmount, reactive, ref, watch } from "vue";
 
 import {
   runResearchStream,
@@ -386,6 +431,14 @@ const error = ref("");
 const progressLogs = ref<string[]>([]);
 const logsCollapsed = ref(false);
 const isExpanded = ref(false);
+
+// Presentation state only; research data and stream handling remain unchanged.
+const resultView = ref<"tasks" | "report">("tasks");
+const taskDetailView = ref<"sources" | "summary" | "tools">("summary");
+watch(isExpanded, () => {
+  resultView.value = "tasks";
+  taskDetailView.value = "summary";
+});
 
 const todoTasks = ref<TodoTaskView[]>([]);
 const activeTaskId = ref<number | null>(null);
@@ -1103,7 +1156,7 @@ onBeforeUnmount(() => {
 }
 
 .panel-result {
-  min-width: 360px;
+  min-width: 0;
   flex: 2 1 420px;
 }
 
@@ -1435,7 +1488,7 @@ select:focus {
 
 .tasks-section {
   display: grid;
-  grid-template-columns: 280px 1fr;
+  grid-template-columns: 280px minmax(0, 1fr);
   gap: 20px;
   align-items: start;
 }
@@ -1549,6 +1602,7 @@ select:focus {
 }
 
 .task-detail {
+  min-width: 0;
   background: rgba(255, 255, 255, 0.94);
   border: 1px solid rgba(148, 163, 184, 0.26);
   border-radius: 18px;
@@ -2072,7 +2126,7 @@ select:focus {
     padding: 56px 16px;
   }
 
-  .layout {
+  .layout-centered {
     flex-direction: column;
     align-items: stretch;
   }
@@ -2288,17 +2342,180 @@ select:focus {
 @media (max-width: 768px) {
   .layout-fullscreen {
     flex-direction: column;
+    height: auto;
+    min-height: 100vh;
   }
 
   .sidebar {
     width: 100%;
     min-width: 100%;
     height: auto;
-    max-height: 40vh;
+    max-height: none;
   }
 
   .layout-fullscreen .panel-result {
-    height: 60vh;
+    height: auto;
+    min-height: 60vh;
+    overflow-y: visible;
   }
+}
+
+/* Research overview hierarchy and presentation-only view switches. */
+.research-overview {
+  border: 1px solid rgba(148, 163, 184, 0.26);
+  border-radius: 14px;
+}
+
+.research-overview-heading {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  list-style: none;
+  cursor: pointer;
+}
+
+.research-overview-heading::-webkit-details-marker {
+  display: none;
+}
+
+.overview-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+}
+
+.overview-label {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.disclosure-action {
+  color: #2563eb;
+  font-size: 12px;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.disclosure-collapse,
+.research-overview[open] .disclosure-expand {
+  display: none;
+}
+
+.research-overview[open] .disclosure-collapse {
+  display: inline;
+}
+
+.research-overview .topic-display {
+  width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.research-overview-body {
+  margin: 0 16px 16px;
+  padding: 16px 0 0 14px;
+  border-top: 1px solid rgba(148, 163, 184, 0.2);
+  border-left: 2px solid rgba(148, 163, 184, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.research-overview-body .status-meta {
+  margin: 0;
+}
+
+.flow-toggle {
+  width: 100%;
+  padding: 8px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  color: #1f2937;
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.research-flow .timeline-wrapper {
+  max-height: none;
+  overflow: visible;
+  padding: 0;
+}
+
+.research-flow .timeline p {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.result-tabs,
+.task-detail-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.22);
+}
+
+.view-tab {
+  padding: 10px 16px;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.94);
+  color: #475569;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.view-tab[aria-pressed="true"] {
+  background: rgba(191, 219, 254, 0.36);
+  border-color: rgba(59, 130, 246, 0.6);
+  color: #1d4ed8;
+}
+
+.view-tab:hover {
+  border-color: #3b82f6;
+}
+
+.view-tab:focus-visible,
+.flow-toggle:focus-visible,
+.research-overview-heading:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 3px;
+}
+
+.task-detail .sources-block,
+.task-detail .summary-block,
+.task-detail .tools-block {
+  margin-top: 0;
+}
+
+.task-detail .block-pre,
+.report-block .block-pre,
+.tool-pre {
+  max-height: none;
+  overflow: visible;
+}
+
+.task-chip-group,
+.task-label,
+.tool-entry-title,
+.task-header h3 {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.view-empty {
+  margin: 0;
+  padding: 22px;
 }
 </style>
