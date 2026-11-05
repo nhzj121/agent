@@ -464,7 +464,8 @@ const TASK_STATUS_LABEL: Record<string, string> = {
   pending: "待执行",
   in_progress: "进行中",
   completed: "已完成",
-  skipped: "已跳过"
+  skipped: "已跳过",
+  failed: "失败"
 };
 
 function formatTaskStatus(status: string): string {
@@ -865,6 +866,10 @@ const handleSubmit = async () => {
             }
           } else if (status === "skipped") {
             progressLogs.value.push(`任务跳过：${task.title}`);
+          } else if (status === "failed") {
+            const detail = typeof payload.detail === "string" ? payload.detail : "任务执行失败";
+            task.notices.push(detail);
+            progressLogs.value.push(`任务失败：${task.title}，${detail}`);
           }
           return;
         }
@@ -1608,6 +1613,7 @@ select:focus {
   color: #15803d;
 }
 
+.task-status.failed,
 .task-status.skipped {
   background: rgba(248, 113, 113, 0.18);
   color: #b91c1c;

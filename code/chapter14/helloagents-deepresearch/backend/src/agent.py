@@ -9,7 +9,7 @@ from queue import Empty, Queue
 from threading import Lock, Thread
 from typing import Any, Callable, Iterator
 
-from hello_agents import HelloAgentsLLM, ToolAwareSimpleAgent
+from hello_agents import HelloAgentsLLM
 from hello_agents.tools import ToolRegistry
 from hello_agents.tools.builtin.note_tool import NoteTool
 
@@ -20,6 +20,7 @@ from prompts import (
     todo_planner_system_prompt,
 )
 from models import SummaryState, SummaryStateOutput, TodoItem
+from services.native_agent import NativeToolAgent
 from services.planner import PlanningService
 from services.reporter import ReportingService
 from services.search import dispatch_search, prepare_research_context
@@ -63,7 +64,7 @@ class DeepResearchAgent:
             system_prompt=report_writer_instructions.strip(),
         )
 
-        self._summarizer_factory: Callable[[], ToolAwareSimpleAgent] = lambda: self._create_tool_aware_agent(  # noqa: E501
+        self._summarizer_factory: Callable[[], NativeToolAgent] = lambda: self._create_tool_aware_agent(  # noqa: E501
             name="任务总结专家",
             system_prompt=task_summarizer_instructions.strip(),
         )
@@ -106,13 +107,12 @@ class DeepResearchAgent:
 
         return HelloAgentsLLM(**llm_kwargs)
 
-    def _create_tool_aware_agent(self, *, name: str, system_prompt: str) -> ToolAwareSimpleAgent:
-        """Instantiate a ToolAwareSimpleAgent sharing tool registry and tracker."""
-        return ToolAwareSimpleAgent(
+    def _create_tool_aware_agent(self, *, name: str, system_prompt: str) -> NativeToolAgent:
+        """Instantiate a NativeToolAgent sharing tool registry and tracker."""
+        return NativeToolAgent(
             name=name,
             llm=self.llm,
             system_prompt=system_prompt,
-            enable_tool_calling=self.tools_registry is not None,
             tool_registry=self.tools_registry,
             tool_call_listener=self._tool_tracker.record,
         )
@@ -219,6 +219,8 @@ class DeepResearchAgent:
                     enqueue(event, task=task)
             except Exception as exc:  # pragma: no cover - defensive guardrail
                 logger.exception("Task execution failed", exc_info=exc)
+                task.status = "failed"
+                task.notices.append(str(exc))
                 enqueue(
                     {
                         "type": "task_status",

@@ -1,4 +1,4 @@
-"""Helpers for coordinating note tool usage instructions."""
+"""Helpers for coordinating native note tool usage."""
 
 from __future__ import annotations
 
@@ -8,52 +8,22 @@ from models import TodoItem
 
 
 def build_note_guidance(task: TodoItem) -> str:
-    """Generate note tool usage guidance for a specific task."""
-
-    tags_list = ["deep_research", f"task_{task.id}"]
-    tags_literal = json.dumps(tags_list, ensure_ascii=False)
-
+    """Describe note operations without embedding a text-call protocol."""
+    tags = json.dumps(["deep_research", f"task_{task.id}"], ensure_ascii=False)
+    common = (
+        f"- 工具参数 task_id 使用 {task.id}，tags 使用 {tags}。\n"
+        "- 保持已有段落结构，在对应段落补充完整的研究发现和来源依据。\n"
+        "- 必须依据工具真实返回确认操作成功；不要在正文模拟工具调用或工具结果。\n"
+    )
     if task.note_id:
-        read_payload = json.dumps({"action": "read", "note_id": task.note_id}, ensure_ascii=False)
-        update_payload = json.dumps(
-            {
-                "action": "update",
-                "note_id": task.note_id,
-                "task_id": task.id,
-                "title": f"任务 {task.id}: {task.title}",
-                "note_type": "task_state",
-                "tags": tags_list,
-                "content": "请将本轮新增信息补充到任务概览中",
-            },
-            ensure_ascii=False,
-        )
-
         return (
             "笔记协作指引：\n"
             f"- 当前任务笔记 ID：{task.note_id}。\n"
-            f"- 在书写总结前必须调用：[TOOL_CALL:note:{read_payload}] 获取最新内容。\n"
-            f"- 完成分析后调用：[TOOL_CALL:note:{update_payload}] 同步增量信息。\n"
-            "- 更新时保持原有段落结构，新增内容请在对应段落中补充。\n"
-            f"- 建议 tags 保持为 {tags_literal}，保证其他 Agent 可快速定位。\n"
-            "- 成功同步到笔记后，再输出面向用户的总结。\n"
+            "- 先通过原生 note 工具的 read 操作读取该笔记，再通过 update 操作同步研究发现。\n"
+            + common
         )
-
-    create_payload = json.dumps(
-        {
-            "action": "create",
-            "task_id": task.id,
-            "title": f"任务 {task.id}: {task.title}",
-            "note_type": "task_state",
-            "tags": tags_list,
-            "content": "请记录任务概览、来源概览",
-        },
-        ensure_ascii=False,
-    )
-
     return (
         "笔记协作指引：\n"
-        f"- 当前任务尚未建立笔记，请先调用：[TOOL_CALL:note:{create_payload}]。\n"
-        "- 创建成功后记录返回的 note_id，并在后续所有更新中复用。\n"
-        "- 同步笔记后，再输出面向用户的总结。\n"
+        "- 当前任务没有笔记，请通过原生 note 工具的 create 操作创建 task_state 笔记。\n"
+        + common
     )
-

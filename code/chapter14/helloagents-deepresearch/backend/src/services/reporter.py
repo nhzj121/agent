@@ -2,20 +2,17 @@
 
 from __future__ import annotations
 
-import json
-
-from hello_agents import ToolAwareSimpleAgent
+from services.native_agent import AgentProtocolError, NativeToolAgent
 
 from models import SummaryState
 from config import Configuration
 from utils import strip_thinking_tokens
-from services.text_processing import strip_tool_calls
 
 
 class ReportingService:
     """Generates the final structured report."""
 
-    def __init__(self, report_agent: ToolAwareSimpleAgent, config: Configuration) -> None:
+    def __init__(self, report_agent: NativeToolAgent, config: Configuration) -> None:
         self._agent = report_agent
         self._config = config
 
@@ -44,34 +41,36 @@ class ReportingService:
 
         notes_section = "\n".join(note_references) if note_references else "- 暂无可用任务笔记"
 
-        read_template = json.dumps({"action": "read", "note_id": "<note_id>"}, ensure_ascii=False)
-        create_conclusion_template = json.dumps(
-            {
-                "action": "create",
-                "title": f"研究报告：{state.research_topic}",
-                "note_type": "conclusion",
-                "tags": ["deep_research", "report"],
-                "content": "请在此沉淀最终报告要点",
-            },
-            ensure_ascii=False,
-        )
-
         prompt = (
             f"研究主题：{state.research_topic}\n"
             f"任务概览：\n{''.join(tasks_block)}\n"
             f"可用任务笔记：\n{notes_section}\n"
-            f"请针对每条任务笔记使用格式：[TOOL_CALL:note:{read_template}] 读取内容，整合所有信息后撰写报告。\n"
-            f"如需输出汇总结论，可追加调用：[TOOL_CALL:note:{create_conclusion_template}] 保存报告要点。"
+            "请通过原生 note 工具逐条读取上述笔记，整合所有信息后撰写报告。\n"
+            "如需保存汇总结论，可调用 note 工具创建 conclusion 笔记，tags 使用 deep_research 和 report。"
         )
 
-        response = self._agent.run(prompt)
-        self._agent.clear_history()
+        if not self._config.enable_notes:
+            prompt = (
+                f"研究主题：{state.research_topic}\n"
+                f"任务概览：\n{''.join(tasks_block)}\n"
+                "本次未启用笔记，请直接依据任务概览生成最终报告。"
+            )
+        try:
+            response = self._agent.run(prompt)
+            if self._config.enable_notes:
+                expected = {task.note_id for task in state.todo_items if task.note_id}
+                read_ids = {
+                    item.parameters.get("note_id") for item in self._agent.executions
+                    if item.tool == "note" and item.parameters.get("action") == "read"
+                }
+                if expected - read_ids:
+                    raise AgentProtocolError("报告生成前未确认所有任务笔记已成功读取")
+        finally:
+            self._agent.clear_history()
 
         report_text = response.strip()
         if self._config.strip_thinking_tokens:
             report_text = strip_thinking_tokens(report_text)
-
-        report_text = strip_tool_calls(report_text).strip()
 
         return report_text or "报告生成失败，请检查输入。"
 

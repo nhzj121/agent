@@ -1,125 +1,105 @@
-"""Task summarization utilities."""
+"""Separate verified note collaboration from final answer generation."""
 
 from __future__ import annotations
 
 from collections.abc import Callable, Iterator
-from typing import Tuple
+import re
 
-from hello_agents import ToolAwareSimpleAgent
-
-from models import SummaryState, TodoItem
 from config import Configuration
-from utils import strip_thinking_tokens
+from models import SummaryState, TodoItem
+from prompts import task_summary_writer_instructions
+from services.native_agent import AgentProtocolError, NativeToolAgent
 from services.notes import build_note_guidance
-from services.text_processing import strip_tool_calls
 
 
 class SummarizationService:
-    """Handles synchronous and streaming task summarization."""
+    """Only final-answer fragments are exposed to the summary event stream."""
 
     def __init__(
         self,
-        summarizer_factory: Callable[[], ToolAwareSimpleAgent],
+        summarizer_factory: Callable[[], NativeToolAgent],
         config: Configuration,
     ) -> None:
         self._agent_factory = summarizer_factory
         self._config = config
 
-    def summarize_task(self, state: SummaryState, task: TodoItem, context: str) -> str:
-        """Generate a task-specific summary using the summarizer agent."""
-
-        prompt = self._build_prompt(state, task, context)
-
+    def _prepare(
+        self, state: SummaryState, task: TodoItem, context: str
+    ) -> tuple[NativeToolAgent, str]:
         agent = self._agent_factory()
+        agent.task_id = task.id
+        verified_note = ""
         try:
-            response = agent.run(prompt)
-        finally:
+            if self._config.enable_notes:
+                agent.run(self._build_prompt(state, task, context))
+                read_ids: set[str] = set()
+                target_id = task.note_id
+                created_here = False
+                synchronized = False
+                for execution in agent.executions:
+                    if execution.tool != "note":
+                        continue
+                    params = execution.parameters
+                    action = params.get("action")
+                    note_id = params.get("note_id")
+                    if action == "read" and isinstance(note_id, str):
+                        read_ids.add(note_id)
+                    elif action == "create" and target_id is None:
+                        match = re.search(r"ID:\s*([^\n]+)", execution.result)
+                        if match:
+                            target_id = match.group(1).strip()
+                            created_here = True
+                            verified_note = str(params.get("content") or "")
+                            synchronized = True
+                    elif action == "update" and note_id == target_id:
+                        if note_id in read_ids or created_here:
+                            verified_note = str(params.get("content") or "")
+                            synchronized = True
+                if not synchronized or not verified_note.strip():
+                    raise AgentProtocolError("未确认任务笔记已按要求成功读取并同步，停止生成完成总结")
+            final_prompt = (
+                f"研究主题：{state.research_topic}\n"
+                f"任务名称：{task.title}\n任务目标：{task.intent}\n"
+                f"检索查询：{task.query}\n"
+                f"研究材料：\n{context}\n"
+                f"已通过工具核实写入的任务笔记内容：\n{verified_note or '本次未启用笔记'}\n"
+                "请依据上述材料直接输出唯一一份面向用户的最终任务总结。"
+            )
+            return agent, final_prompt
+        except BaseException:
             agent.clear_history()
+            raise
 
-        summary_text = response.strip()
-        if self._config.strip_thinking_tokens:
-            summary_text = strip_thinking_tokens(summary_text)
-
-        summary_text = strip_tool_calls(summary_text).strip()
-
-        return summary_text or "暂无可用信息"
+    def summarize_task(self, state: SummaryState, task: TodoItem, context: str) -> str:
+        stream, get_summary = self.stream_task_summary(state, task, context)
+        for _ in stream:
+            pass
+        return get_summary()
 
     def stream_task_summary(
         self, state: SummaryState, task: TodoItem, context: str
-    ) -> Tuple[Iterator[str], Callable[[], str]]:
-        """Stream the summary text for a task while collecting full output."""
-
-        prompt = self._build_prompt(state, task, context)
-        remove_thinking = self._config.strip_thinking_tokens
-        raw_buffer = ""
-        visible_output = ""
-        emit_index = 0
-        agent = self._agent_factory()
-
-        def flush_visible() -> Iterator[str]:
-            nonlocal emit_index, raw_buffer
-            while True:
-                start = raw_buffer.find("<think>", emit_index)
-                if start == -1:
-                    if emit_index < len(raw_buffer):
-                        segment = raw_buffer[emit_index:]
-                        emit_index = len(raw_buffer)
-                        if segment:
-                            yield segment
-                    break
-
-                if start > emit_index:
-                    segment = raw_buffer[emit_index:start]
-                    emit_index = start
-                    if segment:
-                        yield segment
-
-                end = raw_buffer.find("</think>", start)
-                if end == -1:
-                    break
-                emit_index = end + len("</think>")
+    ) -> tuple[Iterator[str], Callable[[], str]]:
+        pieces: list[str] = []
 
         def generator() -> Iterator[str]:
-            nonlocal raw_buffer, visible_output, emit_index
+            agent, prompt = self._prepare(state, task, context)
             try:
-                for chunk in agent.stream_run(prompt):
-                    raw_buffer += chunk
-                    if remove_thinking:
-                        for segment in flush_visible():
-                            visible_output += segment
-                            if segment:
-                                yield segment
-                    else:
-                        visible_output += chunk
-                        if chunk:
-                            yield chunk
+                for chunk in agent.stream_answer(
+                    prompt, system_prompt=task_summary_writer_instructions.strip()
+                ):
+                    pieces.append(chunk)
+                    yield chunk
+                if not "".join(pieces).strip():
+                    raise AgentProtocolError("模型未返回有效的最终任务总结")
             finally:
-                if remove_thinking:
-                    for segment in flush_visible():
-                        visible_output += segment
-                        if segment:
-                            yield segment
                 agent.clear_history()
 
-        def get_summary() -> str:
-            if remove_thinking:
-                cleaned = strip_thinking_tokens(visible_output)
-            else:
-                cleaned = visible_output
-
-            return strip_tool_calls(cleaned).strip()
-
-        return generator(), get_summary
+        return generator(), lambda: "".join(pieces).strip()
 
     def _build_prompt(self, state: SummaryState, task: TodoItem, context: str) -> str:
-        """Construct the summarization prompt shared by both modes."""
-
         return (
-            f"任务主题：{state.research_topic}\n"
-            f"任务名称：{task.title}\n"
-            f"任务目标：{task.intent}\n"
-            f"检索查询：{task.query}\n"
-            f"任务上下文：\n{context}\n"
-            f"{build_note_guidance(task)}\n"
-            "请按照以上协作要求先同步笔记，然后返回一份面向用户的 Markdown 总结（仍遵循任务总结模板）。"
+            f"任务主题：{state.research_topic}\n任务名称：{task.title}\n"
+            f"任务目标：{task.intent}\n检索查询：{task.query}\n"
+            f"任务上下文：\n{context}\n{build_note_guidance(task)}\n"
+            "请完成笔记读取、分析与同步；面向用户的总结由独立阶段生成。"
         )

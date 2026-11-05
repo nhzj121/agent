@@ -4,10 +4,9 @@ from __future__ import annotations
 
 import json
 import logging
-import re
 from typing import Any, List, Optional
 
-from hello_agents import ToolAwareSimpleAgent
+from services.native_agent import NativeToolAgent
 
 from models import SummaryState, TodoItem
 from config import Configuration
@@ -16,15 +15,10 @@ from utils import strip_thinking_tokens
 
 logger = logging.getLogger(__name__)
 
-TOOL_CALL_PATTERN = re.compile(
-    r"\[TOOL_CALL:(?P<tool>[^:]+):(?P<body>[^\]]+)\]",
-    re.IGNORECASE,
-)
-
 class PlanningService:
     """Wraps the planner agent to produce structured TODO items."""
 
-    def __init__(self, planner_agent: ToolAwareSimpleAgent, config: Configuration) -> None:
+    def __init__(self, planner_agent: NativeToolAgent, config: Configuration) -> None:
         self._agent = planner_agent
         self._config = config
 
@@ -36,8 +30,10 @@ class PlanningService:
             research_topic=state.research_topic,
         )
 
-        response = self._agent.run(prompt)
-        self._agent.clear_history()
+        try:
+            response = self._agent.run(prompt)
+        finally:
+            self._agent.clear_history()
 
         logger.info("Planner raw output (truncated): %s", response[:500])
 
@@ -101,13 +97,6 @@ class PlanningService:
                 if isinstance(item, dict):
                     tasks.append(item)
 
-        if not tasks:
-            tool_payload = self._extract_tool_payload(text)
-            if tool_payload and isinstance(tool_payload.get("tasks"), list):
-                for item in tool_payload["tasks"]:
-                    if isinstance(item, dict):
-                        tasks.append(item)
-
         return tasks
 
     def _extract_json_payload(self, text: str) -> Optional[dict[str, Any] | list]:
@@ -132,29 +121,3 @@ class PlanningService:
                 return None
 
         return None
-
-    def _extract_tool_payload(self, text: str) -> Optional[dict[str, Any]]:
-        """Parse the first TOOL_CALL expression in the output."""
-
-        match = TOOL_CALL_PATTERN.search(text)
-        if not match:
-            return None
-
-        body = match.group("body")
-
-        try:
-            payload = json.loads(body)
-            if isinstance(payload, dict):
-                return payload
-        except json.JSONDecodeError:
-            pass
-
-        parts = [segment.strip() for segment in body.split(",") if segment.strip()]
-        payload: dict[str, Any] = {}
-        for part in parts:
-            if "=" not in part:
-                continue
-            key, value = part.split("=", 1)
-            payload[key.strip()] = value.strip().strip('"').strip("'")
-
-        return payload or None
