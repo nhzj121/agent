@@ -197,7 +197,7 @@
 
         <section id="research-tasks-view" v-show="resultView === 'tasks'" aria-label="研究任务">
           <div class="tasks-section" v-if="todoTasks.length">
-            <aside class="tasks-list">
+            <nav class="tasks-list" aria-label="研究任务选择">
               <h3>任务清单</h3>
               <ul>
                 <li
@@ -208,6 +208,7 @@
                   <button
                     type="button"
                     class="task-button"
+                    :aria-pressed="task.id === activeTaskId"
                     @click="activeTaskId = task.id"
                   >
                     <span class="task-title">{{ task.title }}</span>
@@ -215,10 +216,9 @@
                       {{ formatTaskStatus(task.status) }}
                     </span>
                   </button>
-                  <p class="task-intent">{{ task.intent }}</p>
                 </li>
               </ul>
-            </aside>
+            </nav>
 
             <article class="task-detail" v-if="currentTask">
               <header class="task-header">
@@ -305,7 +305,7 @@
                 :class="{ 'block-highlight': summaryHighlight }"
               >
                 <h3>任务总结</h3>
-                <pre class="block-pre">{{ currentTaskSummary || "暂无可用信息" }}</pre>
+                <MarkdownContent :content="currentTaskSummary || '暂无可用信息'" />
               </section>
 
               <section
@@ -348,7 +348,7 @@
                     <pre class="tool-pre">{{ formatToolParameters(entry.parameters) }}</pre>
                     <template v-if="entry.result">
                       <p class="tool-subtitle">执行结果</p>
-                      <pre class="tool-pre">{{ formatToolResult(entry.result) }}</pre>
+                      <MarkdownContent :content="formatToolResult(entry.result)" />
                     </template>
                   </li>
                 </ul>
@@ -370,7 +370,7 @@
             :class="{ 'block-highlight': reportHighlight }"
           >
             <h3>最终报告</h3>
-            <pre class="block-pre">{{ reportMarkdown }}</pre>
+            <MarkdownContent :content="reportMarkdown" />
           </div>
           <p v-else class="view-empty muted">等待最终报告生成。</p>
         </section>
@@ -382,6 +382,7 @@
 
 <script lang="ts" setup>
 import { computed, onBeforeUnmount, reactive, ref, watch } from "vue";
+import MarkdownContent from "./components/MarkdownContent.vue";
 
 import {
   runResearchStream,
@@ -1174,6 +1175,23 @@ onBeforeUnmount(() => {
   opacity: 1;
 }
 
+.panel-result {
+  background: #f8fafc;
+}
+
+.panel-result::before {
+  content: none;
+}
+
+.panel-result .tasks-list,
+.panel-result .task-detail,
+.panel-result .report-block,
+.panel-result .sources-block,
+.panel-result .summary-block,
+.panel-result .tools-block {
+  background: #ffffff;
+}
+
 .panel > * {
   position: relative;
   z-index: 1;
@@ -1488,15 +1506,9 @@ select:focus {
 
 .tasks-section {
   display: grid;
-  grid-template-columns: 280px minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: 20px;
   align-items: start;
-}
-
-@media (max-width: 960px) {
-  .tasks-section {
-    grid-template-columns: 1fr;
-  }
 }
 
 .tasks-list {
@@ -1522,11 +1534,13 @@ select:focus {
   margin: 0;
   padding: 0;
   display: flex;
-  flex-direction: column;
-  gap: 12px;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .task-item {
+  flex: 1 1 190px;
+  min-width: 0;
   border-radius: 14px;
   border: 1px solid transparent;
   transition: border-color 0.2s ease, background 0.2s ease;
@@ -1544,11 +1558,13 @@ select:focus {
 
 .task-button {
   width: 100%;
+  height: 100%;
+  min-height: 52px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 12px 14px 6px;
+  padding: 12px 14px;
   background: transparent;
   border: none;
   color: inherit;
@@ -1557,12 +1573,15 @@ select:focus {
 }
 
 .task-title {
+  min-width: 0;
+  overflow-wrap: anywhere;
   font-weight: 600;
   font-size: 14px;
   color: #1e293b;
 }
 
 .task-status {
+  flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -2487,6 +2506,7 @@ select:focus {
 }
 
 .view-tab:focus-visible,
+.task-button:focus-visible,
 .flow-toggle:focus-visible,
 .research-overview-heading:focus-visible {
   outline: 2px solid #2563eb;
